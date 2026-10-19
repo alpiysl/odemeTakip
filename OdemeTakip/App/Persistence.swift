@@ -12,7 +12,7 @@ struct PersistenceStore {
     let isTemporary: Bool
 
     static func make() -> PersistenceStore {
-        let schema = Schema([Payment.self, CashPayment.self])
+        let schema = Schema([Payment.self, CashPayment.self, Asset.self, AssetMovement.self])
         do {
             return PersistenceStore(container: try ModelContainer(for: schema), isTemporary: false)
         } catch {

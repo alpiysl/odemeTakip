@@ -23,6 +23,7 @@
 		3C21306E80DFA8DE2742A17A /* PaymentRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 04DEECE9F86D84CB2DD76784 /* PaymentRowView.swift */; };
 		3CFC28B0496F760042F3544B /* RateBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 044632BDE1110AEFF63E8079 /* RateBar.swift */; };
 		3E96CF058E2A693EB5385DAB /* CashDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2E25EB3543253D1A308727D /* CashDetailView.swift */; };
+		4323C604016C134A1B16F834 /* AssetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BFB61A3F257BDE54DFC79A /* AssetTests.swift */; };
 		43BFB03C748B5D1D1898ABA8 /* FilterBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38DACA7D4889E828CFB67EC9 /* FilterBar.swift */; };
 		44FB84E7D1A306A34DCD2324 /* CreditDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7558A5C98267824C37FB5A1 /* CreditDetailView.swift */; };
 		451EB41524E521BF07EE12D0 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61B06A01C996481C06E266A8 /* Theme.swift */; };
@@ -35,6 +36,7 @@
 		7026AC9BD6BD9171E4AAEB50 /* AddCashPaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817E8FA7E5F02FE744996C15 /* AddCashPaymentView.swift */; };
 		735DF3A390CB6AE39FDB199C /* InfoBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC167838A315A24EACCF60F1 /* InfoBanner.swift */; };
 		78E21B94B05447EDAF52C271 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1C1CF9BB8B7230EC511CC4 /* Persistence.swift */; };
+		7BFF2BA7F5544B7B3B32BC1C /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFABF7B5D77BB45130291AA9 /* Asset.swift */; };
 		81DC13696E07ACF7D02D63E6 /* RateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EA5C15C00D602F734729CA /* RateStore.swift */; };
 		82E6168BA2D4D109C76949D9 /* OdemeTakipApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121B3E8535A3A59E78D92CEE /* OdemeTakipApp.swift */; };
 		85020322418B8E172CE7948A /* PaymentCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527BC0130CA51901F8049969 /* PaymentCalculatorTests.swift */; };
@@ -43,6 +45,7 @@
 		8B88C8C30EBD04CFBF251034 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563E1E16A20D164E436FD270 /* SampleData.swift */; };
 		96F9C0D7C5CCEC8FC564F13D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5040EE6831DB33AD33915EA2 /* Assets.xcassets */; };
 		A60A0289987C10B30CF40804 /* NotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77DCC5D11FFDFAEF6439C68 /* NotificationScheduler.swift */; };
+		AABF2FC3E67DC3706A28E980 /* AssetDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED57E5CFBB44FD69D90CABC /* AssetDraft.swift */; };
 		AC520ABA564666A06377FBC7 /* AmountParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A87B22088181E37AF5CEEF /* AmountParser.swift */; };
 		AE8EB8B744C6A500EBDAA026 /* NotificationContentBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F027CB78FA23DEDD1D1E98 /* NotificationContentBuilder.swift */; };
 		B56029B9EB92A871FC6BC96A /* OdemeTakipUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D5A523F2F2872D22106CC2 /* OdemeTakipUITests.swift */; };
@@ -98,6 +101,7 @@
 		6081AC848CDA356CB9D1BC18 /* YearMonth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearMonth.swift; sourceTree = "<group>"; };
 		61B06A01C996481C06E266A8 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		69690146152DA445844FB9F4 /* SummaryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryCardView.swift; sourceTree = "<group>"; };
+		6ED57E5CFBB44FD69D90CABC /* AssetDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetDraft.swift; sourceTree = "<group>"; };
 		760A30D93D7F5DA4FA0103D3 /* PaymentFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentFormView.swift; sourceTree = "<group>"; };
 		766118F3B242A97224E9FA56 /* MonthTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthTrackerTests.swift; sourceTree = "<group>"; };
 		77B8F527FAD862CB9192E3BD /* PaymentKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentKind.swift; sourceTree = "<group>"; };
@@ -122,9 +126,11 @@
 		D6F848E2090ED33C6E38AA78 /* PaymentDeletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentDeletion.swift; sourceTree = "<group>"; };
 		DA1C1CF9BB8B7230EC511CC4 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		DC167838A315A24EACCF60F1 /* InfoBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoBanner.swift; sourceTree = "<group>"; };
+		E0BFB61A3F257BDE54DFC79A /* AssetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetTests.swift; sourceTree = "<group>"; };
 		E2EA5C15C00D602F734729CA /* RateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateStore.swift; sourceTree = "<group>"; };
 		E92864563763E614174E87DE /* YearMonthTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearMonthTests.swift; sourceTree = "<group>"; };
 		EA9BEADDD5FA0921F0FFDA6B /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
+		EFABF7B5D77BB45130291AA9 /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
 		F2761EF82D6A85215F3E13F7 /* MonthPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthPicker.swift; sourceTree = "<group>"; };
 		F7558A5C98267824C37FB5A1 /* CreditDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -160,6 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				89A528FFE7034C9C2B420E1E /* AmountParserTests.swift */,
+				E0BFB61A3F257BDE54DFC79A /* AssetTests.swift */,
 				95E377CFC0610B4EF0CF1942 /* ExchangeRatesTests.swift */,
 				77DC0DE05EEC84D1BCFACA82 /* GoldPricesTests.swift */,
 				A604D0877591C6593549497F /* MoneyFormatterTests.swift */,
@@ -178,6 +185,7 @@
 			isa = PBXGroup;
 			children = (
 				A0A87B22088181E37AF5CEEF /* AmountParser.swift */,
+				6ED57E5CFBB44FD69D90CABC /* AssetDraft.swift */,
 				AE078CD487C8303CD36DB932 /* CashPaymentDraft.swift */,
 				44521EA7B4E7F7A016604A76 /* ExchangeRates.swift */,
 				1CAC3CD2847A98CAF12107B3 /* MoneyFormatter.swift */,
@@ -204,6 +212,7 @@
 		7648581DE7521D176651746A /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				EFABF7B5D77BB45130291AA9 /* Asset.swift */,
 				59D3C92DCC199DC6FCF0C9E3 /* CashPayment.swift */,
 				2BB56F6CDAA1AE7EDE2A1735 /* Payment.swift */,
 				77B8F527FAD862CB9192E3BD /* PaymentKind.swift */,
@@ -435,6 +444,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				154041551A3598E4D673DF8A /* AmountParserTests.swift in Sources */,
+				4323C604016C134A1B16F834 /* AssetTests.swift in Sources */,
 				14BB2F1D315475BE3D039EB5 /* ExchangeRatesTests.swift in Sources */,
 				0D09DD6C00D5465420C2B186 /* GoldPricesTests.swift in Sources */,
 				388CA95F5B6CD7F502236C3E /* MoneyFormatterTests.swift in Sources */,
@@ -462,6 +472,8 @@
 			files = (
 				7026AC9BD6BD9171E4AAEB50 /* AddCashPaymentView.swift in Sources */,
 				AC520ABA564666A06377FBC7 /* AmountParser.swift in Sources */,
+				7BFF2BA7F5544B7B3B32BC1C /* Asset.swift in Sources */,
+				AABF2FC3E67DC3706A28E980 /* AssetDraft.swift in Sources */,
 				3E96CF058E2A693EB5385DAB /* CashDetailView.swift in Sources */,
 				4A4709DAE1A81EB8F5C1452B /* CashPayment.swift in Sources */,
 				DF44C254D07780A184DE3826 /* CashPaymentDraft.swift in Sources */,
