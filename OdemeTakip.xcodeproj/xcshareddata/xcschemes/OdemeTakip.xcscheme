@@ -35,6 +35,20 @@
                ReferencedContainer = "container:OdemeTakip.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7BF1979181A6AB3E71F1CA69"
+               BuildableName = "OdemeTakipUITests.xctest"
+               BlueprintName = "OdemeTakipUITests"
+               ReferencedContainer = "container:OdemeTakip.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -61,6 +75,17 @@
                BlueprintIdentifier = "4193241267FC1DB95833C449"
                BuildableName = "OdemeTakipTests.xctest"
                BlueprintName = "OdemeTakipTests"
+               ReferencedContainer = "container:OdemeTakip.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "7BF1979181A6AB3E71F1CA69"
+               BuildableName = "OdemeTakipUITests.xctest"
+               BlueprintName = "OdemeTakipUITests"
                ReferencedContainer = "container:OdemeTakip.xcodeproj">
             </BuildableReference>
          </TestableReference>

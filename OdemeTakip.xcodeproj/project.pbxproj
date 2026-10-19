@@ -37,6 +37,7 @@
 		A60A0289987C10B30CF40804 /* NotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77DCC5D11FFDFAEF6439C68 /* NotificationScheduler.swift */; };
 		AC520ABA564666A06377FBC7 /* AmountParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A87B22088181E37AF5CEEF /* AmountParser.swift */; };
 		AE8EB8B744C6A500EBDAA026 /* NotificationContentBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F027CB78FA23DEDD1D1E98 /* NotificationContentBuilder.swift */; };
+		B56029B9EB92A871FC6BC96A /* OdemeTakipUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D5A523F2F2872D22106CC2 /* OdemeTakipUITests.swift */; };
 		CDBE2656B303CEE0B67AB55F /* PaymentCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0268448F46F57866703BB903 /* PaymentCalculator.swift */; };
 		D4B37414EEA7679A852D3AAC /* NotificationContentBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45CF986C7721B47C6544BF4 /* NotificationContentBuilderTests.swift */; };
 		DA018ACDBC7FB2A384EB639E /* PaymentDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCE1A56F185895F7CE00B05 /* PaymentDraft.swift */; };
@@ -55,6 +56,13 @@
 			remoteGlobalIDString = 8E396DA12B7518CFB8535B6B;
 			remoteInfo = OdemeTakip;
 		};
+		AC310EAAFF000D0C3A330B87 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = BC9288125BC415A3BC024896 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8E396DA12B7518CFB8535B6B;
+			remoteInfo = OdemeTakip;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -63,6 +71,7 @@
 		0C14F88A4D9A8AC81490953A /* PaymentSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentSnapshot.swift; sourceTree = "<group>"; };
 		121B3E8535A3A59E78D92CEE /* OdemeTakipApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdemeTakipApp.swift; sourceTree = "<group>"; };
 		1CAC3CD2847A98CAF12107B3 /* MoneyFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyFormatter.swift; sourceTree = "<group>"; };
+		250996F8E0A526354F4B285B /* OdemeTakipUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = OdemeTakipUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BB56F6CDAA1AE7EDE2A1735 /* Payment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payment.swift; sourceTree = "<group>"; };
 		38DACA7D4889E828CFB67EC9 /* FilterBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBar.swift; sourceTree = "<group>"; };
 		4265AE1AECD323B7769D022A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
@@ -85,6 +94,7 @@
 		89A528FFE7034C9C2B420E1E /* AmountParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountParserTests.swift; sourceTree = "<group>"; };
 		98A3789EF46EB33A5E399CE7 /* InstallmentRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallmentRowView.swift; sourceTree = "<group>"; };
 		A0A87B22088181E37AF5CEEF /* AmountParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountParser.swift; sourceTree = "<group>"; };
+		A2D5A523F2F2872D22106CC2 /* OdemeTakipUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdemeTakipUITests.swift; sourceTree = "<group>"; };
 		A604D0877591C6593549497F /* MoneyFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyFormatterTests.swift; sourceTree = "<group>"; };
 		A77DCC5D11FFDFAEF6439C68 /* NotificationScheduler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationScheduler.swift; sourceTree = "<group>"; };
 		AE078CD487C8303CD36DB932 /* CashPaymentDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashPaymentDraft.swift; sourceTree = "<group>"; };
@@ -102,6 +112,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
+		0003ED6ED67FCFE0574D1A57 /* OdemeTakipUITests */ = {
+			isa = PBXGroup;
+			children = (
+				A2D5A523F2F2872D22106CC2 /* OdemeTakipUITests.swift */,
+			);
+			path = OdemeTakipUITests;
+			sourceTree = "<group>";
+		};
 		17ACE5B66E3584AFC914ABCC /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -153,6 +171,7 @@
 			children = (
 				883497B8400ED2892169CE3A /* OdemeTakip.app */,
 				5130855919CD6ECDFBA10F47 /* OdemeTakipTests.xctest */,
+				250996F8E0A526354F4B285B /* OdemeTakipUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -191,6 +210,7 @@
 			children = (
 				912ECE0E4FC5CBD8EE910C51 /* OdemeTakip */,
 				6AF3016BAE99FA510FA841FA /* OdemeTakipTests */,
+				0003ED6ED67FCFE0574D1A57 /* OdemeTakipUITests */,
 				748A10A15175F81ECF443E51 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -290,6 +310,24 @@
 			productReference = 5130855919CD6ECDFBA10F47 /* OdemeTakipTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		7BF1979181A6AB3E71F1CA69 /* OdemeTakipUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 85CC692C2D77588B8A189218 /* Build configuration list for PBXNativeTarget "OdemeTakipUITests" */;
+			buildPhases = (
+				CD8F6DC158EEE11082B449A8 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				F1C3AC7F19EE73A4F7B9FD33 /* PBXTargetDependency */,
+			);
+			name = OdemeTakipUITests;
+			packageProductDependencies = (
+			);
+			productName = OdemeTakipUITests;
+			productReference = 250996F8E0A526354F4B285B /* OdemeTakipUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		8E396DA12B7518CFB8535B6B /* OdemeTakip */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 1EE10EB215416DE913A92C6C /* Build configuration list for PBXNativeTarget "OdemeTakip" */;
@@ -321,6 +359,11 @@
 						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
+					7BF1979181A6AB3E71F1CA69 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+						TestTargetID = 8E396DA12B7518CFB8535B6B;
+					};
 					8E396DA12B7518CFB8535B6B = {
 						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
@@ -343,6 +386,7 @@
 			targets = (
 				8E396DA12B7518CFB8535B6B /* OdemeTakip */,
 				4193241267FC1DB95833C449 /* OdemeTakipTests */,
+				7BF1979181A6AB3E71F1CA69 /* OdemeTakipUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -370,6 +414,14 @@
 				04E7666EAFE655B77A9C9EDA /* PaymentDraftTests.swift in Sources */,
 				014883F3AD8CF434229A4636 /* PaymentModelTests.swift in Sources */,
 				DC6BBDB9E581E7313FD22E51 /* YearMonthTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		CD8F6DC158EEE11082B449A8 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B56029B9EB92A871FC6BC96A /* OdemeTakipUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,9 +470,31 @@
 			target = 8E396DA12B7518CFB8535B6B /* OdemeTakip */;
 			targetProxy = 34DDD4CF2B2CACACFFA28B47 /* PBXContainerItemProxy */;
 		};
+		F1C3AC7F19EE73A4F7B9FD33 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8E396DA12B7518CFB8535B6B /* OdemeTakip */;
+			targetProxy = AC310EAAFF000D0C3A330B87 /* PBXContainerItemProxy */;
+		};
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		1BD5AFE13B8A831A7B5A6150 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.alpiysl.odemetakip.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = OdemeTakip;
+			};
+			name = Debug;
+		};
 		271E8F0BB144DB674DAAB038 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -521,6 +595,23 @@
 				PRODUCT_NAME = OdemeTakip;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		6F6FCADCB32FE6BEA1F52841 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.alpiysl.odemetakip.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = OdemeTakip;
 			};
 			name = Release;
 		};
@@ -642,6 +733,15 @@
 			buildConfigurations = (
 				271E8F0BB144DB674DAAB038 /* Debug */,
 				BE92813D2F67925526D08E3D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		85CC692C2D77588B8A189218 /* Build configuration list for PBXNativeTarget "OdemeTakipUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1BD5AFE13B8A831A7B5A6150 /* Debug */,
+				6F6FCADCB32FE6BEA1F52841 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;

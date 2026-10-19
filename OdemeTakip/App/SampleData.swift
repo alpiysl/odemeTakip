@@ -7,6 +7,12 @@ import SwiftUI
 enum SampleData {
     @MainActor
     static func insertIfRequested(into context: ModelContext) {
+        if ProcessInfo.processInfo.arguments.contains("-resetData") {
+            for payment in (try? context.fetch(FetchDescriptor<Payment>())) ?? [] {
+                context.delete(payment)
+            }
+            context.saveQuietly()
+        }
         guard ProcessInfo.processInfo.arguments.contains("-seedSampleData"),
               (try? context.fetchCount(FetchDescriptor<Payment>())) == 0 else { return }
 

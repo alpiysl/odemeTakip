@@ -45,15 +45,29 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.alpiysl.odemetakip.tests
         GENERATE_INFOPLIST_FILE: YES
+  OdemeTakipUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - OdemeTakipUITests
+    dependencies:
+      - target: OdemeTakip
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.alpiysl.odemetakip.uitests
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: OdemeTakip
 schemes:
   OdemeTakip:
     build:
       targets:
         OdemeTakip: all
         OdemeTakipTests: [test]
+        OdemeTakipUITests: [test]
     run:
       config: Release
     test:
       config: Debug
       targets:
         - OdemeTakipTests
+        - OdemeTakipUITests

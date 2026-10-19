@@ -3,6 +3,8 @@ import UserNotifications
 
 @MainActor
 enum NotificationScheduler {
+    private static let monthlyPrefix = "monthly-"
+
     /// İzin hiç sorulmadıysa sorar. Bildirim gösterilebiliyorsa true.
     static func requestAuthorization() async -> Bool {
         let center = UNUserNotificationCenter.current()
@@ -25,7 +27,10 @@ enum NotificationScheduler {
     /// Bekleyen tüm aylık bildirimleri silip önümüzdeki 12 ay için yeniden kurar.
     static func reschedule(payments: [PaymentSnapshot], now: Date = .now) async {
         let center = UNUserNotificationCenter.current()
-        center.removeAllPendingNotificationRequests()
+        let monthlyIDs = await center.pendingNotificationRequests()
+            .map(\.identifier)
+            .filter { $0.hasPrefix(monthlyPrefix) }
+        center.removePendingNotificationRequests(withIdentifiers: monthlyIDs)
         for month in NotificationContentBuilder.triggerMonths(after: now) {
             guard let content = NotificationContentBuilder.content(for: month, payments: payments) else { continue }
             var components = DateComponents()
@@ -35,7 +40,7 @@ enum NotificationScheduler {
             components.hour = NotificationContentBuilder.hour
             components.minute = 0
             let request = UNNotificationRequest(
-                identifier: "monthly-\(month.year)-\(month.month)",
+                identifier: "\(monthlyPrefix)\(month.year)-\(month.month)",
                 content: makeContent(content),
                 trigger: UNCalendarNotificationTrigger(dateMatching: components, repeats: false))
             do {

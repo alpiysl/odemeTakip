@@ -24,6 +24,11 @@ struct RootView: View {
             #endif
             notificationsAllowed = await NotificationScheduler.requestAuthorization()
             await NotificationScheduler.reschedule(payments: snapshots)
+            #if DEBUG
+            if ProcessInfo.processInfo.arguments.contains("-testNotification") {
+                await NotificationScheduler.scheduleTest(payments: snapshots)
+            }
+            #endif
         }
         .task(id: snapshots) {
             await NotificationScheduler.reschedule(payments: snapshots)
