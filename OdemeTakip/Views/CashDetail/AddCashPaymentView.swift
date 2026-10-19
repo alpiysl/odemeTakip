@@ -28,6 +28,7 @@ struct AddCashPaymentView: View {
                             .focused($amountFocused)
                     }
                     DatePicker("Tarih", selection: $draft.date, displayedComponents: .date)
+                        .onChange(of: draft.date) { amountFocused = false }
                         .environment(\.locale, Locale(identifier: "tr_TR"))
                 } footer: {
                     if let message = draft.validationMessage {
@@ -39,6 +40,7 @@ struct AddCashPaymentView: View {
                 .listRowBackground(Theme.surface)
             }
             .scrollContentBackground(.hidden)
+            .scrollDismissesKeyboard(.interactively)
             .background(Theme.background)
             .navigationTitle("Ödeme ekle")
             .navigationBarTitleDisplayMode(.inline)
@@ -50,6 +52,11 @@ struct AddCashPaymentView: View {
                     Button("Kaydet") { save() }
                         .fontWeight(.bold)
                         .disabled(draft.amount == nil)
+                }
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Bitti") { amountFocused = false }
+                        .fontWeight(.semibold)
                 }
             }
             .onAppear { amountFocused = true }

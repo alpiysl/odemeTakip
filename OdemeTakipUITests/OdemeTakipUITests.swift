@@ -11,10 +11,11 @@ final class OdemeTakipUITests: XCTestCase {
 
     private func launch(_ extra: [String] = []) -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments = ["-resetData", "-seedSampleData"] + extra
+        app.launchArguments = ["-resetData", "-seedSampleData", "-fakeRates"] + extra
         app.launch()
         let allow = springboard.buttons["Allow"]
         if allow.waitForExistence(timeout: 4) { allow.tap() }
+        XCTAssertTrue(app.descendants(matching: .any)["splash"].waitForNonExistence(timeout: 5))
         return app
     }
 
@@ -72,9 +73,19 @@ final class OdemeTakipUITests: XCTestCase {
         let numbers = app.textFields.matching(NSPredicate(format: "placeholderValue == '0'"))
         numbers.element(boundBy: 0).tap()
         numbers.element(boundBy: 0).typeText("12")
+        app.buttons["Bitti"].tap()
         numbers.element(boundBy: 1).tap()
         numbers.element(boundBy: 1).typeText("1000")
         XCTAssertTrue(text(app, "Toplam ₺12.000 · Kalan ₺12.000").waitForExistence(timeout: 3))
+        XCTAssertTrue(app.keyboards.element.exists)
+        app.buttons["Bitti"].tap()
+        XCTAssertTrue(app.keyboards.element.waitForNonExistence(timeout: 3))
+
+        app.textFields["Ad"].tap()
+        XCTAssertTrue(app.keyboards.element.waitForExistence(timeout: 3))
+        app.segmentedControls.buttons["Elden"].tap()
+        XCTAssertTrue(app.keyboards.element.waitForNonExistence(timeout: 3))
+        app.segmentedControls.buttons["Kredi"].tap()
         app.buttons["Kaydet"].tap()
 
         XCTAssertTrue(text(app, "Telefon").waitForExistence(timeout: 3))
@@ -94,5 +105,21 @@ final class OdemeTakipUITests: XCTestCase {
         let label = banner.label
         XCTAssertTrue(label.contains("Kredi:"), label)
         XCTAssertTrue(label.contains("Elden kalan:"), label)
+    }
+
+    func testSplashThenLiraTotalsWithRates() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-resetData", "-seedSampleData", "-fakeRates"]
+        app.launch()
+        let allow = springboard.buttons["Allow"]
+        if allow.waitForExistence(timeout: 4) { allow.tap() }
+        XCTAssertTrue(app.descendants(matching: .any)["splash"].waitForNonExistence(timeout: 5))
+
+        // ₺455.000 + $2.400 × 40 = ₺551.000
+        XCTAssertTrue(text(app, "₺551.000").waitForExistence(timeout: 5))
+        let rateBar = app.descendants(matching: .any)["rateBar"]
+        XCTAssertTrue(rateBar.label.contains("1$ = ₺40 · 1€ = ₺50 · TCMB 19 Eki"), rateBar.label)
+        XCTAssertTrue(text(app, "≈ ₺96.000").exists)
+        XCTAssertFalse(text(app, "+ $2.400").exists)
     }
 }

@@ -14,6 +14,7 @@ struct PaymentFormView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var draft: PaymentDraft
     @State private var confirmingDelete = false
+    @FocusState private var focusedField: String?
 
     init(mode: Mode, onDeleteRequested: (() -> Void)? = nil) {
         self.mode = mode
@@ -40,6 +41,7 @@ struct PaymentFormView: View {
                 Section {
                     TextField("Ad", text: $draft.name)
                         .textInputAutocapitalization(.words)
+                        .focused($focusedField, equals: "Ad")
                     Picker("İkon", selection: $draft.icon) {
                         ForEach(PaymentDraft.icons, id: \.self) { Text($0).tag($0) }
                     }
@@ -104,8 +106,18 @@ struct PaymentFormView: View {
                         .fontWeight(.bold)
                         .disabled(!draft.isValid)
                 }
+                ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Bitti") { focusedField = nil }
+                        .fontWeight(.semibold)
+                }
             }
+            .scrollDismissesKeyboard(.interactively)
+            .onChange(of: draft.icon) { focusedField = nil }
+            .onChange(of: draft.currency) { focusedField = nil }
+            .onChange(of: draft.firstMonth) { focusedField = nil }
             .onChange(of: draft.kind) { _, newKind in
+                focusedField = nil
                 if PaymentKind.allCases.map(PaymentDraft.defaultIcon(for:)).contains(draft.icon) {
                     draft.icon = PaymentDraft.defaultIcon(for: newKind)
                 }
@@ -128,6 +140,7 @@ struct PaymentFormView: View {
         LabeledContent(title) {
             TextField("0", text: text)
                 .keyboardType(decimal ? .decimalPad : .numberPad)
+                .focused($focusedField, equals: title)
                 .multilineTextAlignment(.trailing)
                 .monospacedDigit()
         }
