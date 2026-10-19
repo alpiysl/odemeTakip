@@ -55,7 +55,7 @@ struct PaymentFormView: View {
                         numberField("Aylık tutar", text: $draft.monthlyAmountText, decimal: true)
                         MonthPicker(title: "İlk taksit ayı", selection: $draft.firstMonth)
                         if !draft.isEditing {
-                            numberField("Önceden ödenen taksit", text: $draft.prepaidCountText, decimal: false)
+                            numberField("Ödenmiş taksit sayısı", text: $draft.prepaidCountText, decimal: false)
                         }
                     }
                     .listRowBackground(Theme.surface)
@@ -120,6 +120,7 @@ struct PaymentFormView: View {
                 Text("Tüm ödeme geçmişi de silinir.")
             }
         }
+        .tint(Theme.accent)
         .preferredColorScheme(.dark)
     }
 

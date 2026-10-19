@@ -35,5 +35,16 @@ struct RootView: View {
                 await NotificationScheduler.reschedule(payments: snapshots)
             }
         }
+        #if DEBUG
+        .fullScreenCover(isPresented: Binding(
+            get: { debugScreen != nil && !payments.isEmpty },
+            set: { if !$0 { debugScreen = nil } })) {
+            DebugScreen(name: debugScreen ?? "", payments: payments)
+        }
+        #endif
     }
+
+    #if DEBUG
+    @State private var debugScreen = SampleData.requestedScreen
+    #endif
 }

@@ -1,6 +1,7 @@
 #if DEBUG
 import Foundation
 import SwiftData
+import SwiftUI
 
 /// `-seedSampleData` argümanıyla açılırsa ve veri yoksa örnek kayıtlar ekler.
 enum SampleData {
@@ -38,6 +39,34 @@ enum SampleData {
             }
         }
         context.saveQuietly()
+    }
+
+    /// `-debugScreen <credit|cash|form>` argümanının değeri.
+    static var requestedScreen: String? {
+        let args = ProcessInfo.processInfo.arguments
+        guard let index = args.firstIndex(of: "-debugScreen"), index + 1 < args.count else { return nil }
+        return args[index + 1]
+    }
+}
+
+/// Ekran görüntüsü kontrolü için ekranı doğrudan açar (sadece Debug).
+struct DebugScreen: View {
+    let name: String
+    let payments: [Payment]
+
+    var body: some View {
+        switch name {
+        case "credit":
+            if let payment = payments.first(where: { $0.kind == .credit }) {
+                NavigationStack { CreditDetailView(payment: payment) }
+            }
+        case "cash":
+            if let payment = payments.first(where: { $0.kind == .cash }) {
+                NavigationStack { CashDetailView(payment: payment) }
+            }
+        default:
+            PaymentFormView(mode: .create)
+        }
     }
 }
 #endif
