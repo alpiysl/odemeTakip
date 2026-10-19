@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		014883F3AD8CF434229A4636 /* PaymentModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEE527522F5CDB16D4479F0 /* PaymentModelTests.swift */; };
 		04E7666EAFE655B77A9C9EDA /* PaymentDraftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E39C9974A3F289A4FF9DBBE /* PaymentDraftTests.swift */; };
+		1124655AA02C0C8F0C3A3075 /* MonthPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2761EF82D6A85215F3E13F7 /* MonthPicker.swift */; };
 		154041551A3598E4D673DF8A /* AmountParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 89A528FFE7034C9C2B420E1E /* AmountParserTests.swift */; };
 		2FA2965340F8C58F12D94DBC /* YearMonth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6081AC848CDA356CB9D1BC18 /* YearMonth.swift */; };
 		35DC6D0F82E5018EBD19F85B /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B80EB2871F7EF597C4AC6DA /* RootView.swift */; };
@@ -88,6 +89,7 @@
 		DA1C1CF9BB8B7230EC511CC4 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		DC167838A315A24EACCF60F1 /* InfoBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoBanner.swift; sourceTree = "<group>"; };
 		E92864563763E614174E87DE /* YearMonthTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearMonthTests.swift; sourceTree = "<group>"; };
+		F2761EF82D6A85215F3E13F7 /* MonthPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthPicker.swift; sourceTree = "<group>"; };
 		F7558A5C98267824C37FB5A1 /* CreditDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreditDetailView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -167,6 +169,7 @@
 		7AA26B18D665B88BBDE4138F /* Form */ = {
 			isa = PBXGroup;
 			children = (
+				F2761EF82D6A85215F3E13F7 /* MonthPicker.swift */,
 				760A30D93D7F5DA4FA0103D3 /* PaymentFormView.swift */,
 			);
 			path = Form;
@@ -371,6 +374,7 @@
 				5E24C0310B0A9E89C2624E72 /* HomeView.swift in Sources */,
 				735DF3A390CB6AE39FDB199C /* InfoBanner.swift in Sources */,
 				452217B6F645DF3257EA669F /* MoneyFormatter.swift in Sources */,
+				1124655AA02C0C8F0C3A3075 /* MonthPicker.swift in Sources */,
 				AE8EB8B744C6A500EBDAA026 /* NotificationContentBuilder.swift in Sources */,
 				A60A0289987C10B30CF40804 /* NotificationScheduler.swift in Sources */,
 				82E6168BA2D4D109C76949D9 /* OdemeTakipApp.swift in Sources */,
