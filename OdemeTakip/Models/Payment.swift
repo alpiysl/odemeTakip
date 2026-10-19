@@ -85,7 +85,7 @@ final class Payment {
             } else {
                 paidInstallmentIndexes = Array(0..<prepaid)
             }
-        case .cash:
+        case .cash, .receivable:
             guard let debt = draft.totalDebt else { return false }
             totalDebt = debt
         }
@@ -107,7 +107,7 @@ final class Payment {
             draft.installmentCountText = String(installmentCount)
             draft.monthlyAmountText = AmountParser.editingText(monthlyAmount)
             draft.minimumInstallmentCount = max(1, (paidInstallmentIndexes.max() ?? -1) + 1)
-        case .cash:
+        case .cash, .receivable:
             draft.totalDebtText = AmountParser.editingText(totalDebt)
             draft.minimumTotalDebt = snapshot.cashPaid
         }

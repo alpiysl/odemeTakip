@@ -67,4 +67,11 @@ struct NotificationContentBuilderTests {
         let months = NotificationContentBuilder.triggerMonths(after: date(2026, 12, 15, 10), count: 2)
         #expect(months == [YearMonth(year: 2027, month: 1), YearMonth(year: 2027, month: 2)])
     }
+
+    @Test func receivablesNeverAppearInNotification() {
+        let payments: [PaymentSnapshot] = [
+            PaymentSnapshot(kind: .receivable, currency: .TRY, totalDebt: 20_000),
+        ]
+        #expect(NotificationContentBuilder.content(for: nov2026, payments: payments) == nil)
+    }
 }

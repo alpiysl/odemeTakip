@@ -77,7 +77,7 @@ struct HomeView: View {
         NavigationLink {
             switch payment.kind {
             case .credit: CreditDetailView(payment: payment, currentMonth: currentMonth)
-            case .cash: CashDetailView(payment: payment)
+            case .cash, .receivable: CashDetailView(payment: payment)
             }
         } label: {
             PaymentRowView(payment: payment, rates: rates)

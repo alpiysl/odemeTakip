@@ -95,4 +95,20 @@ struct PaymentCalculatorTests {
         #expect(s.collapsedPaidCount == 1)
         #expect(s.visibleRows.first?.index == 1)
     }
+
+    @Test func receivablesStayOutOfDebtTotals() {
+        let payments: [PaymentSnapshot] = [
+            .cash(debt: 5_000),
+            PaymentSnapshot(kind: .receivable, currency: .TRY, totalDebt: 20_000, cashPaid: 5_000, cashPaymentCount: 1),
+            PaymentSnapshot(kind: .receivable, currency: .ceyrek, totalDebt: 4),
+            PaymentSnapshot(kind: .receivable, currency: .USD, totalDebt: 10),
+            PaymentSnapshot(kind: .receivable, currency: .USD, totalDebt: 10),
+        ]
+        let t = PaymentCalculator.totals(payments)
+        #expect(t.cash == [.TRY: 5_000])
+        #expect(t.overall == [.TRY: 5_000])
+        #expect(t.receivable == [.TRY: 15_000, .ceyrek: 4, .USD: 20])
+        #expect(PaymentCalculator.remaining(payments[1]) == 15_000)
+        #expect(PaymentCalculator.primaryCurrency(payments) == .TRY)
+    }
 }

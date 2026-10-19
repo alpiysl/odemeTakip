@@ -3,11 +3,14 @@ import Foundation
 enum PaymentKind: String, CaseIterable, Codable, Sendable {
     case credit
     case cash
+    /// Birikim tarafı: sana borçlu olunan tutar (elden borcun aynası).
+    case receivable
 
     var title: String {
         switch self {
         case .credit: "Kredi"
         case .cash: "Elden"
+        case .receivable: "Alacak"
         }
     }
 }

@@ -12,7 +12,8 @@ struct RootView: View {
     @State private var month = MonthTracker()
     @State private var rateStore = RootView.makeRateStore()
 
-    private var payments: [Payment] { queriedPayments.filter(\.isLive) }
+    /// Borçlar (kredi + elden); alacaklar birikim tarafında.
+    private var payments: [Payment] { queriedPayments.filter { $0.isLive && $0.kind != .receivable } }
 
     private var snapshots: [PaymentSnapshot] { payments.map(\.snapshot) }
 

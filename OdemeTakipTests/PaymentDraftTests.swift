@@ -116,4 +116,19 @@ struct PaymentDraftTests {
         #expect(cash.amount == nil)
         #expect(cash.validationMessage == nil)
     }
+
+    @Test func receivableDraftValidation() {
+        var d = PaymentDraft(firstMonth: YearMonth(year: 2026, month: 10))
+        d.kind = .receivable
+        d.name = "Mehmet"
+        #expect(d.validationMessage == "Geçerli bir toplam alacak gir")
+        d.totalDebtText = "3"
+        d.currency = .ceyrek
+        #expect(d.isValid)
+        d.isEditing = true
+        d.minimumTotalDebt = 5
+        #expect(d.validationMessage == "Toplam alacak tahsil edilenden (5 çeyrek) az olamaz")
+        #expect(PaymentDraft.defaultIcon(for: .receivable) == "💰")
+        #expect(PaymentKind.receivable.title == "Alacak")
+    }
 }

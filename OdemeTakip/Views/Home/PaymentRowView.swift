@@ -41,6 +41,8 @@ struct PaymentRowView: View {
             "\(PaymentCalculator.paidCount(s))/\(s.installmentCount) taksit · \(MoneyFormatter.string(s.monthlyAmount, s.currency))/ay"
         case .cash:
             "Elden · \(MoneyFormatter.string(s.cashPaid, s.currency)) ödendi"
+        case .receivable:
+            "Alacak · \(MoneyFormatter.string(s.cashPaid, s.currency)) tahsil edildi"
         }
     }
 }

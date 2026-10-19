@@ -119,4 +119,19 @@ struct PaymentModelTests {
         try context.save()
         #expect(!p.isLive)
     }
+
+    @Test func receivableCollectsPayments() throws {
+        var d = PaymentDraft(firstMonth: YearMonth(year: 2026, month: 10))
+        d.kind = .receivable
+        d.name = "Mehmet"
+        d.currency = .gram
+        d.totalDebtText = "20"
+        let p = try #require(Payment.make(from: d))
+        context.insert(p)
+        p.addCashPayment(amount: 5, date: .now)
+        try context.save()
+        #expect(p.kind == .receivable)
+        #expect(PaymentCalculator.remaining(p.snapshot) == 15)
+        #expect(p.makeDraft().minimumTotalDebt == 5)
+    }
 }

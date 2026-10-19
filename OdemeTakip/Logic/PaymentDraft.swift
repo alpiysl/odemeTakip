@@ -6,7 +6,11 @@ struct PaymentDraft: Equatable {
     static let icons = ["🏦", "🏠", "🚗", "💳", "📱", "🎓", "🤝", "💵", "👤", "🛒", "🏥", "✈️"]
 
     static func defaultIcon(for kind: PaymentKind) -> String {
-        kind == .credit ? "🏦" : "🤝"
+        switch kind {
+        case .credit: "🏦"
+        case .cash: "🤝"
+        case .receivable: "💰"
+        }
     }
 
     var kind: PaymentKind = .credit
@@ -69,6 +73,11 @@ struct PaymentDraft: Equatable {
             guard let debt = Self.positiveAmount(totalDebtText) else { return "Geçerli bir toplam borç gir" }
             if debt < minimumTotalDebt {
                 return "Toplam borç ödenen tutardan (\(MoneyFormatter.string(minimumTotalDebt, currency))) az olamaz"
+            }
+        case .receivable:
+            guard let total = Self.positiveAmount(totalDebtText) else { return "Geçerli bir toplam alacak gir" }
+            if total < minimumTotalDebt {
+                return "Toplam alacak tahsil edilenden (\(MoneyFormatter.string(minimumTotalDebt, currency))) az olamaz"
             }
         }
         return nil

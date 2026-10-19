@@ -8,7 +8,9 @@ struct DueSummary: Equatable, Sendable {
 struct Totals: Equatable, Sendable {
     var credit: [Currency: Decimal]
     var cash: [Currency: Decimal]
+    /// Sadece borçlar (kredi + elden).
     var overall: [Currency: Decimal]
+    var receivable: [Currency: Decimal] = [:]
 }
 
 enum ThisMonthStatus: Equatable {
@@ -35,21 +37,21 @@ enum PaymentCalculator {
     static func paidCount(_ p: PaymentSnapshot) -> Int {
         switch p.kind {
         case .credit: p.paidInstallments.filter { $0 >= 0 && $0 < p.installmentCount }.count
-        case .cash: p.cashPaymentCount
+        case .cash, .receivable: p.cashPaymentCount
         }
     }
 
     static func total(_ p: PaymentSnapshot) -> Decimal {
         switch p.kind {
         case .credit: Decimal(max(p.installmentCount, 0)) * p.monthlyAmount
-        case .cash: p.totalDebt
+        case .cash, .receivable: p.totalDebt
         }
     }
 
     static func paid(_ p: PaymentSnapshot) -> Decimal {
         switch p.kind {
         case .credit: Decimal(paidCount(p)) * p.monthlyAmount
-        case .cash: p.cashPaid
+        case .cash, .receivable: p.cashPaid
         }
     }
 
@@ -100,6 +102,9 @@ enum PaymentCalculator {
             switch p.kind {
             case .credit: totals.credit[p.currency, default: 0] += left
             case .cash: totals.cash[p.currency, default: 0] += left
+            case .receivable:
+                totals.receivable[p.currency, default: 0] += left
+                continue
             }
             totals.overall[p.currency, default: 0] += left
         }
@@ -109,7 +114,7 @@ enum PaymentCalculator {
     /// Kalanı olan kayıtlarda en sık kullanılan para birimi; eşitlikte TL, sonra USD, EUR.
     static func primaryCurrency(_ payments: [PaymentSnapshot]) -> Currency {
         var counts: [Currency: Int] = [:]
-        for p in payments where remaining(p) > 0 {
+        for p in payments where p.kind != .receivable && remaining(p) > 0 {
             counts[p.currency, default: 0] += 1
         }
         return Currency.allCases.sorted { a, b in

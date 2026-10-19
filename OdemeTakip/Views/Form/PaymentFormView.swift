@@ -31,7 +31,7 @@ struct PaymentFormView: View {
                 if !draft.isEditing {
                     Section {
                         Picker("Tür", selection: $draft.kind) {
-                            ForEach(PaymentKind.allCases, id: \.self) { Text($0.title).tag($0) }
+                            ForEach([PaymentKind.credit, .cash], id: \.self) { Text($0.title).tag($0) }
                         }
                         .pickerStyle(.segmented)
                         .listRowBackground(Color.clear)
