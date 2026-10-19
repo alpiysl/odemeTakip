@@ -15,6 +15,7 @@ struct RateStoreTests {
     }
 
     private let xml = Data(ExchangeRatesTests.sampleXML.utf8)
+    private let market = Data(GoldPricesTests.sampleJSON.utf8)
 
     @Test func refreshStoresAndPersistsRates() async {
         let store = RateStore(defaults: defaults, fetch: { [xml] in xml }, fetchGold: { throw FetchFailed() })
@@ -45,7 +46,7 @@ struct RateStoreTests {
     }
 
     @Test func freshRatesSkipNetwork() async {
-        let seeded = RateStore(defaults: defaults, fetch: { [xml] in xml }, fetchGold: { throw FetchFailed() })
+        let seeded = RateStore(defaults: defaults, fetch: { [xml] in xml }, fetchGold: { [market] in market })
         await seeded.refreshIfNeeded()
 
         let counter = Counter()
@@ -55,8 +56,6 @@ struct RateStoreTests {
         await store.refreshIfNeeded(now: .now.addingTimeInterval(7 * 3600))
         #expect(await counter.value == 1)
     }
-
-    private let market = Data(GoldPricesTests.sampleJSON.utf8)
 
     @Test func goldPricesMergeIntoRates() async {
         let store = RateStore(defaults: defaults, fetch: { [xml] in xml }, fetchGold: { [market] in market })
@@ -88,6 +87,16 @@ struct RateStoreTests {
         let store = RateStore(defaults: defaults, fetch: { throw FetchFailed() }, fetchGold: { throw FetchFailed() })
         #expect(store.rates?.usd == 40)
         #expect(store.rates?.rate(for: .gram) == nil)
+    }
+
+    @Test func freshCacheWithoutGoldStillFetchesGold() async {
+        // Önceki sürüm: sadece TCMB kuru, 1 saat önce alınmış.
+        let old = ExchangeRates(usd: 40, eur: 50, bulletinDate: .now, fetchedAt: .now.addingTimeInterval(-3600))
+        defaults.set(try? JSONEncoder().encode(old), forKey: "exchangeRates")
+
+        let store = RateStore(defaults: defaults, fetch: { [xml] in xml }, fetchGold: { [market] in market })
+        await store.refreshIfNeeded()
+        #expect(store.rates?.rate(for: .gram) == Decimal(string: "6602.36"))
     }
 }
 

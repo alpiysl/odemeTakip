@@ -27,7 +27,8 @@ final class RateStore {
     }
 
     func refreshIfNeeded(now: Date = .now) async {
-        if let rates, now.timeIntervalSince(rates.fetchedAt) < Self.maxAge { return }
+        // Taze ve altın fiyatları da varsa ağa çıkma (eski sürüm önbelleğinde altın yok).
+        if let rates, rates.gold?.isEmpty == false, now.timeIntervalSince(rates.fetchedAt) < Self.maxAge { return }
         guard !isRefreshing else { return }
         isRefreshing = true
         defer { isRefreshing = false }
