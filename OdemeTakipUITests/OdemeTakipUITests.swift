@@ -9,9 +9,9 @@ final class OdemeTakipUITests: XCTestCase {
         continueAfterFailure = false
     }
 
-    private func launch(_ extra: [String] = []) -> XCUIApplication {
+    private func launch(_ extra: [String] = [], mode: String = "debt") -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments = ["-resetData", "-seedSampleData", "-fakeRates"] + extra
+        app.launchArguments = ["-resetData", "-seedSampleData", "-fakeRates", "-startMode", mode] + extra
         app.launch()
         let allow = springboard.buttons["Allow"]
         if allow.waitForExistence(timeout: 4) { allow.tap() }
@@ -109,7 +109,7 @@ final class OdemeTakipUITests: XCTestCase {
 
     func testSplashThenLiraTotalsWithRates() {
         let app = XCUIApplication()
-        app.launchArguments = ["-resetData", "-seedSampleData", "-fakeRates"]
+        app.launchArguments = ["-resetData", "-seedSampleData", "-fakeRates", "-startMode", "debt"]
         app.launch()
         let allow = springboard.buttons["Allow"]
         if allow.waitForExistence(timeout: 4) { allow.tap() }
@@ -118,8 +118,94 @@ final class OdemeTakipUITests: XCTestCase {
         // ₺455.000 + $2.400 × 40 = ₺551.000
         XCTAssertTrue(text(app, "₺551.000").waitForExistence(timeout: 5))
         let rateBar = app.descendants(matching: .any)["rateBar"]
-        XCTAssertTrue(rateBar.label.contains("1$ = ₺40 · 1€ = ₺50 · TCMB 19 Eki"), rateBar.label)
+        XCTAssertTrue(rateBar.label.contains("$ ₺40 · € ₺50 · Gr ₺6.000"), rateBar.label)
+        XCTAssertTrue(rateBar.label.hasSuffix("TCMB 19 Eki"), rateBar.label)
         XCTAssertTrue(text(app, "≈ ₺96.000").exists)
         XCTAssertFalse(text(app, "+ $2.400").exists)
+    }
+
+    // MARK: Varlık Takip
+
+    func testOnboardingChoiceIsRemembered() {
+        let app = launch(mode: "none")
+        XCTAssertTrue(app.buttons["onboarding-savings"].waitForExistence(timeout: 5))
+        app.buttons["onboarding-savings"].tap()
+        app.buttons["Devam"].tap()
+        XCTAssertTrue(text(app, "Toplam varlık").waitForExistence(timeout: 3))
+
+        app.terminate()
+        app.launchArguments = ["-fakeRates"]
+        app.launch()
+        XCTAssertTrue(text(app, "Toplam varlık").waitForExistence(timeout: 6))
+    }
+
+    func testModeToggleShowsToastThenFades() {
+        let app = launch()
+        XCTAssertTrue(text(app, "Toplam kalan").waitForExistence(timeout: 5))
+        XCTAssertTrue(app.descendants(matching: .any)["netWorth"].firstMatch.exists)
+        app.buttons["mode-savings"].tap()
+        let toast = app.staticTexts["Ana ekran: Birikim Takip"]
+        XCTAssertTrue(toast.waitForExistence(timeout: 2))
+        XCTAssertTrue(text(app, "Toplam varlık").exists)
+        XCTAssertTrue(toast.waitForNonExistence(timeout: 4))
+    }
+
+    func testSavingsTotalsAndNetWorth() {
+        let app = launch(mode: "savings")
+        // 50 gr × 6.000 + 12 çeyrek × 10.000 + 10.000 $ × 40 + ₺209.319 + alacak ₺120.000
+        XCTAssertTrue(text(app, "₺1.149.319").waitForExistence(timeout: 5))
+        // Net = 1.149.319 − borç 551.000
+        let net = app.descendants(matching: .any)["netWorth"].firstMatch
+        XCTAssertTrue(net.label.contains("₺598.319"), net.label)
+        let rateBar = app.descendants(matching: .any)["rateBar"]
+        XCTAssertTrue(rateBar.label.contains("Gr ₺6.000 · Çyr ₺10.000 · Yrm ₺20.000 · Tam ₺40.000 · Reşat ₺41.000"), rateBar.label)
+    }
+
+    func testAssetDepositAndWithdrawLimit() {
+        let app = launch(mode: "savings")
+        XCTAssertTrue(text(app, "Altın").waitForExistence(timeout: 5))
+        text(app, "Altın").tap()
+        XCTAssertTrue(text(app, "₺300.000").waitForExistence(timeout: 3))
+
+        app.buttons["+ Ekle"].tap()
+        app.textFields.firstMatch.typeText("10")
+        app.buttons["Kaydet"].tap()
+        XCTAssertTrue(text(app, "₺360.000").waitForExistence(timeout: 3))
+
+        app.buttons["− Çıkar"].tap()
+        app.textFields.firstMatch.typeText("100")
+        XCTAssertTrue(text(app, "Mevcut miktardan (60 gr) fazla çıkarılamaz").waitForExistence(timeout: 3))
+        XCTAssertFalse(app.buttons["Kaydet"].isEnabled)
+    }
+
+    func testReceivableCollection() {
+        let app = launch(mode: "savings")
+        XCTAssertTrue(text(app, "Mehmet").waitForExistence(timeout: 5))
+        text(app, "Mehmet").tap()
+        app.buttons["+ Tahsilat ekle"].tap()
+        let field = app.textFields.firstMatch
+        field.typeText("200000")
+        XCTAssertTrue(text(app, "Kalan alacaktan (₺120.000) fazla olamaz").waitForExistence(timeout: 3))
+        field.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: 6) + "20000")
+        app.buttons["Kaydet"].tap()
+        XCTAssertTrue(text(app, "₺100.000").waitForExistence(timeout: 3))
+        XCTAssertTrue(text(app, "Kalan alacak").exists)
+    }
+
+    func testAddResatGoldFromMenu() {
+        let app = launch(mode: "savings")
+        XCTAssertTrue(app.buttons["Yeni kayıt"].waitForExistence(timeout: 5))
+        app.buttons["Yeni kayıt"].tap()
+        app.buttons["Birikim ekle"].tap()
+        app.textFields["Ad"].tap()
+        app.textFields["Ad"].typeText("Reşatlar")
+        app.buttons["Bitti"].tap()
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Tür'")).firstMatch.tap()
+        app.buttons["Reşat altın"].tap()
+        app.textFields["0"].tap()
+        app.textFields["0"].typeText("2")
+        app.buttons["Kaydet"].tap()
+        XCTAssertTrue(text(app, "Reşatlar").waitForExistence(timeout: 3))
+        XCTAssertTrue(text(app, "₺82.000").exists)
     }
 }

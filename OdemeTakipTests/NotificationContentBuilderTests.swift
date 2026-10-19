@@ -74,4 +74,14 @@ struct NotificationContentBuilderTests {
         ]
         #expect(NotificationContentBuilder.content(for: nov2026, payments: payments) == nil)
     }
+
+    @Test func goldDebtsConvertWhenPricesExist() {
+        let payments: [PaymentSnapshot] = [.cash(.ceyrek, debt: 5), .cash(debt: 1_000)]
+        let rates = ExchangeRates(usd: 40, eur: 50, bulletinDate: .now, fetchedAt: .now,
+                                  gold: [Currency.ceyrek.rawValue: 10_000])
+        #expect(NotificationContentBuilder.content(for: nov2026, payments: payments, rates: rates)?.body
+                == "Elden kalan: ₺51.000")
+        #expect(NotificationContentBuilder.content(for: nov2026, payments: payments, rates: nil)?.body
+                == "Elden kalan: ₺1.000 + 5 çeyrek")
+    }
 }

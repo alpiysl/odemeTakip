@@ -4,6 +4,7 @@ import SwiftUI
 struct PaymentFormView: View {
     enum Mode {
         case create
+        case createReceivable
         case edit(Payment)
     }
 
@@ -21,6 +22,11 @@ struct PaymentFormView: View {
         self.onDeleteRequested = onDeleteRequested
         switch mode {
         case .create: _draft = State(initialValue: PaymentDraft(firstMonth: YearMonth(date: .now)))
+        case .createReceivable:
+            var draft = PaymentDraft(firstMonth: YearMonth(date: .now))
+            draft.kind = .receivable
+            draft.icon = PaymentDraft.defaultIcon(for: .receivable)
+            _draft = State(initialValue: draft)
         case .edit(let payment): _draft = State(initialValue: payment.makeDraft())
         }
     }
@@ -28,7 +34,7 @@ struct PaymentFormView: View {
     var body: some View {
         NavigationStack {
             Form {
-                if !draft.isEditing {
+                if !draft.isEditing && draft.kind != .receivable {
                     Section {
                         Picker("Tür", selection: $draft.kind) {
                             ForEach([PaymentKind.credit, .cash], id: \.self) { Text($0.title).tag($0) }
@@ -46,7 +52,7 @@ struct PaymentFormView: View {
                         ForEach(PaymentDraft.icons, id: \.self) { Text($0).tag($0) }
                     }
                     Picker("Para birimi", selection: $draft.currency) {
-                        ForEach(Currency.fiatCases) { Text($0.displayName).tag($0) }
+                        ForEach(PaymentDraft.currencyOptions) { Text($0.displayName).tag($0) }
                     }
                 }
                 .listRowBackground(Theme.surface)
@@ -63,7 +69,7 @@ struct PaymentFormView: View {
                     .listRowBackground(Theme.surface)
                 } else {
                     Section {
-                        numberField("Toplam borç", text: $draft.totalDebtText, decimal: true)
+                        numberField(draft.kind == .receivable ? "Toplam alacak" : "Toplam borç", text: $draft.totalDebtText, decimal: true)
                     }
                     .listRowBackground(Theme.surface)
                 }
@@ -95,7 +101,7 @@ struct PaymentFormView: View {
             }
             .scrollContentBackground(.hidden)
             .background(Theme.background)
-            .navigationTitle(draft.isEditing ? "Düzenle" : "Yeni ödeme")
+            .navigationTitle(draft.isEditing ? "Düzenle" : (draft.kind == .receivable ? "Yeni alacak" : "Yeni ödeme"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -148,7 +154,7 @@ struct PaymentFormView: View {
 
     private func save() {
         switch mode {
-        case .create:
+        case .create, .createReceivable:
             guard let payment = Payment.make(from: draft) else { return }
             context.insert(payment)
         case .edit(let payment):

@@ -131,4 +131,20 @@ struct PaymentDraftTests {
         #expect(PaymentDraft.defaultIcon(for: .receivable) == "💰")
         #expect(PaymentKind.receivable.title == "Alacak")
     }
+
+    @Test func receivableCollectionMessageMentionsReceivable() {
+        var d = CashPaymentDraft(remaining: 4, currency: .ceyrek, isReceivable: true)
+        d.amountText = "5"
+        #expect(d.validationMessage == "Kalan alacaktan (4 çeyrek) fazla olamaz")
+    }
+
+    @Test func debtFormOffersGoldUnits() {
+        #expect(PaymentDraft.currencyOptions == Currency.allCases)
+        var d = PaymentDraft(firstMonth: YearMonth(year: 2026, month: 10))
+        d.kind = .cash
+        d.name = "Kuyumcu"
+        d.currency = .yarim
+        d.totalDebtText = "3"
+        #expect(d.isValid)
+    }
 }

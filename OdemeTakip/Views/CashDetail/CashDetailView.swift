@@ -22,16 +22,17 @@ struct CashDetailView: View {
         let snapshot = payment.snapshot
         let entries = payment.sortedCashPayments
         let completed = PaymentCalculator.isCompleted(snapshot)
+        let receivable = payment.kind == .receivable
 
         return List {
             Section {
-                Text("Elden · Toplam borç \(MoneyFormatter.string(snapshot.totalDebt, snapshot.currency))")
+                Text("\(receivable ? "Alacak · Toplam alacak" : "Elden · Toplam borç") \(MoneyFormatter.string(snapshot.totalDebt, snapshot.currency))")
                     .font(.footnote)
                     .foregroundStyle(Theme.secondaryText)
                     .listRowBackground(Color.clear)
 
                 if completed {
-                    Text("Borç tamamlandı ✓")
+                    Text(receivable ? "Alacak tamamlandı ✓" : "Borç tamamlandı ✓")
                         .font(.headline)
                         .foregroundStyle(Theme.paid)
                         .frame(maxWidth: .infinity)
@@ -40,7 +41,7 @@ struct CashDetailView: View {
                     Button {
                         addingPayment = true
                     } label: {
-                        Text("+ Ödeme ekle")
+                        Text(receivable ? "+ Tahsilat ekle" : "+ Ödeme ekle")
                             .font(.headline)
                             .foregroundStyle(.white)
                             .frame(maxWidth: .infinity)
@@ -55,7 +56,7 @@ struct CashDetailView: View {
 
             Section {
                 if entries.isEmpty {
-                    Text("Henüz ödeme yok")
+                    Text(receivable ? "Henüz tahsilat yok" : "Henüz ödeme yok")
                         .font(.footnote)
                         .foregroundStyle(Theme.secondaryText)
                         .listRowBackground(Color.clear)
@@ -85,7 +86,7 @@ struct CashDetailView: View {
                     context.saveQuietly()
                 }
             } header: {
-                Text("Ödeme geçmişi").font(.caption).foregroundStyle(Theme.secondaryText)
+                Text(receivable ? "Tahsilat geçmişi" : "Ödeme geçmişi").font(.caption).foregroundStyle(Theme.secondaryText)
             }
         }
         .listStyle(.plain)
@@ -93,12 +94,12 @@ struct CashDetailView: View {
         .safeAreaInset(edge: .bottom, spacing: 0) {
             FooterTotalsView(
                 lines: [
-                    .init(title: "Toplam borç", value: MoneyFormatter.string(snapshot.totalDebt, snapshot.currency)),
-                    .init(title: "Ödenen (\(snapshot.cashPaymentCount))",
+                    .init(title: receivable ? "Toplam alacak" : "Toplam borç", value: MoneyFormatter.string(snapshot.totalDebt, snapshot.currency)),
+                    .init(title: "\(receivable ? "Tahsil edilen" : "Ödenen") (\(snapshot.cashPaymentCount))",
                           value: "− " + MoneyFormatter.string(snapshot.cashPaid, snapshot.currency),
                           color: Theme.paid),
                 ],
-                resultTitle: "Kalan",
+                resultTitle: receivable ? "Kalan alacak" : "Kalan",
                 resultValue: MoneyFormatter.string(PaymentCalculator.remaining(snapshot), snapshot.currency))
         }
         .background(Theme.background.ignoresSafeArea())

@@ -33,12 +33,15 @@
 		566146351F7A950FCA98254A /* SummaryCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69690146152DA445844FB9F4 /* SummaryCardView.swift */; };
 		5B46269FEE19B4086C915337 /* PaymentKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77B8F527FAD862CB9192E3BD /* PaymentKind.swift */; };
 		5E24C0310B0A9E89C2624E72 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB158EC0E7670F72F77F579 /* HomeView.swift */; };
+		66B0A2AB840BED3130EE1988 /* AssetFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4DDAFF30F6DAF2799300D1 /* AssetFormView.swift */; };
 		7026AC9BD6BD9171E4AAEB50 /* AddCashPaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817E8FA7E5F02FE744996C15 /* AddCashPaymentView.swift */; };
 		735DF3A390CB6AE39FDB199C /* InfoBanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC167838A315A24EACCF60F1 /* InfoBanner.swift */; };
 		78E21B94B05447EDAF52C271 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1C1CF9BB8B7230EC511CC4 /* Persistence.swift */; };
+		7BD314216191CB58299C0FBA /* HomeMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7189A71E531A8406ADF18E /* HomeMode.swift */; };
 		7BFF2BA7F5544B7B3B32BC1C /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFABF7B5D77BB45130291AA9 /* Asset.swift */; };
 		81DC13696E07ACF7D02D63E6 /* RateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EA5C15C00D602F734729CA /* RateStore.swift */; };
 		82E6168BA2D4D109C76949D9 /* OdemeTakipApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121B3E8535A3A59E78D92CEE /* OdemeTakipApp.swift */; };
+		8421337CC3D5B5B26AC8091A /* SavingsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D72461E60B0EA0B510775E /* SavingsHomeView.swift */; };
 		85020322418B8E172CE7948A /* PaymentCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527BC0130CA51901F8049969 /* PaymentCalculatorTests.swift */; };
 		8539540103654D9F2AE1C122 /* PaymentSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C14F88A4D9A8AC81490953A /* PaymentSnapshot.swift */; };
 		86016CDF135AEA9BC8180521 /* WealthCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B42B1F387824A0456FEDC4 /* WealthCalculatorTests.swift */; };
@@ -50,6 +53,7 @@
 		AABF2FC3E67DC3706A28E980 /* AssetDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6ED57E5CFBB44FD69D90CABC /* AssetDraft.swift */; };
 		AC520ABA564666A06377FBC7 /* AmountParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A87B22088181E37AF5CEEF /* AmountParser.swift */; };
 		AE8EB8B744C6A500EBDAA026 /* NotificationContentBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F027CB78FA23DEDD1D1E98 /* NotificationContentBuilder.swift */; };
+		B2BE4C0C1E0FC77AFF8B66CE /* AssetDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 571D05DD49965DA67C9FA15B /* AssetDetailView.swift */; };
 		B56029B9EB92A871FC6BC96A /* OdemeTakipUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D5A523F2F2872D22106CC2 /* OdemeTakipUITests.swift */; };
 		C94CCEA3105AAC2D78EDC19C /* MonthTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C43C3ABC03E2498EAD97BDB8 /* MonthTracker.swift */; };
 		CDBE2656B303CEE0B67AB55F /* PaymentCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0268448F46F57866703BB903 /* PaymentCalculator.swift */; };
@@ -91,12 +95,14 @@
 		38DACA7D4889E828CFB67EC9 /* FilterBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterBar.swift; sourceTree = "<group>"; };
 		4265AE1AECD323B7769D022A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		44521EA7B4E7F7A016604A76 /* ExchangeRates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRates.swift; sourceTree = "<group>"; };
+		4D7189A71E531A8406ADF18E /* HomeMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeMode.swift; sourceTree = "<group>"; };
 		4DCE1A56F185895F7CE00B05 /* PaymentDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentDraft.swift; sourceTree = "<group>"; };
 		4E4C5876AD019A792456A816 /* RateStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateStoreTests.swift; sourceTree = "<group>"; };
 		5040EE6831DB33AD33915EA2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5130855919CD6ECDFBA10F47 /* OdemeTakipTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = OdemeTakipTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		527BC0130CA51901F8049969 /* PaymentCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentCalculatorTests.swift; sourceTree = "<group>"; };
 		563E1E16A20D164E436FD270 /* SampleData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleData.swift; sourceTree = "<group>"; };
+		571D05DD49965DA67C9FA15B /* AssetDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetDetailView.swift; sourceTree = "<group>"; };
 		59D3C92DCC199DC6FCF0C9E3 /* CashPayment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashPayment.swift; sourceTree = "<group>"; };
 		5B80EB2871F7EF597C4AC6DA /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		5BB158EC0E7670F72F77F579 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -111,7 +117,7 @@
 		7E39C9974A3F289A4FF9DBBE /* PaymentDraftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentDraftTests.swift; sourceTree = "<group>"; };
 		817E8FA7E5F02FE744996C15 /* AddCashPaymentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCashPaymentView.swift; sourceTree = "<group>"; };
 		86B42B1F387824A0456FEDC4 /* WealthCalculatorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WealthCalculatorTests.swift; sourceTree = "<group>"; };
-		883497B8400ED2892169CE3A /* OdemeTakip.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = OdemeTakip.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		883497B8400ED2892169CE3A /* OdemeTakip.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OdemeTakip.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		89A528FFE7034C9C2B420E1E /* AmountParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountParserTests.swift; sourceTree = "<group>"; };
 		95E377CFC0610B4EF0CF1942 /* ExchangeRatesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeRatesTests.swift; sourceTree = "<group>"; };
 		98A3789EF46EB33A5E399CE7 /* InstallmentRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstallmentRowView.swift; sourceTree = "<group>"; };
@@ -127,9 +133,11 @@
 		C43C3ABC03E2498EAD97BDB8 /* MonthTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthTracker.swift; sourceTree = "<group>"; };
 		CEEE527522F5CDB16D4479F0 /* PaymentModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentModelTests.swift; sourceTree = "<group>"; };
 		D2E25EB3543253D1A308727D /* CashDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashDetailView.swift; sourceTree = "<group>"; };
+		D5D72461E60B0EA0B510775E /* SavingsHomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavingsHomeView.swift; sourceTree = "<group>"; };
 		D6F848E2090ED33C6E38AA78 /* PaymentDeletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentDeletion.swift; sourceTree = "<group>"; };
 		DA1C1CF9BB8B7230EC511CC4 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		DC167838A315A24EACCF60F1 /* InfoBanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoBanner.swift; sourceTree = "<group>"; };
+		DE4DDAFF30F6DAF2799300D1 /* AssetFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetFormView.swift; sourceTree = "<group>"; };
 		E0BFB61A3F257BDE54DFC79A /* AssetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetTests.swift; sourceTree = "<group>"; };
 		E2EA5C15C00D602F734729CA /* RateStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateStore.swift; sourceTree = "<group>"; };
 		E92864563763E614174E87DE /* YearMonthTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearMonthTests.swift; sourceTree = "<group>"; };
@@ -164,6 +172,24 @@
 				D2E25EB3543253D1A308727D /* CashDetailView.swift */,
 			);
 			path = CashDetail;
+			sourceTree = "<group>";
+		};
+		52DB86B0A6E72E7C98266742 /* Savings */ = {
+			isa = PBXGroup;
+			children = (
+				571D05DD49965DA67C9FA15B /* AssetDetailView.swift */,
+				DE4DDAFF30F6DAF2799300D1 /* AssetFormView.swift */,
+				D5D72461E60B0EA0B510775E /* SavingsHomeView.swift */,
+			);
+			path = Savings;
+			sourceTree = "<group>";
+		};
+		5837CD188CD11CC36A00FFC7 /* Shell */ = {
+			isa = PBXGroup;
+			children = (
+				4D7189A71E531A8406ADF18E /* HomeMode.swift */,
+			);
+			path = Shell;
 			sourceTree = "<group>";
 		};
 		6AF3016BAE99FA510FA841FA /* OdemeTakipTests */ = {
@@ -264,6 +290,8 @@
 				A9357A6ACB94682EAEB7D2F5 /* CreditDetail */,
 				7AA26B18D665B88BBDE4138F /* Form */,
 				B4897B6163511BB8FEC7CD5F /* Home */,
+				52DB86B0A6E72E7C98266742 /* Savings */,
+				5837CD188CD11CC36A00FFC7 /* Shell */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -407,7 +435,6 @@
 						TestTargetID = 8E396DA12B7518CFB8535B6B;
 					};
 					8E396DA12B7518CFB8535B6B = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -480,7 +507,9 @@
 				7026AC9BD6BD9171E4AAEB50 /* AddCashPaymentView.swift in Sources */,
 				AC520ABA564666A06377FBC7 /* AmountParser.swift in Sources */,
 				7BFF2BA7F5544B7B3B32BC1C /* Asset.swift in Sources */,
+				B2BE4C0C1E0FC77AFF8B66CE /* AssetDetailView.swift in Sources */,
 				AABF2FC3E67DC3706A28E980 /* AssetDraft.swift in Sources */,
+				66B0A2AB840BED3130EE1988 /* AssetFormView.swift in Sources */,
 				3E96CF058E2A693EB5385DAB /* CashDetailView.swift in Sources */,
 				4A4709DAE1A81EB8F5C1452B /* CashPayment.swift in Sources */,
 				DF44C254D07780A184DE3826 /* CashPaymentDraft.swift in Sources */,
@@ -488,6 +517,7 @@
 				51267187A59E562E80CB59DA /* ExchangeRates.swift in Sources */,
 				43BFB03C748B5D1D1898ABA8 /* FilterBar.swift in Sources */,
 				2741F454D7B7CFF90B413D03 /* FooterTotalsView.swift in Sources */,
+				7BD314216191CB58299C0FBA /* HomeMode.swift in Sources */,
 				5E24C0310B0A9E89C2624E72 /* HomeView.swift in Sources */,
 				735DF3A390CB6AE39FDB199C /* InfoBanner.swift in Sources */,
 				DE8B9C7AAFE09735C70FC653 /* InstallmentRowView.swift in Sources */,
@@ -510,6 +540,7 @@
 				81DC13696E07ACF7D02D63E6 /* RateStore.swift in Sources */,
 				35DC6D0F82E5018EBD19F85B /* RootView.swift in Sources */,
 				8B88C8C30EBD04CFBF251034 /* SampleData.swift in Sources */,
+				8421337CC3D5B5B26AC8091A /* SavingsHomeView.swift in Sources */,
 				1BDC7B270DB7AD18CF7C18ED /* SplashView.swift in Sources */,
 				566146351F7A950FCA98254A /* SummaryCardView.swift in Sources */,
 				451EB41524E521BF07EE12D0 /* Theme.swift in Sources */,
@@ -622,6 +653,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7VQ496NHD6;
 				INFOPLIST_FILE = OdemeTakip/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -641,6 +673,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7VQ496NHD6;
 				INFOPLIST_FILE = OdemeTakip/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

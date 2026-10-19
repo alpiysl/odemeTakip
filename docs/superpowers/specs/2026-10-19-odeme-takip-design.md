@@ -187,7 +187,7 @@ iCloud senkronizasyonu, widget, iPad, açık tema, grafik/istatistik ekranı.
 ## 15. Varlık Takip (sonradan eklendi, onaylı — mockup `varlik-v1.html`)
 
 - Uygulama adı **Varlık Takip** (bundle ID değişmez, veri korunur). Splash'te yazı yok; süre ~2 sn.
-- **Birim** (`Currency`): `TRY, USD, EUR` + altın: `gram, ceyrek, yarim, tam, resat`. Borç formunda sadece TL/USD/EUR; birikim ve alacakta hepsi. Altın biçimi: `50 gr`, `12 çeyrek`, `2 yarım`, `1 tam`, `3 reşat`.
+- **Birim** (`Currency`): `TRY, USD, EUR` + altın: `gram, ceyrek, yarim, tam, resat`. Borç (kredi, elden), alacak ve birikimde hepsi seçilebilir (kullanıcı isteğiyle borca da altın eklendi). Altın biçimi: `50 gr`, `12 çeyrek`, `2 yarım`, `1 tam`, `3 reşat`.
 - **Altın fiyatı:** `https://finans.truncgil.com/v4/today.json` → `GRA, CEYREKALTIN, YARIMALTIN, TAMALTIN, RESATALTIN` `Selling` (resmi değil). TCMB'den bağımsız çekilir; biri başarısızsa diğerinin ve önceki değerlerin kullanımı sürer. Fiyat yoksa o kalemin TL değeri gösterilmez, toplamlar para birimine göre ayrı kalır.
 - **Kur satırı:** yatay kaydırılabilir: `$ · € · Gr · Çyr · Yrm · Tam · Reşat · kaynak tarihi`.
 - **Ana ekran modu:** ilk açılışta seçim (Borç Takip / Birikim Takip), `@AppStorage`. Üst başlıkta küçük `Borç | Birikim` anahtarı; değişince mod kalıcı olur ve üstte 2 sn'lik mesaj (fade in/out): `Ana ekran: Birikim Takip`.

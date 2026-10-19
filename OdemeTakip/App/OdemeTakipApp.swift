@@ -8,6 +8,9 @@ struct OdemeTakipApp: App {
 
     init() {
         UNUserNotificationCenter.current().delegate = NotificationDelegate.shared
+        #if DEBUG
+        SampleData.applyStartModeArgument()
+        #endif
     }
 
     var body: some Scene {

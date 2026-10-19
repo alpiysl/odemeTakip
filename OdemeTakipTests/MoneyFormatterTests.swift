@@ -34,4 +34,9 @@ struct MoneyFormatterTests {
     @Test func joinedListsGoldAfterFiat() {
         #expect(MoneyFormatter.joined([.ceyrek: 3, .TRY: 50_000, .gram: 10]) == "₺50.000 + 10 gr + 3 çeyrek")
     }
+
+    @Test func signedShowsMinusForNegativeNet() {
+        #expect(MoneyFormatter.signed(-12_000) == "−₺12.000")
+        #expect(MoneyFormatter.signed(5) == "₺5")
+    }
 }

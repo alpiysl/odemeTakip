@@ -5,10 +5,12 @@ struct CashPaymentDraft: Equatable {
     var date = Date.now
     let remaining: Decimal
     let currency: Currency
+    let isReceivable: Bool
 
-    init(remaining: Decimal, currency: Currency) {
+    init(remaining: Decimal, currency: Currency, isReceivable: Bool = false) {
         self.remaining = remaining
         self.currency = currency
+        self.isReceivable = isReceivable
     }
 
     var amount: Decimal? {
@@ -21,7 +23,8 @@ struct CashPaymentDraft: Equatable {
         if amountText.trimmingCharacters(in: .whitespaces).isEmpty || AmountParser.isIncomplete(amountText) { return nil }
         guard let value = AmountParser.parse(amountText), value > 0 else { return "Geçerli bir tutar gir" }
         if value > remaining {
-            return "Kalan borçtan (\(MoneyFormatter.string(remaining, currency))) fazla olamaz"
+            let limit = isReceivable ? "Kalan alacaktan" : "Kalan borçtan"
+            return "\(limit) (\(MoneyFormatter.string(remaining, currency))) fazla olamaz"
         }
         return nil
     }

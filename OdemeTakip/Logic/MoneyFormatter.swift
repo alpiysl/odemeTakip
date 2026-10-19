@@ -15,6 +15,11 @@ enum MoneyFormatter {
         return currency.isGold ? "\(number) \(currency.unitName)" : currency.symbol + number
     }
 
+    /// TL, eksi ise "−₺12.000".
+    static func signed(_ amount: Decimal) -> String {
+        amount < 0 ? "−" + string(-amount, .TRY) : string(amount, .TRY)
+    }
+
     /// Para birimlerini sırayla "₺50.000 + $2.400" şeklinde birleştirir; sıfırları atlar.
     static func joined(_ amounts: [Currency: Decimal]) -> String {
         let parts = amounts

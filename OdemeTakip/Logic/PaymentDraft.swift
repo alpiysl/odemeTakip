@@ -3,6 +3,8 @@ import Foundation
 struct PaymentDraft: Equatable {
     static let maxInstallments = 480
     static let maxAmount: Decimal = 1_000_000_000_000
+    /// Borç ve alacakta seçilebilen birimler: TL, döviz ve altın türleri.
+    static let currencyOptions = Currency.allCases
     static let icons = ["🏦", "🏠", "🚗", "💳", "📱", "🎓", "🤝", "💵", "👤", "🛒", "🏥", "✈️"]
 
     static func defaultIcon(for kind: PaymentKind) -> String {

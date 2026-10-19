@@ -13,7 +13,8 @@ struct AddCashPaymentView: View {
         self.payment = payment
         _draft = State(initialValue: CashPaymentDraft(
             remaining: PaymentCalculator.remaining(payment.snapshot),
-            currency: payment.currency))
+            currency: payment.currency,
+            isReceivable: payment.kind == .receivable))
     }
 
     var body: some View {
@@ -42,7 +43,7 @@ struct AddCashPaymentView: View {
             .scrollContentBackground(.hidden)
             .scrollDismissesKeyboard(.interactively)
             .background(Theme.background)
-            .navigationTitle("Ödeme ekle")
+            .navigationTitle(draft.isReceivable ? "Tahsilat ekle" : "Ödeme ekle")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {

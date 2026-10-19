@@ -16,12 +16,15 @@ enum HomeFilter: String, CaseIterable, Identifiable {
     }
 }
 
-struct FilterBar: View {
-    @Binding var selection: HomeFilter
+struct FilterBar<Option>: View
+where Option: CaseIterable & Identifiable & Hashable & RawRepresentable,
+      Option.RawValue == String, Option.AllCases: RandomAccessCollection {
+    @Binding var selection: Option
+    var gradient: LinearGradient = Theme.gradient
 
     var body: some View {
         HStack(spacing: 0) {
-            ForEach(HomeFilter.allCases) { filter in
+            ForEach(Option.allCases) { filter in
                 Button {
                     selection = filter
                 } label: {
@@ -31,7 +34,7 @@ struct FilterBar: View {
                         .padding(.vertical, 7)
                         .background {
                             if selection == filter {
-                                RoundedRectangle(cornerRadius: 8, style: .continuous).fill(Theme.gradient)
+                                RoundedRectangle(cornerRadius: 8, style: .continuous).fill(gradient)
                             }
                         }
                         .foregroundStyle(selection == filter ? Color.white : Color.white.opacity(0.6))

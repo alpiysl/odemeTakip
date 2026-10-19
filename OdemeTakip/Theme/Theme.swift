@@ -14,6 +14,12 @@ enum Theme {
     static let secondaryText = Color.white.opacity(0.5)
     static let tertiaryText = Color.white.opacity(0.3)
 
+    static let savingsStart = Color(hex: 0x0F9B8E)
+
+    static var savingsGradient: LinearGradient {
+        LinearGradient(colors: [savingsStart, paid], startPoint: .topLeading, endPoint: .bottomTrailing)
+    }
+
     static var gradient: LinearGradient {
         LinearGradient(colors: [gradientStart, accent], startPoint: .topLeading, endPoint: .bottomTrailing)
     }

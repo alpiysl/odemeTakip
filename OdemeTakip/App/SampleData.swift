@@ -11,6 +11,9 @@ enum SampleData {
             for payment in (try? context.fetch(FetchDescriptor<Payment>())) ?? [] {
                 context.delete(payment)
             }
+            for asset in (try? context.fetch(FetchDescriptor<Asset>())) ?? [] {
+                context.delete(asset)
+            }
             context.saveQuietly()
         }
         guard ProcessInfo.processInfo.arguments.contains("-seedSampleData"),
@@ -32,6 +35,31 @@ enum SampleData {
         var dollar = PaymentDraft(firstMonth: now)
         dollar.kind = .cash; dollar.name = "Dolar borcu"; dollar.icon = "💵"
         dollar.currency = .USD; dollar.totalDebtText = "3000"
+
+        var mehmet = PaymentDraft(firstMonth: now)
+        mehmet.kind = .receivable; mehmet.name = "Mehmet"; mehmet.icon = "💰"; mehmet.totalDebtText = "150000"
+        if let receivable = Payment.make(from: mehmet) {
+            context.insert(receivable)
+            receivable.addCashPayment(amount: 30_000, date: .now)
+        }
+
+        let assets: [(String, Currency, [Decimal])] = [
+            ("Altın", .gram, [45, 10, -5]),
+            ("Çeyrekler", .ceyrek, [12]),
+            ("Dolar hesabı", .USD, [10_000]),
+            ("Vadeli TL", .TRY, [209_319]),
+        ]
+        for (name, unit, amounts) in assets {
+            var draft = AssetDraft()
+            draft.name = name
+            draft.unit = unit
+            draft.icon = AssetDraft.defaultIcon(for: unit)
+            draft.amountText = "\(amounts[0])"
+            guard let asset = Asset.make(from: draft, in: context) else { continue }
+            for (offset, amount) in amounts.dropFirst().enumerated() {
+                asset.addMovement(amount: amount, date: .now.addingTimeInterval(Double(offset + 1) * 60))
+            }
+        }
 
         for draft in [home, car, friend, dollar] {
             guard let payment = Payment.make(from: draft) else { continue }
@@ -58,7 +86,23 @@ enum SampleData {
         <Tarih_Date Tarih="19.10.2026"><Currency CurrencyCode="USD"><Unit>1</Unit><ForexSelling>40</ForexSelling></Currency>\
         <Currency CurrencyCode="EUR"><Unit>1</Unit><ForexSelling>50</ForexSelling></Currency></Tarih_Date>
         """
-        return RateStore(defaults: defaults, fetch: { Data(xml.utf8) })
+        let gold = """
+        {"GRA":{"Selling":6000},"CEYREKALTIN":{"Selling":10000},"YARIMALTIN":{"Selling":20000},\
+        "TAMALTIN":{"Selling":40000},"RESATALTIN":{"Selling":41000}}
+        """
+        return RateStore(defaults: defaults, fetch: { Data(xml.utf8) }, fetchGold: { Data(gold.utf8) })
+    }
+
+    /// `-startMode <debt|savings|none>`: ana ekran tercihini ayarlar (none = ilk açılış seçimi).
+    static func applyStartModeArgument() {
+        let args = ProcessInfo.processInfo.arguments
+        guard let index = args.firstIndex(of: "-startMode"), index + 1 < args.count else { return }
+        let value = args[index + 1]
+        if value == "none" {
+            UserDefaults.standard.removeObject(forKey: HomeMode.storageKey)
+        } else {
+            UserDefaults.standard.set(value, forKey: HomeMode.storageKey)
+        }
     }
 
     /// `-debugScreen <credit|cash|form>` argümanının değeri.

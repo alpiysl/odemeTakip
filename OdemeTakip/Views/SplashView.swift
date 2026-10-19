@@ -1,12 +1,11 @@
 import SwiftUI
 
-/// Açılış: logo B'nin + ve − tuşları sırayla basılır, ad belirir, ~1 sn sonra biter.
+/// Açılış: logo B'nin + ve − tuşları sırayla basılır; ~2 sn sonra biter.
 struct SplashView: View {
     let onFinish: () -> Void
 
     @State private var plusPressed = false
     @State private var minusPressed = false
-    @State private var showTitle = false
 
     var body: some View {
         ZStack {
@@ -20,12 +19,6 @@ struct SplashView: View {
                 key(symbol: "minus", symbolColor: Theme.cash, pressed: minusPressed) {
                     RoundedRectangle(cornerRadius: 26, style: .continuous).fill(Color(hex: 0x26262E))
                 }
-                Text("Ödeme Takip")
-                    .font(.title2.weight(.bold))
-                    .foregroundStyle(.white)
-                    .padding(.top, 18)
-                    .opacity(showTitle ? 1 : 0)
-                    .offset(y: showTitle ? 0 : 8)
             }
         }
         .accessibilityElement(children: .ignore)
@@ -53,8 +46,7 @@ struct SplashView: View {
         withAnimation(.easeInOut(duration: 0.12)) { minusPressed = true }
         try? await Task.sleep(for: .milliseconds(130))
         withAnimation(.spring(duration: 0.25)) { minusPressed = false }
-        withAnimation(.easeOut(duration: 0.3)) { showTitle = true }
-        try? await Task.sleep(for: .milliseconds(500))
+        try? await Task.sleep(for: .milliseconds(1_400))
         onFinish()
     }
 }

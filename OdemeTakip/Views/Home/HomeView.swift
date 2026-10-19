@@ -4,6 +4,8 @@ struct HomeView: View {
     let payments: [Payment]
     let currentMonth: YearMonth
     let rates: ExchangeRates?
+    let netWorth: Decimal?
+    @Binding var mode: HomeMode
     let notificationsAllowed: Bool
     let isTemporaryStore: Bool
 
@@ -29,7 +31,9 @@ struct HomeView: View {
                             hideNotificationBanner = true
                         }
                     }
+                    HomeHeader(mode: $mode)
                     summaryCard(snapshots)
+                    NetWorthRow(net: netWorth)
                     RateBar(rates: rates)
                     if payments.isEmpty {
                         emptyState
