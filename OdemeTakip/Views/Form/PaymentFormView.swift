@@ -46,7 +46,7 @@ struct PaymentFormView: View {
                         ForEach(PaymentDraft.icons, id: \.self) { Text($0).tag($0) }
                     }
                     Picker("Para birimi", selection: $draft.currency) {
-                        ForEach(Currency.allCases) { Text($0.displayName).tag($0) }
+                        ForEach(Currency.fiatCases) { Text($0.displayName).tag($0) }
                     }
                 }
                 .listRowBackground(Theme.surface)

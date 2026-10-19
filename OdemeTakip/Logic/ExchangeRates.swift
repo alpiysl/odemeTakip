@@ -9,11 +9,12 @@ struct ExchangeRates: Codable, Equatable, Sendable {
     /// Telefona alındığı an.
     var fetchedAt: Date
 
-    func rate(for currency: Currency) -> Decimal {
+    func rate(for currency: Currency) -> Decimal? {
         switch currency {
         case .TRY: 1
         case .USD: usd
         case .EUR: eur
+        case .gram, .ceyrek, .yarim, .tam, .resat: nil
         }
     }
 
@@ -28,8 +29,8 @@ enum CurrencyConverter {
             if currency == .TRY {
                 total += amount
             } else {
-                guard let rates else { return nil }
-                total += (amount * rates.rate(for: currency)).roundedToWhole
+                guard let rate = rates?.rate(for: currency) else { return nil }
+                total += (amount * rate).roundedToWhole
             }
         }
         return total

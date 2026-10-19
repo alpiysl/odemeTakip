@@ -12,7 +12,7 @@ enum MoneyFormatter {
         formatter.minimumFractionDigits = hasFraction ? 2 : 0
         formatter.maximumFractionDigits = 2
         let number = formatter.string(from: amount as NSDecimalNumber) ?? "\(amount)"
-        return currency.symbol + number
+        return currency.isGold ? "\(number) \(currency.unitName)" : currency.symbol + number
     }
 
     /// Para birimlerini sırayla "₺50.000 + $2.400" şeklinde birleştirir; sıfırları atlar.

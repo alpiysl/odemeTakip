@@ -21,4 +21,17 @@ struct MoneyFormatterTests {
     @Test func joinedEmptyIsZeroLira() {
         #expect(MoneyFormatter.joined([:]) == "₺0")
     }
+
+    @Test func goldAmountsUseUnitNames() {
+        #expect(MoneyFormatter.string(50, .gram) == "50 gr")
+        #expect(MoneyFormatter.string(Decimal(string: "12.5") ?? 0, .gram) == "12,50 gr")
+        #expect(MoneyFormatter.string(12, .ceyrek) == "12 çeyrek")
+        #expect(MoneyFormatter.string(2, .yarim) == "2 yarım")
+        #expect(MoneyFormatter.string(1, .tam) == "1 tam")
+        #expect(MoneyFormatter.string(3, .resat) == "3 reşat")
+    }
+
+    @Test func joinedListsGoldAfterFiat() {
+        #expect(MoneyFormatter.joined([.ceyrek: 3, .TRY: 50_000, .gram: 10]) == "₺50.000 + 10 gr + 3 çeyrek")
+    }
 }

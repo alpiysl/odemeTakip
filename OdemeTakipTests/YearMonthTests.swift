@@ -48,7 +48,9 @@ struct YearMonthTests {
     }
 
     @Test func currencyOrderAndSymbols() {
-        #expect(Currency.allCases.sorted() == [.TRY, .USD, .EUR])
+        #expect(Currency.fiatCases == [.TRY, .USD, .EUR])
+        #expect(Currency.allCases.sorted() == [.TRY, .USD, .EUR, .gram, .ceyrek, .yarim, .tam, .resat])
+        #expect(Currency.gram.isGold && !Currency.USD.isGold)
         #expect(Currency.TRY.symbol == "₺")
         #expect(Currency.USD.symbol == "$")
         #expect(Currency.EUR.symbol == "€")
