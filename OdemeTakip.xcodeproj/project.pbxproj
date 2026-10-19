@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		014883F3AD8CF434229A4636 /* PaymentModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = CEEE527522F5CDB16D4479F0 /* PaymentModelTests.swift */; };
 		04E7666EAFE655B77A9C9EDA /* PaymentDraftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E39C9974A3F289A4FF9DBBE /* PaymentDraftTests.swift */; };
+		0D09DD6C00D5465420C2B186 /* GoldPricesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77DC0DE05EEC84D1BCFACA82 /* GoldPricesTests.swift */; };
 		1124655AA02C0C8F0C3A3075 /* MonthPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2761EF82D6A85215F3E13F7 /* MonthPicker.swift */; };
 		11AE7079E09DAE95D920AC80 /* PaymentDeletion.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6F848E2090ED33C6E38AA78 /* PaymentDeletion.swift */; };
 		14BB2F1D315475BE3D039EB5 /* ExchangeRatesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95E377CFC0610B4EF0CF1942 /* ExchangeRatesTests.swift */; };
@@ -100,6 +101,7 @@
 		760A30D93D7F5DA4FA0103D3 /* PaymentFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentFormView.swift; sourceTree = "<group>"; };
 		766118F3B242A97224E9FA56 /* MonthTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthTrackerTests.swift; sourceTree = "<group>"; };
 		77B8F527FAD862CB9192E3BD /* PaymentKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentKind.swift; sourceTree = "<group>"; };
+		77DC0DE05EEC84D1BCFACA82 /* GoldPricesTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoldPricesTests.swift; sourceTree = "<group>"; };
 		7E39C9974A3F289A4FF9DBBE /* PaymentDraftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentDraftTests.swift; sourceTree = "<group>"; };
 		817E8FA7E5F02FE744996C15 /* AddCashPaymentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCashPaymentView.swift; sourceTree = "<group>"; };
 		883497B8400ED2892169CE3A /* OdemeTakip.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = OdemeTakip.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -159,6 +161,7 @@
 			children = (
 				89A528FFE7034C9C2B420E1E /* AmountParserTests.swift */,
 				95E377CFC0610B4EF0CF1942 /* ExchangeRatesTests.swift */,
+				77DC0DE05EEC84D1BCFACA82 /* GoldPricesTests.swift */,
 				A604D0877591C6593549497F /* MoneyFormatterTests.swift */,
 				766118F3B242A97224E9FA56 /* MonthTrackerTests.swift */,
 				B45CF986C7721B47C6544BF4 /* NotificationContentBuilderTests.swift */,
@@ -433,6 +436,7 @@
 			files = (
 				154041551A3598E4D673DF8A /* AmountParserTests.swift in Sources */,
 				14BB2F1D315475BE3D039EB5 /* ExchangeRatesTests.swift in Sources */,
+				0D09DD6C00D5465420C2B186 /* GoldPricesTests.swift in Sources */,
 				388CA95F5B6CD7F502236C3E /* MoneyFormatterTests.swift in Sources */,
 				87FAA002E7F30A21FEC93069 /* MonthTrackerTests.swift in Sources */,
 				D4B37414EEA7679A852D3AAC /* NotificationContentBuilderTests.swift in Sources */,

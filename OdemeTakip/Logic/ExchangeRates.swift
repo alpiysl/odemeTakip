@@ -8,13 +8,15 @@ struct ExchangeRates: Codable, Equatable, Sendable {
     var bulletinDate: Date
     /// Telefona alındığı an.
     var fetchedAt: Date
+    /// Altın satış fiyatları (Currency.rawValue → TL). Eski kayıtlarda yok.
+    var gold: [String: Decimal]? = nil
 
     func rate(for currency: Currency) -> Decimal? {
         switch currency {
         case .TRY: 1
         case .USD: usd
         case .EUR: eur
-        case .gram, .ceyrek, .yarim, .tam, .resat: nil
+        case .gram, .ceyrek, .yarim, .tam, .resat: gold?[currency.rawValue]
         }
     }
 
@@ -44,6 +46,36 @@ extension MoneyFormatter {
             return string(lira, .TRY)
         }
         return joined(amounts)
+    }
+}
+
+/// Piyasa servisinden (truncgil) altın ve yedek döviz satış fiyatları.
+struct MarketPrices: Equatable, Sendable {
+    var gold: [Currency: Decimal]
+    var usd: Decimal?
+    var eur: Decimal?
+}
+
+enum GoldParser {
+    private static let keys: [Currency: String] = [
+        .gram: "GRA", .ceyrek: "CEYREKALTIN", .yarim: "YARIMALTIN", .tam: "TAMALTIN", .resat: "RESATALTIN",
+    ]
+
+    /// Bozuk JSON veya hiç altın yoksa nil.
+    static func parse(_ data: Data) -> MarketPrices? {
+        guard let root = (try? JSONSerialization.jsonObject(with: data)) as? [String: Any] else { return nil }
+        func selling(_ key: String) -> Decimal? {
+            guard let entry = root[key] as? [String: Any], let number = entry["Selling"] as? NSNumber,
+                  let value = Decimal(string: number.stringValue, locale: Locale(identifier: "en_US_POSIX")),
+                  value > 0 else { return nil }
+            return value
+        }
+        var gold: [Currency: Decimal] = [:]
+        for (currency, key) in keys {
+            if let value = selling(key) { gold[currency] = value }
+        }
+        guard !gold.isEmpty else { return nil }
+        return MarketPrices(gold: gold, usd: selling("USD"), eur: selling("EUR"))
     }
 }
 
