@@ -4,6 +4,9 @@ import SwiftUI
 struct CashDetailView: View {
     let payment: Payment
 
+    @Environment(RateStore.self) private var rateStore
+    private var rates: ExchangeRates? { rateStore.rates }
+
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @State private var addingPayment = false
@@ -100,7 +103,8 @@ struct CashDetailView: View {
                           color: Theme.paid),
                 ],
                 resultTitle: receivable ? "Kalan alacak" : "Kalan",
-                resultValue: MoneyFormatter.string(PaymentCalculator.remaining(snapshot), snapshot.currency))
+                resultValue: MoneyFormatter.string(PaymentCalculator.remaining(snapshot), snapshot.currency),
+                footnote: .liraEquivalent(PaymentCalculator.remaining(snapshot), snapshot.currency, rates: rates))
         }
         .background(Theme.background.ignoresSafeArea())
         .navigationTitle("\(payment.icon) \(payment.name)")

@@ -26,9 +26,10 @@ final class RateStore {
         }
     }
 
-    func refreshIfNeeded(now: Date = .now) async {
+    /// `force`: uygulama sıfırdan açılınca önbellek taze olsa da yeniden çeker.
+    func refreshIfNeeded(now: Date = .now, force: Bool = false) async {
         // Taze ve altın fiyatları da varsa ağa çıkma (eski sürüm önbelleğinde altın yok).
-        if let rates, rates.gold?.isEmpty == false, now.timeIntervalSince(rates.fetchedAt) < Self.maxAge { return }
+        if !force, let rates, rates.gold?.isEmpty == false, now.timeIntervalSince(rates.fetchedAt) < Self.maxAge { return }
         guard !isRefreshing else { return }
         isRefreshing = true
         defer { isRefreshing = false }

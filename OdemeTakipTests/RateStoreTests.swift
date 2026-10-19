@@ -98,6 +98,18 @@ struct RateStoreTests {
         await store.refreshIfNeeded()
         #expect(store.rates?.rate(for: .gram) == Decimal(string: "6602.36"))
     }
+
+    @Test func launchRefreshIgnoresFreshCache() async {
+        let seeded = RateStore(defaults: defaults, fetch: { [xml] in xml }, fetchGold: { [market] in market })
+        await seeded.refreshIfNeeded()
+
+        let counter = Counter()
+        let store = RateStore(defaults: defaults,
+                              fetch: { [xml] in await counter.hit(); return xml },
+                              fetchGold: { [market] in market })
+        await store.refreshIfNeeded(now: .now.addingTimeInterval(60), force: true)
+        #expect(await counter.value == 1)
+    }
 }
 
 private actor Counter {

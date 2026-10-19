@@ -5,6 +5,9 @@ struct CreditDetailView: View {
     let payment: Payment
     let currentMonth: YearMonth
 
+    @Environment(RateStore.self) private var rateStore
+    private var rates: ExchangeRates? { rateStore.rates }
+
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @State private var showAll = false
@@ -73,7 +76,8 @@ struct CreditDetailView: View {
                           color: Theme.paid),
                 ],
                 resultTitle: "Kalan (\(snapshot.installmentCount - PaymentCalculator.paidCount(snapshot)))",
-                resultValue: MoneyFormatter.string(PaymentCalculator.remaining(snapshot), snapshot.currency))
+                resultValue: MoneyFormatter.string(PaymentCalculator.remaining(snapshot), snapshot.currency),
+                footnote: .liraEquivalent(PaymentCalculator.remaining(snapshot), snapshot.currency, rates: rates))
         }
         .background(Theme.background.ignoresSafeArea())
         .navigationTitle("\(payment.icon) \(payment.name)")

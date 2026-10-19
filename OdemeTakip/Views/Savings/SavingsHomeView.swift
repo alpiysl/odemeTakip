@@ -14,6 +14,7 @@ struct SavingsHomeView: View {
     let summary: WealthSummary
     let rates: ExchangeRates?
     @Binding var mode: HomeMode
+    var onSettings: () -> Void = {}
 
     @State private var filter: SavingsFilter = .all
     @State private var addingAsset = false
@@ -29,7 +30,7 @@ struct SavingsHomeView: View {
             Theme.background.ignoresSafeArea()
             ScrollView {
                 VStack(alignment: .leading, spacing: 12) {
-                    HomeHeader(mode: $mode)
+                    HomeHeader(mode: $mode, onSettings: onSettings)
                     summaryCard
                     NetWorthRow(net: summary.net)
                     RateBar(rates: rates)
@@ -41,7 +42,7 @@ struct SavingsHomeView: View {
                             if showAssets {
                                 ForEach(assets) { asset in
                                     NavigationLink {
-                                        AssetDetailView(asset: asset, rates: rates)
+                                        AssetDetailView(asset: asset)
                                     } label: {
                                         AssetRowView(asset: asset, rates: rates)
                                     }

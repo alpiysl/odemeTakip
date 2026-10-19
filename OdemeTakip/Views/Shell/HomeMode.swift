@@ -34,6 +34,7 @@ enum HomeMode: String, CaseIterable, Identifiable {
 /// Başlık: uygulama adı + Borç | Birikim anahtarı.
 struct HomeHeader: View {
     @Binding var mode: HomeMode
+    var onSettings: () -> Void = {}
 
     var body: some View {
         HStack {
@@ -64,8 +65,83 @@ struct HomeHeader: View {
             .padding(2)
             .background(Theme.surface, in: RoundedRectangle(cornerRadius: 9, style: .continuous))
             .sensoryFeedback(.selection, trigger: mode)
+            Button(action: onSettings) {
+                Image(systemName: "gearshape")
+                    .font(.body.weight(.semibold))
+                    .foregroundStyle(Theme.secondaryText)
+                    .frame(width: 32, height: 32)
+                    .contentShape(Rectangle())
+            }
+            .accessibilityLabel("Ayarlar")
         }
         .padding(.top, 4)
+    }
+}
+
+/// Ayarlar: açılış ekranı seçimi. Değişince 2 sn'lik mesaj.
+struct SettingsView: View {
+    @AppStorage(HomeMode.storageKey) private var landingRaw = HomeMode.debt.rawValue
+    @Environment(\.dismiss) private var dismiss
+    @State private var toastText: String?
+    @State private var toastTask: Task<Void, Never>?
+
+    private var landing: Binding<HomeMode> {
+        Binding(
+            get: { HomeMode(rawValue: landingRaw) ?? .debt },
+            set: { newMode in
+                guard newMode.rawValue != landingRaw else { return }
+                landingRaw = newMode.rawValue
+                showToast("Açılış ekranı: \(newMode.title)")
+            })
+    }
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    Picker("Açılış ekranı", selection: landing) {
+                        ForEach(HomeMode.allCases) { Text($0.title).tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+                    .listRowBackground(Color.clear)
+                } header: {
+                    Text("Açılış ekranı")
+                } footer: {
+                    Text("Uygulama açılınca bu ekran gelir. Üstteki Borç | Birikim anahtarı sadece o anki ekranı değiştirir.")
+                }
+            }
+            .scrollContentBackground(.hidden)
+            .background(Theme.background)
+            .navigationTitle("Ayarlar")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Kapat") { dismiss() }
+                }
+            }
+        }
+        .overlay(alignment: .top) {
+            if let toastText {
+                ToastView(text: toastText)
+                    .padding(.top, 8)
+                    .transition(.opacity)
+                    .allowsHitTesting(false)
+            }
+        }
+        .tint(Theme.accent)
+        .preferredColorScheme(.dark)
+        .presentationDetents([.medium])
+    }
+
+    /// 2 sn görünen, yavaşça belirip kaybolan bilgi mesajı.
+    private func showToast(_ text: String) {
+        toastTask?.cancel()
+        toastTask = Task { @MainActor in
+            withAnimation(.easeInOut(duration: 0.35)) { toastText = text }
+            try? await Task.sleep(for: .seconds(2))
+            guard !Task.isCancelled else { return }
+            withAnimation(.easeInOut(duration: 0.35)) { toastText = nil }
+        }
     }
 }
 
@@ -82,6 +158,9 @@ struct ToastView: View {
             .background(Color(hex: 0x28282F).opacity(0.97), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
             .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).stroke(Color(hex: 0x33333D)))
             .shadow(color: .black.opacity(0.5), radius: 12, y: 6)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(text)
+            .accessibilityAddTraits(.isStaticText)
             .accessibilityIdentifier("toast")
     }
 }

@@ -4,6 +4,9 @@ import SwiftUI
 struct AddCashPaymentView: View {
     let payment: Payment
 
+    @Environment(RateStore.self) private var rateStore
+    private var rates: ExchangeRates? { rateStore.rates }
+
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @State private var draft: CashPaymentDraft
@@ -35,7 +38,8 @@ struct AddCashPaymentView: View {
                     if let message = draft.validationMessage {
                         Text(message).foregroundStyle(Theme.cash)
                     } else {
-                        Text("Kalan: \(MoneyFormatter.string(draft.remaining, draft.currency))")
+                        Text("Kalan: \(MoneyFormatter.string(draft.remaining, draft.currency))"
+                             + (FooterTotalsView.Line.liraEquivalent(draft.remaining, draft.currency, rates: rates).map { " (\($0.value))" } ?? ""))
                     }
                 }
                 .listRowBackground(Theme.surface)

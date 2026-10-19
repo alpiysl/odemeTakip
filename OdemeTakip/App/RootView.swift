@@ -7,9 +7,11 @@ struct RootView: View {
 
     @Query(sort: \Payment.createdAt) private var queriedPayments: [Payment]
     @Query(sort: \Asset.createdAt) private var queriedAssets: [Asset]
+    /// Açılış ekranı tercihi (Ayarlar / ilk açılış).
     @AppStorage(HomeMode.storageKey) private var homeModeRaw = ""
-    @State private var toastText: String?
-    @State private var toastTask: Task<Void, Never>?
+    /// Anahtarla seçilen, sadece bu oturumda geçerli ekran.
+    @State private var sessionMode: HomeMode?
+    @State private var showingSettings = false
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.modelContext) private var context
     @State private var notificationsAllowed = true
@@ -26,11 +28,9 @@ struct RootView: View {
 
     private var mode: Binding<HomeMode> {
         Binding(
-            get: { HomeMode(rawValue: homeModeRaw) ?? .debt },
+            get: { sessionMode ?? HomeMode(rawValue: homeModeRaw) ?? .debt },
             set: { newMode in
-                guard newMode.rawValue != homeModeRaw else { return }
-                withAnimation(.easeInOut(duration: 0.25)) { homeModeRaw = newMode.rawValue }
-                showToast("Ana ekran: \(newMode.title)")
+                withAnimation(.easeInOut(duration: 0.25)) { sessionMode = newMode }
             })
     }
 
@@ -43,38 +43,41 @@ struct RootView: View {
         NavigationStack {
             if HomeMode(rawValue: homeModeRaw) == nil {
                 OnboardingView { chosen in
-                    withAnimation(.easeInOut(duration: 0.3)) { homeModeRaw = chosen.rawValue }
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        homeModeRaw = chosen.rawValue
+                        sessionMode = chosen
+                    }
                 }
             } else if mode.wrappedValue == .savings {
                 SavingsHomeView(assets: assets,
                                 receivables: receivables,
                                 summary: summary,
                                 rates: rateStore.rates,
-                                mode: mode)
+                                mode: mode,
+                                onSettings: { showingSettings = true })
             } else {
                 HomeView(payments: payments,
                          currentMonth: month.current,
                          rates: rateStore.rates,
                          netWorth: summary.net,
                          mode: mode,
+                         onSettings: { showingSettings = true },
                          notificationsAllowed: notificationsAllowed,
                          isTemporaryStore: isTemporaryStore)
             }
         }
         .tint(mode.wrappedValue == .savings ? Theme.paid : Theme.accent)
-        .overlay(alignment: .top) {
-            if let toastText {
-                ToastView(text: toastText)
-                    .padding(.top, 8)
-                    .transition(.opacity)
-                    .allowsHitTesting(false)
-            }
+        .sheet(isPresented: $showingSettings) {
+            SettingsView()
         }
+        .environment(rateStore)
         .task {
+            // Açılış ekranı oturum başında bir kez okunur; Ayarlar değişikliği sonraki açılışta geçerli.
+            if sessionMode == nil { sessionMode = HomeMode(rawValue: homeModeRaw) }
             #if DEBUG
             SampleData.insertIfRequested(into: context)
             #endif
-            await rateStore.refreshIfNeeded()
+            await rateStore.refreshIfNeeded(force: true)
             notificationsAllowed = await NotificationScheduler.requestAuthorization()
             await NotificationScheduler.reschedule(payments: snapshots, rates: rateStore.rates)
             #if DEBUG
@@ -110,17 +113,6 @@ struct RootView: View {
     #if DEBUG
     @State private var debugScreen = SampleData.requestedScreen
     #endif
-
-    /// 2 sn görünen, yavaşça belirip kaybolan bilgi mesajı.
-    private func showToast(_ text: String) {
-        toastTask?.cancel()
-        toastTask = Task { @MainActor in
-            withAnimation(.easeInOut(duration: 0.35)) { toastText = text }
-            try? await Task.sleep(for: .seconds(2))
-            guard !Task.isCancelled else { return }
-            withAnimation(.easeInOut(duration: 0.35)) { toastText = nil }
-        }
-    }
 
     private struct ScheduleInput: Equatable {
         let snapshots: [PaymentSnapshot]

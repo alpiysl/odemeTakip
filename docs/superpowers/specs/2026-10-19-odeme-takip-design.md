@@ -190,7 +190,10 @@ iCloud senkronizasyonu, widget, iPad, açık tema, grafik/istatistik ekranı.
 - **Birim** (`Currency`): `TRY, USD, EUR` + altın: `gram, ceyrek, yarim, tam, resat`. Borç (kredi, elden), alacak ve birikimde hepsi seçilebilir (kullanıcı isteğiyle borca da altın eklendi). Altın biçimi: `50 gr`, `12 çeyrek`, `2 yarım`, `1 tam`, `3 reşat`.
 - **Altın fiyatı:** `https://finans.truncgil.com/v4/today.json` → `GRA, CEYREKALTIN, YARIMALTIN, TAMALTIN, RESATALTIN` `Selling` (resmi değil). TCMB'den bağımsız çekilir; biri başarısızsa diğerinin ve önceki değerlerin kullanımı sürer. Fiyat yoksa o kalemin TL değeri gösterilmez, toplamlar para birimine göre ayrı kalır.
 - **Kur satırı:** yatay kaydırılabilir: `$ · € · Gr · Çyr · Yrm · Tam · Reşat · kaynak tarihi`.
-- **Ana ekran modu:** ilk açılışta seçim (Borç Takip / Birikim Takip), `@AppStorage`. Üst başlıkta küçük `Borç | Birikim` anahtarı; değişince mod kalıcı olur ve üstte 2 sn'lik mesaj (fade in/out): `Ana ekran: Birikim Takip`.
+- **Açılış ekranı:** ilk açılışta seçim (Borç Takip / Birikim Takip), `@AppStorage`. Değişiklik başlıktaki ⚙️ **Ayarlar > Açılış ekranı** ile; değişince 2 sn'lik mesaj (fade in/out) `Açılış ekranı: Birikim Takip`, etkisi bir sonraki açılışta.
+- **Borç | Birikim anahtarı:** sadece o anki ekranı değiştirir; tercih ve mesaj yok.
+- **Kur yenileme:** uygulama sıfırdan açılınca kur + altın her zaman yeniden çekilir; öne gelince 6 saatten eskiyse veya altın yoksa. Kur kaynağı environment ile paylaşılır, açık ekranlar dahil her yerde TL karşılığı canlı güncellenir.
+- **TL karşılığı:** döviz/altın kayıtların listede `≈ ₺`, detay alt panelinde `TL karşılığı ≈ ₺`, tahsilat/ödeme ekleme ekranında `Kalan: … (≈ ₺…)`.
 - **Birikim (varlık kalemi):** ad, ikon, birim, hareketler (+ekle / −çıkar, tarih). Miktar = Σ hareket; çıkarma miktarı aşamaz. Detay: Ekle/Çıkar, hareket geçmişi (sola kaydır sil), altta miktar + TL değeri.
 - **Alacak:** `PaymentKind.receivable`; elden borcun aynası (toplam alacak, tahsilat ekle, kalan). Bildirime girmez.
 - **Birikim ana sayfa:** yeşil gradyan kart "Toplam varlık" (TL), lejant Birikim / Alacak; altında "Net varlık (− borç)" satırı; kur satırı; Tümü/Birikim/Alacak süzgeci; yeşil + butonu (form: Birikim | Alacak).

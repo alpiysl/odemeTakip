@@ -3,7 +3,9 @@ import SwiftUI
 
 struct AssetDetailView: View {
     let asset: Asset
-    let rates: ExchangeRates?
+
+    @Environment(RateStore.self) private var rateStore
+    private var rates: ExchangeRates? { rateStore.rates }
 
     private enum MovementSheet: String, Identifiable {
         case deposit, withdrawal

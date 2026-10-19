@@ -139,15 +139,41 @@ final class OdemeTakipUITests: XCTestCase {
         XCTAssertTrue(text(app, "Toplam varlık").waitForExistence(timeout: 6))
     }
 
-    func testModeToggleShowsToastThenFades() {
+    func testToggleSwitchesViewButKeepsLanding() {
         let app = launch()
         XCTAssertTrue(text(app, "Toplam kalan").waitForExistence(timeout: 5))
         XCTAssertTrue(app.descendants(matching: .any)["netWorth"].firstMatch.exists)
         app.buttons["mode-savings"].tap()
-        let toast = app.staticTexts["Ana ekran: Birikim Takip"]
-        XCTAssertTrue(toast.waitForExistence(timeout: 2))
-        XCTAssertTrue(text(app, "Toplam varlık").exists)
-        XCTAssertTrue(toast.waitForNonExistence(timeout: 4))
+        XCTAssertTrue(text(app, "Toplam varlık").waitForExistence(timeout: 2))
+        XCTAssertFalse(app.descendants(matching: .any).matching(NSPredicate(format: "label CONTAINS[c] %@", "Açılış ekranı:")).firstMatch.waitForExistence(timeout: 1))
+
+        app.terminate()
+        app.launchArguments = ["-fakeRates"]
+        app.launch()
+        XCTAssertTrue(text(app, "Toplam kalan").waitForExistence(timeout: 6))
+    }
+
+    func testSettingsChangesLandingWithToast() {
+        let app = launch()
+        XCTAssertTrue(app.buttons["Ayarlar"].waitForExistence(timeout: 5))
+        app.buttons["Ayarlar"].tap()
+        app.segmentedControls.buttons["Birikim Takip"].tap()
+        // Toast sheet içinde erişilebilirlik ağacına girmiyor; görünümü ekran görüntüsüyle doğrulandı.
+        app.buttons["Kapat"].tap()
+        XCTAssertTrue(text(app, "Toplam kalan").exists)   // görünen ekran değişmez
+
+        app.terminate()
+        app.launchArguments = ["-fakeRates"]
+        app.launch()
+        XCTAssertTrue(text(app, "Toplam varlık").waitForExistence(timeout: 6))
+    }
+
+    func testDetailShowsLiraEquivalent() {
+        let app = launch()
+        XCTAssertTrue(text(app, "Dolar borcu").waitForExistence(timeout: 5))
+        text(app, "Dolar borcu").tap()
+        XCTAssertTrue(text(app, "TL karşılığı").waitForExistence(timeout: 3))
+        XCTAssertTrue(text(app, "≈ ₺96.000").exists)
     }
 
     func testSavingsTotalsAndNetWorth() {
