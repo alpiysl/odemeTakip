@@ -183,3 +183,15 @@ iCloud senkronizasyonu, widget, iPad, açık tema, grafik/istatistik ekranı.
 ## 14. Splash
 
 - Koyu zeminde logo B: + tuşu, sonra − tuşu basılır, "Ödeme Takip" belirir; ~1,1 sn sonra yumuşak geçişle ana sayfa. Kur çekme bu sırada başlar.
+
+## 15. Varlık Takip (sonradan eklendi, onaylı — mockup `varlik-v1.html`)
+
+- Uygulama adı **Varlık Takip** (bundle ID değişmez, veri korunur). Splash'te yazı yok; süre ~2 sn.
+- **Birim** (`Currency`): `TRY, USD, EUR` + altın: `gram, ceyrek, yarim, tam, resat`. Borç formunda sadece TL/USD/EUR; birikim ve alacakta hepsi. Altın biçimi: `50 gr`, `12 çeyrek`, `2 yarım`, `1 tam`, `3 reşat`.
+- **Altın fiyatı:** `https://finans.truncgil.com/v4/today.json` → `GRA, CEYREKALTIN, YARIMALTIN, TAMALTIN, RESATALTIN` `Selling` (resmi değil). TCMB'den bağımsız çekilir; biri başarısızsa diğerinin ve önceki değerlerin kullanımı sürer. Fiyat yoksa o kalemin TL değeri gösterilmez, toplamlar para birimine göre ayrı kalır.
+- **Kur satırı:** yatay kaydırılabilir: `$ · € · Gr · Çyr · Yrm · Tam · Reşat · kaynak tarihi`.
+- **Ana ekran modu:** ilk açılışta seçim (Borç Takip / Birikim Takip), `@AppStorage`. Üst başlıkta küçük `Borç | Birikim` anahtarı; değişince mod kalıcı olur ve üstte 2 sn'lik mesaj (fade in/out): `Ana ekran: Birikim Takip`.
+- **Birikim (varlık kalemi):** ad, ikon, birim, hareketler (+ekle / −çıkar, tarih). Miktar = Σ hareket; çıkarma miktarı aşamaz. Detay: Ekle/Çıkar, hareket geçmişi (sola kaydır sil), altta miktar + TL değeri.
+- **Alacak:** `PaymentKind.receivable`; elden borcun aynası (toplam alacak, tahsilat ekle, kalan). Bildirime girmez.
+- **Birikim ana sayfa:** yeşil gradyan kart "Toplam varlık" (TL), lejant Birikim / Alacak; altında "Net varlık (− borç)" satırı; kur satırı; Tümü/Birikim/Alacak süzgeci; yeşil + butonu (form: Birikim | Alacak).
+- **Net varlık** = birikim TL + kalan alacak TL − kalan borç TL; her iki ana sayfada kartın altında. Kur eksikse satır gizlenir.
