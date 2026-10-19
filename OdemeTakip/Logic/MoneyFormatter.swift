@@ -30,6 +30,7 @@ extension Decimal {
         var source = self
         var result = Decimal()
         NSDecimalRound(&result, &source, 0, .plain)
-        return result
+        // Tam sayı biçimine çevir (üs 0); iOS'ta farklı üslü Decimal eşitliği güvenilmez.
+        return Decimal(NSDecimalNumber(decimal: result).int64Value)
     }
 }

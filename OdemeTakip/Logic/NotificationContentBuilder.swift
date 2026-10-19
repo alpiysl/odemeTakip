@@ -8,19 +8,20 @@ struct NotificationContent: Equatable, Sendable {
 enum NotificationContentBuilder {
     static let hour = 9
 
-    static func content(for month: YearMonth, payments: [PaymentSnapshot]) -> NotificationContent? {
+    static func content(for month: YearMonth, payments: [PaymentSnapshot],
+                        rates: ExchangeRates? = nil) -> NotificationContent? {
         var lines: [String] = []
 
         let due = PaymentCalculator.dueUnpaid(payments, in: month)
         if !due.isEmpty {
             let amounts = due.mapValues(\.amount)
             let count = due.values.reduce(0) { $0 + $1.count }
-            lines.append("Kredi: \(MoneyFormatter.joined(amounts)) (\(count) taksit)")
+            lines.append("Kredi: \(MoneyFormatter.total(amounts, rates: rates)) (\(count) taksit)")
         }
 
         let cash = PaymentCalculator.totals(payments).cash
         if !cash.isEmpty {
-            lines.append("Elden kalan: \(MoneyFormatter.joined(cash))")
+            lines.append("Elden kalan: \(MoneyFormatter.total(cash, rates: rates))")
         }
 
         guard !lines.isEmpty else { return nil }

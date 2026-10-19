@@ -1,7 +1,7 @@
 # Ödeme Takip — Tasarım Dokümanı
 
 Tarih: 2026-10-19
-Durum: Kullanıcı onayı bekliyor
+Durum: Onaylandı (2026-10-19); 13–14 sonradan eklendi ve onaylandı
 
 ## 1. Amaç
 
@@ -18,11 +18,11 @@ Sadece tek kullanıcının (geliştiricinin kendisi) iPhone'unda çalışacak, k
 | Konu | Karar |
 |---|---|
 | Platform | Sadece iOS, iPhone, iOS 17+ |
-| Teknoloji | SwiftUI + SwiftData, harici bağımlılık yok, ağ erişimi yok |
+| Teknoloji | SwiftUI + SwiftData, harici bağımlılık yok. Tek ağ erişimi: TCMB kur bülteni (bkz. 13) |
 | Ödeme türleri | Kredi, Elden |
 | Kredi | Taksit sayısı + aylık tutar + ilk taksit ayı (+ önceden ödenen taksit sayısı) |
 | Elden | Toplam borç; her ödeme tutarı ödeme anında girilir, sabit taksit yok |
-| Para birimi | Kayıt bazında: TL, USD, EUR. Toplamlar para birimine göre ayrı, kur çevirisi yok |
+| Para birimi | Kayıt bazında: TL, USD, EUR. Kur varsa ana sayfa toplamları ve bildirim TL'ye çevrilir (bkz. 13); kur yoksa para birimine göre ayrı |
 | Bildirim | Local notification (APNs/sunucu yok) |
 | İmza | Ücretsiz Apple ID; kurulum 7 günde bir Xcode ile yenilenir. Bundle ID sabit: `com.alpiysl.odemetakip` (yeniden kurulumda veri korunur) |
 | Dil | Türkçe arayüz, `tr_TR` sayı/tarih biçimi |
@@ -169,4 +169,17 @@ odemeTakipApp/
 
 ## 12. Kapsam dışı
 
-iCloud senkronizasyonu, widget, kur çevirisi, iPad, açık tema, grafik/istatistik ekranı.
+iCloud senkronizasyonu, widget, iPad, açık tema, grafik/istatistik ekranı.
+
+## 13. Döviz kuru (sonradan eklendi, onaylı)
+
+- Kaynak: TCMB `https://www.tcmb.gov.tr/kurlar/today.xml`, USD ve EUR **ForexSelling** (döviz satış), `Unit` ile bölünür.
+- Açılışta ve uygulama öne gelince, son kur 6 saatten eskiyse çekilir; zaman aşımı 8 sn. Son kur `UserDefaults`'ta saklanır.
+- Hata/ağ yok/bozuk yanıt: sessizce log, son kur korunur. Hiç kur yoksa toplamlar para birimine göre ayrı gösterilir, kur satırında "Kur bekleniyor".
+- TL karşılıkları tam liraya yuvarlanır (`CurrencyConverter.toTRY`).
+- Ana sayfa: toplam, Kredi/Elden lejantı ve "Bu ay" çipi TL; kartın altında kur satırı `1$ = ₺49,55 · 1€ = ₺55,57 · TCMB 19 Eki`; döviz kayıt satırlarında `≈ ₺118.926`.
+- Bildirim: kredi ve elden satırları TL toplamı (kur yoksa eski biçim). Detay ekranları kaydın kendi para biriminde kalır.
+
+## 14. Splash
+
+- Koyu zeminde logo B: + tuşu, sonra − tuşu basılır, "Ödeme Takip" belirir; ~1,1 sn sonra yumuşak geçişle ana sayfa. Kur çekme bu sırada başlar.

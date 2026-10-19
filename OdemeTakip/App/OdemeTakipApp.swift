@@ -4,6 +4,7 @@ import UserNotifications
 @main
 struct OdemeTakipApp: App {
     private let store = PersistenceStore.make()
+    @State private var showSplash = true
 
     init() {
         UNUserNotificationCenter.current().delegate = NotificationDelegate.shared
@@ -11,7 +12,7 @@ struct OdemeTakipApp: App {
 
     var body: some Scene {
         WindowGroup {
-            Group {
+            ZStack {
                 if let container = store.container {
                     RootView(isTemporaryStore: store.isTemporary)
                         .modelContainer(container)
@@ -21,6 +22,13 @@ struct OdemeTakipApp: App {
                         InfoBanner(text: "Veri deposu açılamadı. Uygulamayı kapatıp yeniden aç.", onClose: nil)
                             .padding()
                     }
+                }
+                if showSplash {
+                    SplashView {
+                        withAnimation(.easeOut(duration: 0.3)) { showSplash = false }
+                    }
+                    .transition(.opacity)
+                    .zIndex(1)
                 }
             }
             .preferredColorScheme(.dark)

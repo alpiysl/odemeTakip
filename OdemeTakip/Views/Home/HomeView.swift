@@ -3,6 +3,7 @@ import SwiftUI
 struct HomeView: View {
     let payments: [Payment]
     let currentMonth: YearMonth
+    let rates: ExchangeRates?
     let notificationsAllowed: Bool
     let isTemporaryStore: Bool
 
@@ -29,6 +30,7 @@ struct HomeView: View {
                         }
                     }
                     summaryCard(snapshots)
+                    RateBar(rates: rates)
                     if payments.isEmpty {
                         emptyState
                     } else {
@@ -61,10 +63,10 @@ struct HomeView: View {
 
     @ViewBuilder
     private func summaryCard(_ snapshots: [PaymentSnapshot]) -> some View {
-        let card = SummaryCardView(snapshots: snapshots, currentMonth: currentMonth)
+        let card = SummaryCardView(snapshots: snapshots, currentMonth: currentMonth, rates: rates)
         #if DEBUG
         card.onLongPressGesture {
-            Task { await NotificationScheduler.scheduleTest(payments: snapshots) }
+            Task { await NotificationScheduler.scheduleTest(payments: snapshots, rates: rates) }
         }
         #else
         card
@@ -78,7 +80,7 @@ struct HomeView: View {
             case .cash: CashDetailView(payment: payment)
             }
         } label: {
-            PaymentRowView(payment: payment)
+            PaymentRowView(payment: payment, rates: rates)
         }
         .buttonStyle(.plain)
     }

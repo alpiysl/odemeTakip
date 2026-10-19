@@ -2,6 +2,7 @@ import SwiftUI
 
 struct PaymentRowView: View {
     let payment: Payment
+    var rates: ExchangeRates? = nil
 
     var body: some View {
         let snapshot = payment.snapshot
@@ -16,9 +17,17 @@ struct PaymentRowView: View {
                 Text(Self.subtitle(snapshot)).font(.caption).foregroundStyle(Theme.secondaryText).lineLimit(1)
             }
             Spacer(minLength: 8)
-            Text(MoneyFormatter.string(PaymentCalculator.remaining(snapshot), snapshot.currency))
-                .font(.subheadline.weight(.bold))
-                .monospacedDigit()
+            VStack(alignment: .trailing, spacing: 2) {
+                Text(MoneyFormatter.string(PaymentCalculator.remaining(snapshot), snapshot.currency))
+                    .font(.subheadline.weight(.bold))
+                if snapshot.currency != .TRY,
+                   let lira = CurrencyConverter.toTRY([snapshot.currency: PaymentCalculator.remaining(snapshot)], rates: rates) {
+                    Text("≈ " + MoneyFormatter.string(lira, .TRY))
+                        .font(.caption)
+                        .foregroundStyle(Theme.secondaryText)
+                }
+            }
+            .monospacedDigit()
             Image(systemName: "chevron.right").font(.caption2.weight(.semibold)).foregroundStyle(Theme.tertiaryText)
         }
         .padding(.vertical, 12)

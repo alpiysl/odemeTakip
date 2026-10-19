@@ -3,15 +3,17 @@ import SwiftUI
 struct SummaryCardView: View {
     let snapshots: [PaymentSnapshot]
     let currentMonth: YearMonth
+    let rates: ExchangeRates?
 
     var body: some View {
         let totals = PaymentCalculator.totals(snapshots)
-        let primary = PaymentCalculator.primaryCurrency(snapshots)
-        let others = totals.overall.filter { $0.key != primary }
+        let lira = CurrencyConverter.toTRY(totals.overall, rates: rates)
+        let primary = lira == nil ? PaymentCalculator.primaryCurrency(snapshots) : .TRY
+        let others = lira == nil ? totals.overall.filter { $0.key != primary } : [:]
 
         VStack(alignment: .leading, spacing: 2) {
             Text("Toplam kalan").font(.caption).opacity(0.85)
-            Text(MoneyFormatter.string(totals.overall[primary] ?? 0, primary))
+            Text(MoneyFormatter.string(lira ?? totals.overall[primary] ?? 0, primary))
                 .font(.system(size: 36, weight: .heavy))
                 .monospacedDigit()
                 .lineLimit(1)
@@ -35,8 +37,8 @@ struct SummaryCardView: View {
 
     @ViewBuilder
     private func legends(_ totals: Totals) -> some View {
-        legend(color: Theme.credit, title: "Kredi", value: MoneyFormatter.joined(totals.credit))
-        legend(color: Theme.cash, title: "Elden", value: MoneyFormatter.joined(totals.cash))
+        legend(color: Theme.credit, title: "Kredi", value: MoneyFormatter.total(totals.credit, rates: rates))
+        legend(color: Theme.cash, title: "Elden", value: MoneyFormatter.total(totals.cash, rates: rates))
     }
 
     private func legend(color: Color, title: String, value: String) -> some View {
@@ -55,7 +57,7 @@ struct SummaryCardView: View {
         case .allPaid:
             chipText("Bu ayın taksitleri ödendi ✓")
         case .due(let due):
-            chipText("Bu ay: \(MoneyFormatter.joined(due.mapValues(\.amount))) kredi taksiti")
+            chipText("Bu ay: \(MoneyFormatter.total(due.mapValues(\.amount), rates: rates)) kredi taksiti")
         }
     }
 

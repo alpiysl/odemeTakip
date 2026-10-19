@@ -25,14 +25,14 @@ enum NotificationScheduler {
     }
 
     /// Bekleyen tüm aylık bildirimleri silip önümüzdeki 12 ay için yeniden kurar.
-    static func reschedule(payments: [PaymentSnapshot], now: Date = .now) async {
+    static func reschedule(payments: [PaymentSnapshot], rates: ExchangeRates?, now: Date = .now) async {
         let center = UNUserNotificationCenter.current()
         let monthlyIDs = await center.pendingNotificationRequests()
             .map(\.identifier)
             .filter { $0.hasPrefix(monthlyPrefix) }
         center.removePendingNotificationRequests(withIdentifiers: monthlyIDs)
         for month in NotificationContentBuilder.triggerMonths(after: now) {
-            guard let content = NotificationContentBuilder.content(for: month, payments: payments) else { continue }
+            guard let content = NotificationContentBuilder.content(for: month, payments: payments, rates: rates) else { continue }
             var components = DateComponents()
             components.year = month.year
             components.month = month.month
@@ -53,9 +53,9 @@ enum NotificationScheduler {
 
     #if DEBUG
     /// 5 sn sonra bu ayın bildirimini gösterir (sadece Debug build).
-    static func scheduleTest(payments: [PaymentSnapshot]) async {
+    static func scheduleTest(payments: [PaymentSnapshot], rates: ExchangeRates?) async {
         let month = YearMonth(date: .now)
-        let content = NotificationContentBuilder.content(for: month, payments: payments)
+        let content = NotificationContentBuilder.content(for: month, payments: payments, rates: rates)
             ?? NotificationContent(title: "\(month.name) ödemeleri", body: "Bu ay ödeme yok")
         let request = UNNotificationRequest(
             identifier: "debug-test",

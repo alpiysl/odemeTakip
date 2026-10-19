@@ -10,6 +10,7 @@ struct RootView: View {
     @Environment(\.modelContext) private var context
     @State private var notificationsAllowed = true
     @State private var month = MonthTracker()
+    @State private var rateStore = RootView.makeRateStore()
 
     private var payments: [Payment] { queriedPayments.filter(\.isLive) }
 
@@ -19,6 +20,7 @@ struct RootView: View {
         NavigationStack {
             HomeView(payments: payments,
                      currentMonth: month.current,
+                     rates: rateStore.rates,
                      notificationsAllowed: notificationsAllowed,
                      isTemporaryStore: isTemporaryStore)
         }
@@ -27,23 +29,25 @@ struct RootView: View {
             #if DEBUG
             SampleData.insertIfRequested(into: context)
             #endif
+            await rateStore.refreshIfNeeded()
             notificationsAllowed = await NotificationScheduler.requestAuthorization()
-            await NotificationScheduler.reschedule(payments: snapshots)
+            await NotificationScheduler.reschedule(payments: snapshots, rates: rateStore.rates)
             #if DEBUG
             if ProcessInfo.processInfo.arguments.contains("-testNotification") {
-                await NotificationScheduler.scheduleTest(payments: snapshots)
+                await NotificationScheduler.scheduleTest(payments: snapshots, rates: rateStore.rates)
             }
             #endif
         }
-        .task(id: snapshots) {
-            await NotificationScheduler.reschedule(payments: snapshots)
+        .task(id: ScheduleInput(snapshots: snapshots, rates: rateStore.rates)) {
+            await NotificationScheduler.reschedule(payments: snapshots, rates: rateStore.rates)
         }
         .onChange(of: scenePhase) { _, phase in
             guard phase == .active else { return }
             month.refresh()
             Task {
+                await rateStore.refreshIfNeeded()
                 notificationsAllowed = await NotificationScheduler.requestAuthorization()
-                await NotificationScheduler.reschedule(payments: snapshots)
+                await NotificationScheduler.reschedule(payments: snapshots, rates: rateStore.rates)
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: UIApplication.significantTimeChangeNotification)) { _ in
@@ -61,4 +65,16 @@ struct RootView: View {
     #if DEBUG
     @State private var debugScreen = SampleData.requestedScreen
     #endif
+
+    private struct ScheduleInput: Equatable {
+        let snapshots: [PaymentSnapshot]
+        let rates: ExchangeRates?
+    }
+
+    private static func makeRateStore() -> RateStore {
+        #if DEBUG
+        if let fake = SampleData.fakeRateStore() { return fake }
+        #endif
+        return RateStore()
+    }
 }

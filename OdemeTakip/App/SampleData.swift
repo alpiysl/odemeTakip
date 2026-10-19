@@ -47,6 +47,20 @@ enum SampleData {
         context.saveQuietly()
     }
 
+    /// `-fakeRates`: ağsız, sabit kur (1$ = ₺40, 1€ = ₺50).
+    @MainActor
+    static func fakeRateStore() -> RateStore? {
+        guard ProcessInfo.processInfo.arguments.contains("-fakeRates") else { return nil }
+        let suite = "debug-fake-rates"
+        let defaults = UserDefaults(suiteName: suite) ?? .standard
+        defaults.removePersistentDomain(forName: suite)
+        let xml = """
+        <Tarih_Date Tarih="19.10.2026"><Currency CurrencyCode="USD"><Unit>1</Unit><ForexSelling>40</ForexSelling></Currency>\
+        <Currency CurrencyCode="EUR"><Unit>1</Unit><ForexSelling>50</ForexSelling></Currency></Tarih_Date>
+        """
+        return RateStore(defaults: defaults, fetch: { Data(xml.utf8) })
+    }
+
     /// `-debugScreen <credit|cash|form>` argümanının değeri.
     static var requestedScreen: String? {
         let args = ProcessInfo.processInfo.arguments
