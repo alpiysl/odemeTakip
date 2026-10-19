@@ -3,6 +3,7 @@ import SwiftUI
 
 struct CreditDetailView: View {
     let payment: Payment
+    let currentMonth: YearMonth
 
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
@@ -20,7 +21,7 @@ struct CreditDetailView: View {
 
     private var content: some View {
         let snapshot = payment.snapshot
-        let current = YearMonth(date: .now)
+        let current = currentMonth
         let schedule = PaymentCalculator.schedule(snapshot, current: current)
         let rows = showAll ? schedule.allRows : schedule.visibleRows
         let amount = MoneyFormatter.string(snapshot.monthlyAmount, snapshot.currency)

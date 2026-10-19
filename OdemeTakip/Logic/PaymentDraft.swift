@@ -76,6 +76,13 @@ struct PaymentDraft: Equatable {
 
     var isValid: Bool { validationMessage == nil }
 
+    /// Ekranda gösterilecek mesaj; kullanıcı ondalık yazarken ("1500,") susar.
+    var visibleValidationMessage: String? {
+        let amounts = kind == .credit ? [monthlyAmountText] : [totalDebtText]
+        if amounts.contains(where: AmountParser.isIncomplete) { return nil }
+        return validationMessage
+    }
+
     var hasInput: Bool {
         ![name, installmentCountText, monthlyAmountText, totalDebtText].allSatisfy { Self.trim($0).isEmpty }
     }

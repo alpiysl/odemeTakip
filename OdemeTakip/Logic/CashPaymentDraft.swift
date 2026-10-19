@@ -18,7 +18,7 @@ struct CashPaymentDraft: Equatable {
 
     /// Boş girişte mesaj yok (Kaydet zaten pasif).
     var validationMessage: String? {
-        if amountText.trimmingCharacters(in: .whitespaces).isEmpty { return nil }
+        if amountText.trimmingCharacters(in: .whitespaces).isEmpty || AmountParser.isIncomplete(amountText) { return nil }
         guard let value = AmountParser.parse(amountText), value > 0 else { return "Geçerli bir tutar gir" }
         if value > remaining {
             return "Kalan borçtan (\(MoneyFormatter.string(remaining, currency))) fazla olamaz"

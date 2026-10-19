@@ -1,19 +1,24 @@
 import SwiftData
 import SwiftUI
+import UIKit
 
 struct RootView: View {
     let isTemporaryStore: Bool
 
-    @Query(sort: \Payment.createdAt) private var payments: [Payment]
+    @Query(sort: \Payment.createdAt) private var queriedPayments: [Payment]
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.modelContext) private var context
     @State private var notificationsAllowed = true
+    @State private var month = MonthTracker()
+
+    private var payments: [Payment] { queriedPayments.filter(\.isLive) }
 
     private var snapshots: [PaymentSnapshot] { payments.map(\.snapshot) }
 
     var body: some View {
         NavigationStack {
             HomeView(payments: payments,
+                     currentMonth: month.current,
                      notificationsAllowed: notificationsAllowed,
                      isTemporaryStore: isTemporaryStore)
         }
@@ -35,10 +40,14 @@ struct RootView: View {
         }
         .onChange(of: scenePhase) { _, phase in
             guard phase == .active else { return }
+            month.refresh()
             Task {
                 notificationsAllowed = await NotificationScheduler.requestAuthorization()
                 await NotificationScheduler.reschedule(payments: snapshots)
             }
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.significantTimeChangeNotification)) { _ in
+            month.refresh()
         }
         #if DEBUG
         .fullScreenCover(isPresented: Binding(

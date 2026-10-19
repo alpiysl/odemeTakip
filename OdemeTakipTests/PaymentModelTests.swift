@@ -110,4 +110,13 @@ struct PaymentModelTests {
         #expect(try context.fetchCount(FetchDescriptor<CashPayment>()) == 0)
         #expect(try context.fetchCount(FetchDescriptor<Payment>()) == 0)
     }
+
+    @Test func deletedPaymentIsNotLive() throws {
+        let p = try cashPayment()
+        try context.save()
+        #expect(p.isLive)
+        context.delete(p)
+        try context.save()
+        #expect(!p.isLive)
+    }
 }

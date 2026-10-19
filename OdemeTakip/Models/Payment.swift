@@ -42,6 +42,9 @@ final class Payment {
         }
     }
 
+    /// Silinmemiş ve hâlâ bir context'e bağlı; silinmiş modelin alanlarına erişmemek için.
+    var isLive: Bool { !isDeleted && modelContext != nil }
+
     private var liveCashPayments: [CashPayment] {
         (cashPayments ?? []).filter { !$0.isDeleted }
     }

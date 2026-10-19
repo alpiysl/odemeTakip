@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HomeView: View {
     let payments: [Payment]
+    let currentMonth: YearMonth
     let notificationsAllowed: Bool
     let isTemporaryStore: Bool
 
@@ -60,7 +61,7 @@ struct HomeView: View {
 
     @ViewBuilder
     private func summaryCard(_ snapshots: [PaymentSnapshot]) -> some View {
-        let card = SummaryCardView(snapshots: snapshots, currentMonth: YearMonth(date: .now))
+        let card = SummaryCardView(snapshots: snapshots, currentMonth: currentMonth)
         #if DEBUG
         card.onLongPressGesture {
             Task { await NotificationScheduler.scheduleTest(payments: snapshots) }
@@ -73,7 +74,7 @@ struct HomeView: View {
     private func row(_ payment: Payment) -> some View {
         NavigationLink {
             switch payment.kind {
-            case .credit: CreditDetailView(payment: payment)
+            case .credit: CreditDetailView(payment: payment, currentMonth: currentMonth)
             case .cash: CashDetailView(payment: payment)
             }
         } label: {

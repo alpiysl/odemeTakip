@@ -32,12 +32,14 @@
 		82E6168BA2D4D109C76949D9 /* OdemeTakipApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121B3E8535A3A59E78D92CEE /* OdemeTakipApp.swift */; };
 		85020322418B8E172CE7948A /* PaymentCalculatorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 527BC0130CA51901F8049969 /* PaymentCalculatorTests.swift */; };
 		8539540103654D9F2AE1C122 /* PaymentSnapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C14F88A4D9A8AC81490953A /* PaymentSnapshot.swift */; };
+		87FAA002E7F30A21FEC93069 /* MonthTrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 766118F3B242A97224E9FA56 /* MonthTrackerTests.swift */; };
 		8B88C8C30EBD04CFBF251034 /* SampleData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563E1E16A20D164E436FD270 /* SampleData.swift */; };
 		96F9C0D7C5CCEC8FC564F13D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5040EE6831DB33AD33915EA2 /* Assets.xcassets */; };
 		A60A0289987C10B30CF40804 /* NotificationScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77DCC5D11FFDFAEF6439C68 /* NotificationScheduler.swift */; };
 		AC520ABA564666A06377FBC7 /* AmountParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0A87B22088181E37AF5CEEF /* AmountParser.swift */; };
 		AE8EB8B744C6A500EBDAA026 /* NotificationContentBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0F027CB78FA23DEDD1D1E98 /* NotificationContentBuilder.swift */; };
 		B56029B9EB92A871FC6BC96A /* OdemeTakipUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2D5A523F2F2872D22106CC2 /* OdemeTakipUITests.swift */; };
+		C94CCEA3105AAC2D78EDC19C /* MonthTracker.swift in Sources */ = {isa = PBXBuildFile; fileRef = C43C3ABC03E2498EAD97BDB8 /* MonthTracker.swift */; };
 		CDBE2656B303CEE0B67AB55F /* PaymentCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0268448F46F57866703BB903 /* PaymentCalculator.swift */; };
 		D4B37414EEA7679A852D3AAC /* NotificationContentBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B45CF986C7721B47C6544BF4 /* NotificationContentBuilderTests.swift */; };
 		DA018ACDBC7FB2A384EB639E /* PaymentDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4DCE1A56F185895F7CE00B05 /* PaymentDraft.swift */; };
@@ -87,6 +89,7 @@
 		61B06A01C996481C06E266A8 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
 		69690146152DA445844FB9F4 /* SummaryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryCardView.swift; sourceTree = "<group>"; };
 		760A30D93D7F5DA4FA0103D3 /* PaymentFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentFormView.swift; sourceTree = "<group>"; };
+		766118F3B242A97224E9FA56 /* MonthTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthTrackerTests.swift; sourceTree = "<group>"; };
 		77B8F527FAD862CB9192E3BD /* PaymentKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentKind.swift; sourceTree = "<group>"; };
 		7E39C9974A3F289A4FF9DBBE /* PaymentDraftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentDraftTests.swift; sourceTree = "<group>"; };
 		817E8FA7E5F02FE744996C15 /* AddCashPaymentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCashPaymentView.swift; sourceTree = "<group>"; };
@@ -101,6 +104,7 @@
 		B0F027CB78FA23DEDD1D1E98 /* NotificationContentBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationContentBuilder.swift; sourceTree = "<group>"; };
 		B45CF986C7721B47C6544BF4 /* NotificationContentBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationContentBuilderTests.swift; sourceTree = "<group>"; };
 		BCDD7DBC7E02FFD75F41C595 /* FooterTotalsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterTotalsView.swift; sourceTree = "<group>"; };
+		C43C3ABC03E2498EAD97BDB8 /* MonthTracker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthTracker.swift; sourceTree = "<group>"; };
 		CEEE527522F5CDB16D4479F0 /* PaymentModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentModelTests.swift; sourceTree = "<group>"; };
 		D2E25EB3543253D1A308727D /* CashDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CashDetailView.swift; sourceTree = "<group>"; };
 		D6F848E2090ED33C6E38AA78 /* PaymentDeletion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentDeletion.swift; sourceTree = "<group>"; };
@@ -142,6 +146,7 @@
 			children = (
 				89A528FFE7034C9C2B420E1E /* AmountParserTests.swift */,
 				A604D0877591C6593549497F /* MoneyFormatterTests.swift */,
+				766118F3B242A97224E9FA56 /* MonthTrackerTests.swift */,
 				B45CF986C7721B47C6544BF4 /* NotificationContentBuilderTests.swift */,
 				527BC0130CA51901F8049969 /* PaymentCalculatorTests.swift */,
 				7E39C9974A3F289A4FF9DBBE /* PaymentDraftTests.swift */,
@@ -157,6 +162,7 @@
 				A0A87B22088181E37AF5CEEF /* AmountParser.swift */,
 				AE078CD487C8303CD36DB932 /* CashPaymentDraft.swift */,
 				1CAC3CD2847A98CAF12107B3 /* MoneyFormatter.swift */,
+				C43C3ABC03E2498EAD97BDB8 /* MonthTracker.swift */,
 				B0F027CB78FA23DEDD1D1E98 /* NotificationContentBuilder.swift */,
 				0268448F46F57866703BB903 /* PaymentCalculator.swift */,
 				4DCE1A56F185895F7CE00B05 /* PaymentDraft.swift */,
@@ -409,6 +415,7 @@
 			files = (
 				154041551A3598E4D673DF8A /* AmountParserTests.swift in Sources */,
 				388CA95F5B6CD7F502236C3E /* MoneyFormatterTests.swift in Sources */,
+				87FAA002E7F30A21FEC93069 /* MonthTrackerTests.swift in Sources */,
 				D4B37414EEA7679A852D3AAC /* NotificationContentBuilderTests.swift in Sources */,
 				85020322418B8E172CE7948A /* PaymentCalculatorTests.swift in Sources */,
 				04E7666EAFE655B77A9C9EDA /* PaymentDraftTests.swift in Sources */,
@@ -442,6 +449,7 @@
 				DE8B9C7AAFE09735C70FC653 /* InstallmentRowView.swift in Sources */,
 				452217B6F645DF3257EA669F /* MoneyFormatter.swift in Sources */,
 				1124655AA02C0C8F0C3A3075 /* MonthPicker.swift in Sources */,
+				C94CCEA3105AAC2D78EDC19C /* MonthTracker.swift in Sources */,
 				AE8EB8B744C6A500EBDAA026 /* NotificationContentBuilder.swift in Sources */,
 				A60A0289987C10B30CF40804 /* NotificationScheduler.swift in Sources */,
 				82E6168BA2D4D109C76949D9 /* OdemeTakipApp.swift in Sources */,

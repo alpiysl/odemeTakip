@@ -77,7 +77,7 @@ struct PaymentFormView: View {
                         }
                     }
                     .listRowBackground(Theme.credit.opacity(0.1))
-                } else if draft.hasInput, let message = draft.validationMessage {
+                } else if draft.hasInput, let message = draft.visibleValidationMessage {
                     Section {
                         Text(message).font(.footnote).foregroundStyle(Theme.cash)
                     }

@@ -102,4 +102,18 @@ struct PaymentDraftTests {
         #expect(d.amount == 50_000)
         #expect(d.validationMessage == nil)
     }
+
+    @Test func trailingDecimalSeparatorHidesWarningWhileTyping() {
+        var d = creditDraft()
+        d.monthlyAmountText = "1500,"
+        #expect(!d.isValid)
+        #expect(d.visibleValidationMessage == nil)
+        d.monthlyAmountText = "abc"
+        #expect(d.visibleValidationMessage == "Geçerli bir aylık tutar gir")
+
+        var cash = CashPaymentDraft(remaining: 50_000, currency: .TRY)
+        cash.amountText = "1500,"
+        #expect(cash.amount == nil)
+        #expect(cash.validationMessage == nil)
+    }
 }

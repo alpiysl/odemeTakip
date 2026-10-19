@@ -64,7 +64,7 @@ struct DebugScreen: View {
         switch name {
         case "credit":
             if let payment = payments.first(where: { $0.kind == .credit }) {
-                NavigationStack { CreditDetailView(payment: payment) }
+                NavigationStack { CreditDetailView(payment: payment, currentMonth: YearMonth(date: .now)) }
             }
         case "cash":
             if let payment = payments.first(where: { $0.kind == .cash }) {

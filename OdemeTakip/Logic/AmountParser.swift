@@ -24,6 +24,12 @@ enum AmountParser {
         return Decimal(string: value, locale: Locale(identifier: "en_US_POSIX"))
     }
 
+    /// Yazımı süren ondalık ("1500,") — henüz hata sayılmaz.
+    static func isIncomplete(_ text: String) -> Bool {
+        let trimmed = text.trimmingCharacters(in: .whitespaces)
+        return trimmed.hasSuffix(",") && trimmed.count > 1
+    }
+
     /// Düzenleme formu için gruplamasız metin: 1500.5 → "1500,5".
     static func editingText(_ amount: Decimal) -> String {
         let formatter = NumberFormatter()
