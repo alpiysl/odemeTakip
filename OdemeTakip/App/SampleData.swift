@@ -61,6 +61,16 @@ enum SampleData {
             }
         }
 
+        if ProcessInfo.processInfo.arguments.contains("-seedMany") {
+            for index in 1...15 {
+                var extra = PaymentDraft(firstMonth: now)
+                extra.kind = .cash
+                extra.name = "Ek borç \(index)"
+                extra.totalDebtText = "\(index * 1_000)"
+                if let payment = Payment.make(from: extra) { context.insert(payment) }
+            }
+        }
+
         for draft in [home, car, friend, dollar] {
             guard let payment = Payment.make(from: draft) else { continue }
             context.insert(payment)

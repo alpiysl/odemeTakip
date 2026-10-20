@@ -30,6 +30,8 @@ where Option: CaseIterable & Identifiable & Hashable & RawRepresentable,
                 } label: {
                     Text(filter.rawValue)
                         .font(.caption.weight(.semibold))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 7)
                         .background {

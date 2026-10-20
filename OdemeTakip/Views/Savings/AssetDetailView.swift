@@ -33,22 +33,6 @@ struct AssetDetailView: View {
 
         return List {
             Section {
-                Text(priceText(snapshot.unit))
-                    .font(.footnote)
-                    .foregroundStyle(Theme.secondaryText)
-                    .listRowBackground(Color.clear)
-
-                HStack(spacing: 10) {
-                    actionButton("+ Ekle", filled: true) { sheet = .deposit }
-                    actionButton("− Çıkar", filled: false) { sheet = .withdrawal }
-                        .disabled(snapshot.quantity <= 0)
-                        .opacity(snapshot.quantity <= 0 ? 0.4 : 1)
-                }
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
-            }
-
-            Section {
                 if movements.isEmpty {
                     Text("Henüz hareket yok")
                         .font(.footnote)
@@ -83,6 +67,17 @@ struct AssetDetailView: View {
         }
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
+        .pinnedTop {
+            Text(priceText(snapshot.unit))
+                .font(.footnote)
+                .foregroundStyle(Theme.secondaryText)
+            HStack(spacing: 10) {
+                actionButton("+ Ekle", filled: true) { sheet = .deposit }
+                actionButton("− Çıkar", filled: false) { sheet = .withdrawal }
+                    .disabled(snapshot.quantity <= 0)
+                    .opacity(snapshot.quantity <= 0 ? 0.4 : 1)
+            }
+        }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             FooterTotalsView(
                 lines: [.init(title: "Miktar", value: MoneyFormatter.string(snapshot.quantity, snapshot.unit))],
@@ -91,7 +86,7 @@ struct AssetDetailView: View {
         }
         .background(Theme.background.ignoresSafeArea())
         .navigationTitle("\(asset.icon) \(asset.name)")
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             Button("Düzenle") { editing = true }
         }
@@ -195,7 +190,7 @@ struct AddMovementView: View {
         }
         .tint(Theme.paid)
         .preferredColorScheme(.dark)
-        .presentationDetents([.medium])
+        .presentationDetents([.medium, .large])
     }
 
     private func save() {

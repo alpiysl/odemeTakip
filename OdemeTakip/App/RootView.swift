@@ -70,7 +70,6 @@ struct RootView: View {
         .sheet(isPresented: $showingSettings) {
             SettingsView()
         }
-        .environment(rateStore)
         .task {
             // Açılış ekranı oturum başında bir kez okunur; Ayarlar değişikliği sonraki açılışta geçerli.
             if sessionMode == nil { sessionMode = HomeMode(rawValue: homeModeRaw) }
@@ -108,6 +107,8 @@ struct RootView: View {
             DebugScreen(name: debugScreen ?? "", payments: payments)
         }
         #endif
+        // En dışta: sheet ve tam ekran sunumlar dahil her alt görünüm canlı kura erişir.
+        .environment(rateStore)
     }
 
     #if DEBUG

@@ -37,9 +37,34 @@ struct HomeHeader: View {
     var onSettings: () -> Void = {}
 
     var body: some View {
-        HStack {
-            Text("Varlık Takip").font(.headline.weight(.bold))
-            Spacer()
+        // Sığmazsa başlık üstte, anahtar ve ayar altta.
+        ViewThatFits(in: .horizontal) {
+            HStack {
+                title
+                Spacer(minLength: 8)
+                controls
+            }
+            VStack(alignment: .leading, spacing: 8) {
+                title
+                HStack {
+                    controls
+                    Spacer(minLength: 0)
+                }
+            }
+        }
+        .padding(.top, 4)
+        // Arayüz kontrolleri en büyük erişilebilirlik boyutlarında taşmasın.
+        .dynamicTypeSize(...DynamicTypeSize.accessibility1)
+    }
+
+    private var title: some View {
+        Text("Varlık Takip")
+            .font(.headline.weight(.bold))
+            .lineLimit(1)
+    }
+
+    private var controls: some View {
+        HStack(spacing: 8) {
             HStack(spacing: 0) {
                 ForEach(HomeMode.allCases) { option in
                     Button {
@@ -47,6 +72,8 @@ struct HomeHeader: View {
                     } label: {
                         Text(option.shortTitle)
                             .font(.caption.weight(.semibold))
+                            .lineLimit(1)
+                            .fixedSize()
                             .padding(.horizontal, 11)
                             .padding(.vertical, 5)
                             .background {
@@ -74,7 +101,6 @@ struct HomeHeader: View {
             }
             .accessibilityLabel("Ayarlar")
         }
-        .padding(.top, 4)
     }
 }
 
@@ -130,7 +156,7 @@ struct SettingsView: View {
         }
         .tint(Theme.accent)
         .preferredColorScheme(.dark)
-        .presentationDetents([.medium])
+        .presentationDetents([.medium, .large])
     }
 
     /// 2 sn görünen, yavaşça belirip kaybolan bilgi mesajı.
@@ -171,10 +197,19 @@ struct NetWorthRow: View {
 
     var body: some View {
         if let net {
-            HStack {
-                Text("Net varlık (− borç)").foregroundStyle(Theme.secondaryText)
-                Spacer()
-                Text(MoneyFormatter.signed(net)).fontWeight(.bold).monospacedDigit()
+            let label = Text("Net varlık (− borç)").foregroundStyle(Theme.secondaryText)
+            let value = Text(MoneyFormatter.signed(net)).fontWeight(.bold).monospacedDigit().lineLimit(1)
+            ViewThatFits(in: .horizontal) {
+                HStack {
+                    label.lineLimit(1)
+                    Spacer()
+                    value
+                }
+                VStack(alignment: .leading, spacing: 2) {
+                    label
+                    value.minimumScaleFactor(0.6)
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
             }
             .font(.footnote)
             .padding(.horizontal, 12)

@@ -31,11 +31,6 @@ struct CreditDetailView: View {
 
         return ScrollViewReader { proxy in
             List {
-                Text("\(snapshot.installmentCount) taksit · \(amount)/ay · \(snapshot.firstMonth.shortLabel) başlangıç")
-                    .font(.footnote)
-                    .foregroundStyle(Theme.secondaryText)
-                    .listRowBackground(Color.clear)
-
                 if schedule.collapsedPaidCount > 0 && !showAll {
                     Button("Önceki \(schedule.collapsedPaidCount) taksit ödendi ✓ (göster)") {
                         showAll = true
@@ -67,6 +62,11 @@ struct CreditDetailView: View {
                 }
             }
         }
+        .pinnedTop {
+            Text("\(snapshot.installmentCount) taksit · \(amount)/ay · \(snapshot.firstMonth.shortLabel) başlangıç")
+                .font(.footnote)
+                .foregroundStyle(Theme.secondaryText)
+        }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             FooterTotalsView(
                 lines: [
@@ -81,7 +81,7 @@ struct CreditDetailView: View {
         }
         .background(Theme.background.ignoresSafeArea())
         .navigationTitle("\(payment.icon) \(payment.name)")
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             Button("Düzenle") { editing = true }
         }

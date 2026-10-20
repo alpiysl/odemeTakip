@@ -28,6 +28,8 @@ struct PaymentRowView: View {
                 }
             }
             .monospacedDigit()
+            .lineLimit(1)
+            .layoutPriority(1)
             Image(systemName: "chevron.right").font(.caption2.weight(.semibold)).foregroundStyle(Theme.tertiaryText)
         }
         .padding(.vertical, 12)

@@ -68,7 +68,7 @@ struct AddCashPaymentView: View {
         }
         .tint(Theme.accent)
         .preferredColorScheme(.dark)
-        .presentationDetents([.medium])
+        .presentationDetents([.medium, .large])
     }
 
     private func save() {

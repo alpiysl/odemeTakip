@@ -4,6 +4,9 @@ struct SummaryCardView: View {
     let snapshots: [PaymentSnapshot]
     let currentMonth: YearMonth
     let rates: ExchangeRates?
+    @Environment(\.isCompactHeader) private var compact
+    @ScaledMetric(relativeTo: .largeTitle) private var totalSize: CGFloat = 36
+    @ScaledMetric(relativeTo: .largeTitle) private var compactTotalSize: CGFloat = 28
 
     var body: some View {
         let totals = PaymentCalculator.totals(snapshots)
@@ -14,7 +17,7 @@ struct SummaryCardView: View {
         VStack(alignment: .leading, spacing: 2) {
             Text("Toplam kalan").font(.caption).opacity(0.85)
             Text(MoneyFormatter.string(lira ?? totals.overall[primary] ?? 0, primary))
-                .font(.system(size: 36, weight: .heavy))
+                .font(.system(size: compact ? compactTotalSize : totalSize, weight: .heavy))
                 .monospacedDigit()
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
@@ -26,11 +29,11 @@ struct SummaryCardView: View {
                 VStack(alignment: .leading, spacing: 4) { legends(totals) }
             }
             .font(.caption)
-            .padding(.top, 8)
+            .padding(.top, compact ? 4 : 8)
             chip
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(18)
+        .padding(compact ? 12 : 18)
         .background(Theme.gradient, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .foregroundStyle(.white)
     }
@@ -67,6 +70,6 @@ struct SummaryCardView: View {
             .padding(.horizontal, 11)
             .padding(.vertical, 5)
             .background(.white.opacity(0.2), in: RoundedRectangle(cornerRadius: 10, style: .continuous))
-            .padding(.top, 10)
+            .padding(.top, compact ? 6 : 10)
     }
 }

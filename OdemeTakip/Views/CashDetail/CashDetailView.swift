@@ -29,35 +29,6 @@ struct CashDetailView: View {
 
         return List {
             Section {
-                Text("\(receivable ? "Alacak · Toplam alacak" : "Elden · Toplam borç") \(MoneyFormatter.string(snapshot.totalDebt, snapshot.currency))")
-                    .font(.footnote)
-                    .foregroundStyle(Theme.secondaryText)
-                    .listRowBackground(Color.clear)
-
-                if completed {
-                    Text(receivable ? "Alacak tamamlandı ✓" : "Borç tamamlandı ✓")
-                        .font(.headline)
-                        .foregroundStyle(Theme.paid)
-                        .frame(maxWidth: .infinity)
-                        .listRowBackground(Color.clear)
-                } else {
-                    Button {
-                        addingPayment = true
-                    } label: {
-                        Text(receivable ? "+ Tahsilat ekle" : "+ Ödeme ekle")
-                            .font(.headline)
-                            .foregroundStyle(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 13)
-                            .background(Theme.gradient, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-                    }
-                    .buttonStyle(.plain)
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
-                }
-            }
-
-            Section {
                 if entries.isEmpty {
                     Text(receivable ? "Henüz tahsilat yok" : "Henüz ödeme yok")
                         .font(.footnote)
@@ -94,6 +65,30 @@ struct CashDetailView: View {
         }
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
+        .pinnedTop {
+            Text("\(receivable ? "Alacak · Toplam alacak" : "Elden · Toplam borç") \(MoneyFormatter.string(snapshot.totalDebt, snapshot.currency))")
+                .font(.footnote)
+                .foregroundStyle(Theme.secondaryText)
+            if completed {
+                Text(receivable ? "Alacak tamamlandı ✓" : "Borç tamamlandı ✓")
+                    .font(.headline)
+                    .foregroundStyle(Theme.paid)
+                    .frame(maxWidth: .infinity)
+            } else {
+                Button {
+                    addingPayment = true
+                } label: {
+                    Text(receivable ? "+ Tahsilat ekle" : "+ Ödeme ekle")
+                        .font(.headline)
+                        .foregroundStyle(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 13)
+                        .background(receivable ? Theme.savingsGradient : Theme.gradient,
+                                    in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                }
+                .buttonStyle(.plain)
+            }
+        }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             FooterTotalsView(
                 lines: [
@@ -108,7 +103,7 @@ struct CashDetailView: View {
         }
         .background(Theme.background.ignoresSafeArea())
         .navigationTitle("\(payment.icon) \(payment.name)")
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             Button("Düzenle") { editing = true }
         }

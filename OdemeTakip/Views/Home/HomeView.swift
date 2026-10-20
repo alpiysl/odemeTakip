@@ -20,45 +20,50 @@ struct HomeView: View {
         let active = filtered.filter { !PaymentCalculator.isCompleted($0.snapshot) }
         let completed = filtered.filter { PaymentCalculator.isCompleted($0.snapshot) }
 
-        ZStack(alignment: .bottomTrailing) {
-            Theme.background.ignoresSafeArea()
-            ScrollView {
-                VStack(alignment: .leading, spacing: 14) {
-                    if isTemporaryStore {
-                        InfoBanner(text: "Veri deposu açılamadı. Girilen veriler uygulama kapanınca silinir.", onClose: nil)
-                    }
-                    if !notificationsAllowed && !hideNotificationBanner {
-                        InfoBanner(text: "Bildirimler kapalı — Ayarlar'dan açabilirsin") {
-                            hideNotificationBanner = true
-                        }
-                    }
-                    HomeHeader(mode: $mode, onSettings: onSettings)
-                    summaryCard(snapshots)
-                    NetWorthRow(net: netWorth)
-                    RateBar(rates: rates)
-                    if payments.isEmpty {
-                        emptyState
-                    } else {
-                        FilterBar(selection: $filter)
-                        LazyVStack(spacing: 0) {
-                            ForEach(active) { row($0) }
-                        }
-                        if !completed.isEmpty {
-                            Text("Tamamlananlar")
-                                .font(.caption.weight(.semibold))
-                                .textCase(.uppercase)
-                                .foregroundStyle(Theme.secondaryText)
-                                .padding(.top, 8)
-                            LazyVStack(spacing: 0) {
-                                ForEach(completed) { row($0).opacity(0.5) }
-                            }
-                        }
+        PinnedLayout {
+            if isTemporaryStore {
+                InfoBanner(text: "Veri deposu açılamadı. Girilen veriler uygulama kapanınca silinir.", onClose: nil)
+            }
+            if !notificationsAllowed && !hideNotificationBanner {
+                InfoBanner(text: "Bildirimler kapalı — Ayarlar'dan açabilirsin") {
+                    hideNotificationBanner = true
+                }
+            }
+            HomeHeader(mode: $mode, onSettings: onSettings)
+            summaryCard(snapshots)
+            NetWorthRow(net: netWorth)
+            RateBar(rates: rates)
+            if !payments.isEmpty {
+                FilterBar(selection: $filter)
+            }
+        } content: {
+            if payments.isEmpty {
+                emptyState
+            } else {
+                LazyVStack(spacing: 0) {
+                    ForEach(active) { row($0) }
+                }
+                if !completed.isEmpty {
+                    Text("Tamamlananlar")
+                        .font(.caption.weight(.semibold))
+                        .textCase(.uppercase)
+                        .foregroundStyle(Theme.secondaryText)
+                        .padding(.top, 8)
+                    LazyVStack(spacing: 0) {
+                        ForEach(completed) { row($0).opacity(0.5) }
                     }
                 }
-                .padding(.horizontal, 16)
-                .padding(.bottom, 96)
             }
-            addButton
+        }
+        .background(Theme.background.ignoresSafeArea())
+        .addBar {
+            Button {
+                showingAdd = true
+            } label: {
+                AddBarLabel(title: "Yeni ödeme", gradient: Theme.gradient)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Yeni ödeme")
         }
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showingAdd) {
@@ -93,25 +98,9 @@ struct HomeView: View {
     private var emptyState: some View {
         VStack(spacing: 8) {
             Text("Henüz ödeme yok").font(.headline)
-            Text("+ ile ilk kaydını ekle").font(.subheadline).foregroundStyle(Theme.secondaryText)
+            Text("Alttaki butonla ilk kaydını ekle").font(.subheadline).foregroundStyle(Theme.secondaryText)
         }
         .frame(maxWidth: .infinity)
         .padding(.top, 60)
-    }
-
-    private var addButton: some View {
-        Button {
-            showingAdd = true
-        } label: {
-            Image(systemName: "plus")
-                .font(.title2.weight(.semibold))
-                .foregroundStyle(.white)
-                .frame(width: 56, height: 56)
-                .background(Theme.gradient, in: Circle())
-                .shadow(color: Theme.accent.opacity(0.45), radius: 12, y: 6)
-        }
-        .accessibilityLabel("Yeni ödeme")
-        .padding(.trailing, 20)
-        .padding(.bottom, 24)
     }
 }

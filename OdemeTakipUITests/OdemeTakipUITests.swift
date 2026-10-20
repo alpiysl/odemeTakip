@@ -234,4 +234,44 @@ final class OdemeTakipUITests: XCTestCase {
         XCTAssertTrue(text(app, "Reşatlar").waitForExistence(timeout: 3))
         XCTAssertTrue(text(app, "₺82.000").exists)
     }
+
+    // MARK: Sabit üst alan ve alt buton
+
+    func testHeaderStaysPinnedWhileListScrolls() {
+        let app = launch(["-seedMany"])
+        XCTAssertTrue(text(app, "Toplam kalan").waitForExistence(timeout: 5))
+        let list = app.scrollViews.firstMatch
+        list.swipeUp()
+        list.swipeUp()
+        XCTAssertTrue(text(app, "Toplam kalan").isHittable)
+        XCTAssertTrue(app.buttons["mode-savings"].isHittable)
+        XCTAssertTrue(app.buttons["Ayarlar"].isHittable)
+    }
+
+    func testAddBarNeverCoversRows() {
+        let app = launch(["-seedMany"])
+        let add = app.buttons["Yeni ödeme"]
+        XCTAssertTrue(add.waitForExistence(timeout: 5))
+        let list = app.scrollViews.firstMatch
+        // Liste alanı butonun üstünde biter: hiçbir satır butonun altına giremez.
+        XCTAssertLessThanOrEqual(list.frame.maxY, add.frame.minY + 1)
+        for _ in 0..<4 { list.swipeUp() }
+        let rows = app.buttons.matching(NSPredicate(format: "label CONTAINS 'Ek borç' OR label CONTAINS 'Dolar borcu'"))
+        XCTAssertGreaterThan(rows.count, 0)
+        XCTAssertLessThanOrEqual(list.frame.maxY, add.frame.minY + 1)
+    }
+
+    func testDetailHeaderPinned() {
+        let app = launch()
+        XCTAssertTrue(text(app, "Konut Kredisi").waitForExistence(timeout: 5))
+        text(app, "Konut Kredisi").tap()
+        let info = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH '36 taksit'")).firstMatch
+        XCTAssertTrue(info.waitForExistence(timeout: 3))
+        app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Önceki'")).firstMatch.tap()
+        let list = app.collectionViews.firstMatch
+        list.swipeUp()
+        list.swipeUp()
+        XCTAssertTrue(info.isHittable)
+        XCTAssertTrue(app.buttons["Düzenle"].isHittable)
+    }
 }

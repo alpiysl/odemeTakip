@@ -17,6 +17,9 @@ struct SavingsHomeView: View {
     var onSettings: () -> Void = {}
 
     @State private var filter: SavingsFilter = .all
+    @Environment(\.isCompactHeader) private var compact
+    @ScaledMetric(relativeTo: .largeTitle) private var totalSize: CGFloat = 36
+    @ScaledMetric(relativeTo: .largeTitle) private var compactTotalSize: CGFloat = 28
     @State private var addingAsset = false
     @State private var addingReceivable = false
 
@@ -26,18 +29,18 @@ struct SavingsHomeView: View {
         let showAssets = filter != .receivables
         let showReceivables = filter != .assets
 
-        ZStack(alignment: .bottomTrailing) {
-            Theme.background.ignoresSafeArea()
-            ScrollView {
-                VStack(alignment: .leading, spacing: 12) {
-                    HomeHeader(mode: $mode, onSettings: onSettings)
-                    summaryCard
-                    NetWorthRow(net: summary.net)
-                    RateBar(rates: rates)
+        PinnedLayout {
+            HomeHeader(mode: $mode, onSettings: onSettings)
+            summaryCard
+            NetWorthRow(net: summary.net)
+            RateBar(rates: rates)
+            if !(assets.isEmpty && receivables.isEmpty) {
+                FilterBar(selection: $filter, gradient: Theme.savingsGradient)
+            }
+        } content: {
                     if assets.isEmpty && receivables.isEmpty {
                         emptyState
                     } else {
-                        FilterBar(selection: $filter, gradient: Theme.savingsGradient)
                         LazyVStack(spacing: 0) {
                             if showAssets {
                                 ForEach(assets) { asset in
@@ -64,12 +67,9 @@ struct SavingsHomeView: View {
                             }
                         }
                     }
-                }
-                .padding(.horizontal, 16)
-                .padding(.bottom, 96)
-            }
-            addMenu
         }
+        .background(Theme.background.ignoresSafeArea())
+        .addBar { addMenu }
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $addingAsset) {
             AssetFormView(mode: .create)
@@ -92,7 +92,7 @@ struct SavingsHomeView: View {
         return VStack(alignment: .leading, spacing: 2) {
             Text("Toplam varlık").font(.caption).opacity(0.85)
             Text(total)
-                .font(.system(size: 36, weight: .heavy))
+                .font(.system(size: compact ? compactTotalSize : totalSize, weight: .heavy))
                 .monospacedDigit()
                 .lineLimit(1)
                 .minimumScaleFactor(0.4)
@@ -101,10 +101,10 @@ struct SavingsHomeView: View {
                 VStack(alignment: .leading, spacing: 4) { legends(assetTotals, receivableTotals) }
             }
             .font(.caption)
-            .padding(.top, 8)
+            .padding(.top, compact ? 4 : 8)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(18)
+        .padding(compact ? 12 : 18)
         .background(Theme.savingsGradient, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .foregroundStyle(.white)
     }
@@ -137,7 +137,7 @@ struct SavingsHomeView: View {
     private var emptyState: some View {
         VStack(spacing: 8) {
             Text("Henüz birikim yok").font(.headline)
-            Text("+ ile birikim veya alacak ekle").font(.subheadline).foregroundStyle(Theme.secondaryText)
+            Text("Alttaki butonla birikim veya alacak ekle").font(.subheadline).foregroundStyle(Theme.secondaryText)
         }
         .frame(maxWidth: .infinity)
         .padding(.top, 60)
@@ -148,16 +148,9 @@ struct SavingsHomeView: View {
             Button("Birikim ekle", systemImage: "leaf") { addingAsset = true }
             Button("Alacak ekle", systemImage: "person.crop.circle.badge.plus") { addingReceivable = true }
         } label: {
-            Image(systemName: "plus")
-                .font(.title2.weight(.semibold))
-                .foregroundStyle(.white)
-                .frame(width: 56, height: 56)
-                .background(Theme.savingsGradient, in: Circle())
-                .shadow(color: Theme.paid.opacity(0.4), radius: 12, y: 6)
+            AddBarLabel(title: "Yeni kayıt", gradient: Theme.savingsGradient)
         }
         .accessibilityLabel("Yeni kayıt")
-        .padding(.trailing, 20)
-        .padding(.bottom, 24)
     }
 }
 
@@ -182,6 +175,8 @@ struct AssetRowView: View {
             Text(lira.map { MoneyFormatter.string($0, .TRY) } ?? MoneyFormatter.string(snapshot.quantity, snapshot.unit))
                 .font(.subheadline.weight(.bold))
                 .monospacedDigit()
+                .lineLimit(1)
+                .layoutPriority(1)
             Image(systemName: "chevron.right").font(.caption2.weight(.semibold)).foregroundStyle(Theme.tertiaryText)
         }
         .padding(.vertical, 12)
