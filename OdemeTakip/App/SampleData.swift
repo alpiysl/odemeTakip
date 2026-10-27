@@ -115,7 +115,7 @@ enum SampleData {
         }
     }
 
-    /// `-debugScreen <credit|cash|form>` argümanının değeri.
+    /// `-debugScreen <credit|cash|settings|form>` argümanının değeri.
     static var requestedScreen: String? {
         let args = ProcessInfo.processInfo.arguments
         guard let index = args.firstIndex(of: "-debugScreen"), index + 1 < args.count else { return nil }
@@ -138,6 +138,8 @@ struct DebugScreen: View {
             if let payment = payments.first(where: { $0.kind == .cash }) {
                 NavigationStack { CashDetailView(payment: payment) }
             }
+        case "settings":
+            SettingsView()
         default:
             PaymentFormView(mode: .create)
         }

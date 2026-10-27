@@ -46,7 +46,7 @@ struct FooterTotalsView: View {
         .padding(.top, 14)
         .padding(.bottom, 10)
         .background(Theme.footer)
-        .overlay(alignment: .top) { Color(hex: 0x24242C).frame(height: 1) }
+        .overlay(alignment: .top) { Theme.footerBorder.frame(height: 1) }
     }
 }
 

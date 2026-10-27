@@ -59,7 +59,7 @@ struct HomeHeader: View {
 
     private var title: some View {
         Text("Varlık Takip")
-            .font(.headline.weight(.bold))
+            .font(.title3.weight(.bold))
             .lineLimit(1)
     }
 
@@ -71,17 +71,17 @@ struct HomeHeader: View {
                         mode = option
                     } label: {
                         Text(option.shortTitle)
-                            .font(.caption.weight(.semibold))
+                            .font(.subheadline.weight(.semibold))
                             .lineLimit(1)
                             .fixedSize()
-                            .padding(.horizontal, 11)
-                            .padding(.vertical, 5)
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 8)
                             .background {
                                 if mode == option {
                                     RoundedRectangle(cornerRadius: 7, style: .continuous).fill(option.gradient)
                                 }
                             }
-                            .foregroundStyle(mode == option ? Color.white : Color.white.opacity(0.55))
+                            .foregroundStyle(mode == option ? Color.white : Theme.unselectedText)
                             .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
@@ -89,14 +89,14 @@ struct HomeHeader: View {
                     .accessibilityAddTraits(mode == option ? .isSelected : [])
                 }
             }
-            .padding(2)
-            .background(Theme.surface, in: RoundedRectangle(cornerRadius: 9, style: .continuous))
+            .padding(3)
+            .background(Theme.surface, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
             .sensoryFeedback(.selection, trigger: mode)
             Button(action: onSettings) {
                 Image(systemName: "gearshape")
                     .font(.body.weight(.semibold))
                     .foregroundStyle(Theme.secondaryText)
-                    .frame(width: 32, height: 32)
+                    .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
             }
             .accessibilityLabel("Ayarlar")
@@ -104,9 +104,10 @@ struct HomeHeader: View {
     }
 }
 
-/// Ayarlar: açılış ekranı seçimi. Değişince 2 sn'lik mesaj.
+/// Ayarlar: açılış ekranı ve görünüm seçimi. Değişince 2 sn'lik mesaj.
 struct SettingsView: View {
     @AppStorage(HomeMode.storageKey) private var landingRaw = HomeMode.debt.rawValue
+    @AppStorage(AppAppearance.storageKey) private var appearanceRaw = AppAppearance.dark.rawValue
     @Environment(\.dismiss) private var dismiss
     @State private var toastText: String?
     @State private var toastTask: Task<Void, Never>?
@@ -118,6 +119,16 @@ struct SettingsView: View {
                 guard newMode.rawValue != landingRaw else { return }
                 landingRaw = newMode.rawValue
                 showToast("Açılış ekranı: \(newMode.title)")
+            })
+    }
+
+    private var appearance: Binding<AppAppearance> {
+        Binding(
+            get: { AppAppearance(rawValue: appearanceRaw) ?? .dark },
+            set: { newValue in
+                guard newValue.rawValue != appearanceRaw else { return }
+                withAnimation(.easeInOut(duration: 0.25)) { appearanceRaw = newValue.rawValue }
+                showToast("Görünüm: \(newValue.title)")
             })
     }
 
@@ -134,6 +145,19 @@ struct SettingsView: View {
                     Text("Açılış ekranı")
                 } footer: {
                     Text("Uygulama açılınca bu ekran gelir. Üstteki Borç | Birikim anahtarı sadece o anki ekranı değiştirir.")
+                }
+
+                Section {
+                    Picker("Görünüm", selection: appearance) {
+                        ForEach(AppAppearance.allCases) { Text($0.title).tag($0) }
+                    }
+                    .pickerStyle(.segmented)
+                    .listRowBackground(Color.clear)
+                    .accessibilityIdentifier("appearancePicker")
+                } header: {
+                    Text("Görünüm")
+                } footer: {
+                    Text("Koyu veya açık tema. Değişiklik hemen uygulanır.")
                 }
             }
             .scrollContentBackground(.hidden)
@@ -155,7 +179,7 @@ struct SettingsView: View {
             }
         }
         .tint(Theme.accent)
-        .preferredColorScheme(.dark)
+        .appColorScheme()
         .presentationDetents([.medium, .large])
     }
 
@@ -178,11 +202,11 @@ struct ToastView: View {
     var body: some View {
         Label(text, systemImage: "checkmark.circle.fill")
             .font(.footnote.weight(.semibold))
-            .foregroundStyle(.white)
+            .foregroundStyle(Theme.primaryText)
             .padding(.horizontal, 14)
             .padding(.vertical, 9)
-            .background(Color(hex: 0x28282F).opacity(0.97), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).stroke(Color(hex: 0x33333D)))
+            .background(Theme.toastBackground.opacity(0.97), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).stroke(Theme.toastBorder))
             .shadow(color: .black.opacity(0.5), radius: 12, y: 6)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(text)
@@ -270,7 +294,7 @@ struct OnboardingView: View {
             .padding(18)
             .background(Theme.footer, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
             .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .stroke(selection == mode ? Theme.accent : Color(hex: 0x2A2A33), lineWidth: 2))
+                .stroke(selection == mode ? Theme.accent : Theme.cardBorder, lineWidth: 2))
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)

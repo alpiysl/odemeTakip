@@ -31,11 +31,14 @@ struct CreditDetailView: View {
 
         return ScrollViewReader { proxy in
             List {
-                if schedule.collapsedPaidCount > 0 && !showAll {
-                    Button("Önceki \(schedule.collapsedPaidCount) taksit ödendi ✓ (göster)") {
-                        showAll = true
+                if schedule.collapsedPaidCount > 0 {
+                    Button {
+                        withAnimation { showAll.toggle() }
+                    } label: {
+                        Label(showAll ? "Ödenmiş taksitleri gizle" : "Ödenmiş \(schedule.collapsedPaidCount) taksiti göster",
+                              systemImage: showAll ? "chevron.up" : "chevron.down")
                     }
-                    .font(.footnote)
+                    .font(.footnote.weight(.semibold))
                     .foregroundStyle(Theme.secondaryText)
                     .frame(maxWidth: .infinity)
                     .listRowBackground(Color.clear)
@@ -66,6 +69,27 @@ struct CreditDetailView: View {
             Text("\(snapshot.installmentCount) taksit · \(amount)/ay · \(snapshot.firstMonth.shortLabel) başlangıç")
                 .font(.footnote)
                 .foregroundStyle(Theme.secondaryText)
+            VStack(alignment: .leading, spacing: 6) {
+                HStack {
+                    Text("\(PaymentCalculator.paidCount(snapshot))/\(snapshot.installmentCount) taksit ödendi")
+                        .font(.subheadline.weight(.semibold))
+                    Spacer()
+                    if let next = PaymentCalculator.nextUnpaidMonth(snapshot) {
+                        Text("Sıradaki: \(next.longLabel)")
+                            .font(.footnote)
+                            .foregroundStyle(Theme.secondaryText)
+                    } else {
+                        Text("Tamamlandı ✓").font(.footnote.weight(.semibold)).foregroundStyle(Theme.paid)
+                    }
+                }
+                ProgressBar(fraction: PaymentCalculator.progress(snapshot), height: 6)
+            }
+            .accessibilityElement(children: .combine)
+            if !PaymentCalculator.isCompleted(snapshot) {
+                Label("Ödendi işaretlemek için taksite dokun", systemImage: "hand.tap")
+                    .font(.caption)
+                    .foregroundStyle(Theme.tertiaryText)
+            }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             FooterTotalsView(

@@ -135,12 +135,9 @@ struct SavingsHomeView: View {
     }
 
     private var emptyState: some View {
-        VStack(spacing: 8) {
-            Text("Henüz birikim yok").font(.headline)
-            Text("Alttaki butonla birikim veya alacak ekle").font(.subheadline).foregroundStyle(Theme.secondaryText)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.top, 60)
+        EmptyStateView(systemImage: "leaf",
+                       title: "Henüz birikim yok",
+                       message: "Döviz, altın veya TL birikimini ya da sana olan alacakları ekle.")
     }
 
     private var addMenu: some View {

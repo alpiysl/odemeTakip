@@ -12,6 +12,8 @@ struct HomeView: View {
 
     @State private var filter: HomeFilter = .all
     @State private var showingAdd = false
+    @State private var cashTarget: Payment?
+    @Environment(\.modelContext) private var context
     @AppStorage("hideNotificationBanner") private var hideNotificationBanner = false
 
     var body: some View {
@@ -69,6 +71,9 @@ struct HomeView: View {
         .sheet(isPresented: $showingAdd) {
             PaymentFormView(mode: .create)
         }
+        .sheet(item: $cashTarget) { payment in
+            AddCashPaymentView(payment: payment)
+        }
     }
 
     @ViewBuilder
@@ -93,14 +98,33 @@ struct HomeView: View {
             PaymentRowView(payment: payment, rates: rates)
         }
         .buttonStyle(.plain)
+        .contextMenu { quickActions(payment) }
+    }
+
+    /// Uzun basınca: detaya girmeden bu ayın taksitini işaretle / ödeme ekle.
+    @ViewBuilder
+    private func quickActions(_ payment: Payment) -> some View {
+        let snapshot = payment.snapshot
+        switch payment.kind {
+        case .credit:
+            if let index = PaymentCalculator.installmentIndex(snapshot, in: currentMonth) {
+                let paid = snapshot.paidInstallments.contains(index)
+                Button(paid ? "Bu ayın taksitini ödenmedi yap" : "Bu ayın taksitini ödendi işaretle",
+                       systemImage: paid ? "arrow.uturn.backward.circle" : "checkmark.circle") {
+                    payment.toggleInstallment(index)
+                    context.saveQuietly()
+                }
+            }
+        case .cash, .receivable:
+            if !PaymentCalculator.isCompleted(snapshot) {
+                Button("Ödeme ekle", systemImage: "plus.circle") { cashTarget = payment }
+            }
+        }
     }
 
     private var emptyState: some View {
-        VStack(spacing: 8) {
-            Text("Henüz ödeme yok").font(.headline)
-            Text("Alttaki butonla ilk kaydını ekle").font(.subheadline).foregroundStyle(Theme.secondaryText)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.top, 60)
+        EmptyStateView(systemImage: "creditcard",
+                       title: "Henüz ödeme yok",
+                       message: "Kredi veya elden borcunu ekle, kalan tutarı ve aylık taksitleri buradan takip et.")
     }
 }

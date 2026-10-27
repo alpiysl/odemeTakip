@@ -11,7 +11,7 @@ struct InstallmentRowView: View {
                     Circle().fill(Theme.paid)
                     Image(systemName: "checkmark")
                         .font(.caption.weight(.heavy))
-                        .foregroundStyle(Theme.background)
+                        .foregroundStyle(.white)
                 } else {
                     Circle().strokeBorder(Theme.ring, lineWidth: 2)
                 }
@@ -30,7 +30,7 @@ struct InstallmentRowView: View {
 
             Text(amount)
                 .monospacedDigit()
-                .foregroundStyle(row.isPaid ? Theme.paid : (row.isCurrent ? Color.white : Theme.secondaryText))
+                .foregroundStyle(row.isPaid ? Theme.paid : (row.isCurrent ? Theme.primaryText : Theme.secondaryText))
         }
         .font(.subheadline)
         .padding(.vertical, 6)

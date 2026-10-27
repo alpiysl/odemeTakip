@@ -139,7 +139,7 @@ struct PaymentFormView: View {
             }
         }
         .tint(Theme.accent)
-        .preferredColorScheme(.dark)
+        .appColorScheme()
     }
 
     private func numberField(_ title: String, text: Binding<String>, decimal: Bool) -> some View {

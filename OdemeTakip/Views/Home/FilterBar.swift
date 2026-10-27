@@ -29,20 +29,20 @@ where Option: CaseIterable & Identifiable & Hashable & RawRepresentable,
                     selection = filter
                 } label: {
                     Text(filter.rawValue)
-                        .font(.caption.weight(.semibold))
+                        .font(.footnote.weight(.semibold))
                         .lineLimit(1)
                         .minimumScaleFactor(0.7)
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 7)
+                        .frame(maxWidth: .infinity, minHeight: 34)
                         .background {
                             if selection == filter {
                                 RoundedRectangle(cornerRadius: 8, style: .continuous).fill(gradient)
                             }
                         }
-                        .foregroundStyle(selection == filter ? Color.white : Color.white.opacity(0.6))
+                        .foregroundStyle(selection == filter ? Color.white : Theme.unselectedText)
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
+                .accessibilityAddTraits(selection == filter ? .isSelected : [])
             }
         }
         .padding(3)

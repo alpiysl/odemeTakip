@@ -13,6 +13,7 @@
   <img src="docs/screenshots/03-borc.png" width="220" alt="Borç ana sayfası">
   <img src="docs/screenshots/04-birikim.png" width="220" alt="Birikim ana sayfası">
   <img src="docs/screenshots/05-kredi-detay.png" width="220" alt="Kredi detayı">
+  <img src="docs/screenshots/07-borc-acik.png" width="220" alt="Borç ana sayfası, açık tema">
 </p>
 
 ---
@@ -20,17 +21,19 @@
 ## Özellikler
 
 ### Borç Takip
-- **Kredi:** taksit sayısı, aylık tutar ve ilk taksit ayı girilir. Her ay dokunarak "ödendi" işaretlenir (yeşil ✓), kalan tutar anında düşer. Ödenmiş eski aylar katlanır, liste bu aya kayar.
-- **Elden borç:** toplam borç girilir; her ödeme yapıldığında o ay ödenen tutar elle eklenir. Kalan borçtan fazlası girilemez.
+- **Kredi:** taksit sayısı, aylık tutar ve ilk taksit ayı girilir. Her ay dokunarak "ödendi" işaretlenir (yeşil ✓), kalan tutar anında düşer. Ödenmiş eski aylar katlanır (göster / gizle), liste bu aya kayar. Detayda ilerleme çubuğu ve sıradaki taksit ayı görünür.
+- **Elden borç:** toplam borç girilir; her ödeme yapıldığında o ay ödenen tutar elle eklenir. Kalan borçtan fazlası girilemez; "Kalan borcun tamamı" ile tek dokunuşta kapatılır.
+- **Liste:** her satırda ilerleme çubuğu; kredilerde ödenen/toplam taksit ve sıradaki ay. Satıra uzun basınca detaya girmeden "Bu ayın taksitini ödendi işaretle" veya "Ödeme ekle".
 - **"Bu ay" bilgisi:** bu ay vadesi gelen ödenmemiş kredi taksitlerinin toplamı.
 - **Aylık bildirim:** her ayın 1'i saat 09:00'da kredi taksitleri ve kalan elden borç **ayrı satırlarda**, TL karşılığıyla bildirilir (yerel bildirim, sunucu gerektirmez).
 
 ### Birikim Takip
-- **Birikim kalemleri:** TL, dolar, euro veya altın (gram, çeyrek, yarım, tam, reşat). "+ Ekle / − Çıkar" ile hareket girilir, geçmiş tutulur; eldekinden fazlası çıkarılamaz.
+- **Birikim kalemleri:** TL, dolar, euro veya altın (gram, çeyrek, yarım, tam, reşat). "+ Ekle / − Çıkar" ile hareket girilir, geçmiş tutulur; eldekinden fazlası çıkarılamaz ("Tümünü çıkar" kısayolu var).
 - **Alacak:** sana borçlu olunan tutarlar; tahsilat geldikçe eklenir, kalan alacak düşer.
 - **Net varlık:** birikim + alacak − borç, her iki ana sayfada.
 
 ### Döviz ve altın
+- Ana sayfadaki kur şeridinde her fiyat tam adıyla ayrı çipte (Dolar, Euro, Gram, Çeyrek, Yarım, Tam, Reşat) ve bülten tarihiyle.
 - Dolar ve euro: **TCMB** günlük döviz satış kuru.
 - Altın: gram, çeyrek, yarım, tam, reşat satış fiyatları (ücretsiz piyasa servisi, resmi değil).
 - Tüm döviz ve altın kayıtlar **her ekranda TL karşılığıyla** gösterilir; toplamlar TL'dir.
@@ -39,15 +42,24 @@
 ### Kullanım kolaylığı
 - Üstteki **Borç | Birikim** anahtarıyla iki ekran arasında anında geçiş.
 - **Açılış ekranı:** ilk kurulumda sorulur, sonra ⚙️ Ayarlar'dan değiştirilir.
+- **Görünüm:** ⚙️ Ayarlar'dan **Koyu** (varsayılan) veya **Açık** tema; değişiklik anında uygulanır.
 - Özet alanı sabit kalır, sadece liste kayar; "＋ Yeni ödeme / Yeni kayıt" butonu altta sabittir ve hiçbir satırı örtmez.
-- Küçük ekranlara ve büyük yazı boyutlarına (Dynamic Type, erişilebilirlik boyutları) uyumlu.
-- Koyu tema, Türkçe arayüz, `tr_TR` sayı biçimi (`₺1.500,50`).
+- Küçük ekranlara ve büyük yazı boyutlarına (Dynamic Type, erişilebilirlik boyutları) uyumlu; anahtar ve ayar butonları parmakla rahat dokunulacak boyutta.
+- Türkçe arayüz, `tr_TR` sayı biçimi (`₺1.500,50`).
 
 ## Ekran görüntüleri
 
-| Açılış | İlk kurulum | Borç | Birikim | Kredi detayı | Elden borç detayı |
-|:---:|:---:|:---:|:---:|:---:|:---:|
-| <img src="docs/screenshots/01-splash.png" width="140"> | <img src="docs/screenshots/02-onboarding.png" width="140"> | <img src="docs/screenshots/03-borc.png" width="140"> | <img src="docs/screenshots/04-birikim.png" width="140"> | <img src="docs/screenshots/05-kredi-detay.png" width="140"> | <img src="docs/screenshots/06-elden-detay.png" width="140"> |
+**Koyu tema**
+
+| Açılış | İlk kurulum | Borç | Birikim | Kredi detayı | Elden borç detayı | Ayarlar |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| <img src="docs/screenshots/01-splash.png" width="140"> | <img src="docs/screenshots/02-onboarding.png" width="140"> | <img src="docs/screenshots/03-borc.png" width="140"> | <img src="docs/screenshots/04-birikim.png" width="140"> | <img src="docs/screenshots/05-kredi-detay.png" width="140"> | <img src="docs/screenshots/06-elden-detay.png" width="140"> | <img src="docs/screenshots/10-ayarlar.png" width="140"> |
+
+**Açık tema**
+
+| Borç | Birikim | Kredi detayı |
+|:---:|:---:|:---:|
+| <img src="docs/screenshots/07-borc-acik.png" width="140"> | <img src="docs/screenshots/08-birikim-acik.png" width="140"> | <img src="docs/screenshots/09-kredi-detay-acik.png" width="140"> |
 
 > Görüntülerdeki kayıtlar örnek veridir.
 
@@ -112,6 +124,8 @@ DEBUG build'de kullanılabilen açılış argümanları:
 | `-resetData` | Tüm kayıtları siler |
 | `-fakeRates` | Ağsız sabit kur ve altın fiyatı |
 | `-startMode debt\|savings\|none` | Açılış ekranını ayarlar (`none` = ilk kurulum sorusu) |
+| `-appearance dark\|light` | Görünüm tercihini ayarlar |
+| `-debugScreen credit\|cash\|settings\|form` | İlgili ekranı doğrudan açar (ekran görüntüsü için) |
 | `-testNotification` | 5 sn sonra bu ayın bildirimini gösterir |
 
 ## Notlar

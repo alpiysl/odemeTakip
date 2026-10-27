@@ -39,7 +39,7 @@ struct CashDetailView: View {
                     HStack(spacing: 12) {
                         ZStack {
                             Circle().fill(Theme.paid)
-                            Image(systemName: "checkmark").font(.caption.weight(.heavy)).foregroundStyle(Theme.background)
+                            Image(systemName: "checkmark").font(.caption.weight(.heavy)).foregroundStyle(.white)
                         }
                         .frame(width: 24, height: 24)
                         Text(YearMonth(date: entry.date).longLabel)
@@ -69,6 +69,11 @@ struct CashDetailView: View {
             Text("\(receivable ? "Alacak · Toplam alacak" : "Elden · Toplam borç") \(MoneyFormatter.string(snapshot.totalDebt, snapshot.currency))")
                 .font(.footnote)
                 .foregroundStyle(Theme.secondaryText)
+            if !completed {
+                ProgressBar(fraction: PaymentCalculator.progress(snapshot),
+                            color: receivable ? Theme.credit : Theme.paid,
+                            height: 6)
+            }
             if completed {
                 Text(receivable ? "Alacak tamamlandı ✓" : "Borç tamamlandı ✓")
                     .font(.headline)

@@ -34,7 +34,7 @@ struct OdemeTakipApp: App {
                     .zIndex(1)
                 }
             }
-            .preferredColorScheme(.dark)
+            .appColorScheme()
         }
     }
 }

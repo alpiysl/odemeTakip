@@ -42,7 +42,7 @@ struct AssetDetailView: View {
                 ForEach(movements) { movement in
                     HStack(spacing: 12) {
                         Image(systemName: movement.amount >= 0 ? "plus.circle.fill" : "minus.circle.fill")
-                            .foregroundStyle(movement.amount >= 0 ? Theme.paid : Color(hex: 0xFF6961))
+                            .foregroundStyle(movement.amount >= 0 ? Theme.paid : Theme.negative)
                         Text(YearMonth(date: movement.date).longLabel)
                         Text("· \(TurkishMonths.dayMonth(movement.date))")
                             .font(.caption)
@@ -50,7 +50,7 @@ struct AssetDetailView: View {
                         Spacer()
                         Text((movement.amount >= 0 ? "+" : "−") + MoneyFormatter.string(abs(movement.amount), snapshot.unit))
                             .monospacedDigit()
-                            .foregroundStyle(movement.amount >= 0 ? Theme.paid : Color(hex: 0xFF6961))
+                            .foregroundStyle(movement.amount >= 0 ? Theme.paid : Theme.negative)
                     }
                     .font(.subheadline)
                     .listRowBackground(Color.clear)
@@ -154,6 +154,13 @@ struct AddMovementView: View {
                             .monospacedDigit()
                             .focused($amountFocused)
                     }
+                    if draft.isWithdrawal {
+                        Button {
+                            draft.amountText = AmountParser.editingText(draft.available)
+                        } label: {
+                            Label("Tümünü çıkar", systemImage: "equal.circle")
+                        }
+                    }
                     DatePicker("Tarih", selection: $draft.date, displayedComponents: .date)
                         .environment(\.locale, Locale(identifier: "tr_TR"))
                         .onChange(of: draft.date) { amountFocused = false }
@@ -189,7 +196,7 @@ struct AddMovementView: View {
             .onAppear { amountFocused = true }
         }
         .tint(Theme.paid)
-        .preferredColorScheme(.dark)
+        .appColorScheme()
         .presentationDetents([.medium, .large])
     }
 

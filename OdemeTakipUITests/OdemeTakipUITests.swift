@@ -118,7 +118,7 @@ final class OdemeTakipUITests: XCTestCase {
         // ₺455.000 + $2.400 × 40 = ₺551.000
         XCTAssertTrue(text(app, "₺551.000").waitForExistence(timeout: 5))
         let rateBar = app.descendants(matching: .any)["rateBar"]
-        XCTAssertTrue(rateBar.label.contains("$ ₺40 · € ₺50 · Gr ₺6.000"), rateBar.label)
+        XCTAssertTrue(rateBar.label.contains("Dolar ₺40 · Euro ₺50 · Gram ₺6.000"), rateBar.label)
         XCTAssertTrue(rateBar.label.hasSuffix("TCMB 19 Eki"), rateBar.label)
         XCTAssertTrue(text(app, "≈ ₺96.000").exists)
         XCTAssertFalse(text(app, "+ $2.400").exists)
@@ -184,7 +184,7 @@ final class OdemeTakipUITests: XCTestCase {
         let net = app.descendants(matching: .any)["netWorth"].firstMatch
         XCTAssertTrue(net.label.contains("₺598.319"), net.label)
         let rateBar = app.descendants(matching: .any)["rateBar"]
-        XCTAssertTrue(rateBar.label.contains("Gr ₺6.000 · Çyr ₺10.000 · Yrm ₺20.000 · Tam ₺40.000 · Reşat ₺41.000"), rateBar.label)
+        XCTAssertTrue(rateBar.label.contains("Gram ₺6.000 · Çeyrek ₺10.000 · Yarım ₺20.000 · Tam ₺40.000 · Reşat ₺41.000"), rateBar.label)
     }
 
     func testAssetDepositAndWithdrawLimit() {

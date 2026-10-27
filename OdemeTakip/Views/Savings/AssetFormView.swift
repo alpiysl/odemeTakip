@@ -108,7 +108,7 @@ struct AssetFormView: View {
             }
         }
         .tint(Theme.paid)
-        .preferredColorScheme(.dark)
+        .appColorScheme()
     }
 
     private func save() {

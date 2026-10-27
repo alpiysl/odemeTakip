@@ -31,6 +31,12 @@ struct AddCashPaymentView: View {
                             .monospacedDigit()
                             .focused($amountFocused)
                     }
+                    Button {
+                        draft.amountText = AmountParser.editingText(draft.remaining)
+                    } label: {
+                        Label(draft.isReceivable ? "Kalan alacağın tamamı" : "Kalan borcun tamamı",
+                              systemImage: "equal.circle")
+                    }
                     DatePicker("Tarih", selection: $draft.date, displayedComponents: .date)
                         .onChange(of: draft.date) { amountFocused = false }
                         .environment(\.locale, Locale(identifier: "tr_TR"))
@@ -67,7 +73,7 @@ struct AddCashPaymentView: View {
             .onAppear { amountFocused = true }
         }
         .tint(Theme.accent)
-        .preferredColorScheme(.dark)
+        .appColorScheme()
         .presentationDetents([.medium, .large])
     }
 

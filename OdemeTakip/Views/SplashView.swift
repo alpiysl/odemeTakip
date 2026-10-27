@@ -17,7 +17,7 @@ struct SplashView: View {
                                              startPoint: .topLeading, endPoint: .bottomTrailing))
                 }
                 key(symbol: "minus", symbolColor: Theme.cash, pressed: minusPressed) {
-                    RoundedRectangle(cornerRadius: 26, style: .continuous).fill(Color(hex: 0x26262E))
+                    RoundedRectangle(cornerRadius: 26, style: .continuous).fill(Color(light: 0xE5E5EA, dark: 0x26262E))
                 }
             }
         }
