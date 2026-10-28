@@ -77,7 +77,7 @@ struct RootView: View {
             SampleData.insertIfRequested(into: context)
             #endif
             await rateStore.refreshIfNeeded(force: true)
-            notificationsAllowed = await NotificationScheduler.requestAuthorization()
+            notificationsAllowed = await authorizeNotificationsIfNeeded()
             await NotificationScheduler.reschedule(payments: snapshots, rates: rateStore.rates)
             #if DEBUG
             if ProcessInfo.processInfo.arguments.contains("-testNotification") {
@@ -93,6 +93,14 @@ struct RootView: View {
             month.refresh()
             Task {
                 await rateStore.refreshIfNeeded()
+                notificationsAllowed = await authorizeNotificationsIfNeeded()
+                await NotificationScheduler.reschedule(payments: snapshots, rates: rateStore.rates)
+            }
+        }
+        .onChange(of: payments.isEmpty) { _, isEmpty in
+            // İlk borç kaydı eklenince izin, ne işe yarayacağı belliyken sorulur.
+            guard !isEmpty else { return }
+            Task {
                 notificationsAllowed = await NotificationScheduler.requestAuthorization()
                 await NotificationScheduler.reschedule(payments: snapshots, rates: rateStore.rates)
             }
@@ -114,6 +122,13 @@ struct RootView: View {
     #if DEBUG
     @State private var debugScreen = SampleData.requestedScreen
     #endif
+
+    /// Bildirim izni sadece hatırlatılacak bir borç varken istenir; yoksa durum sormadan okunur.
+    private func authorizeNotificationsIfNeeded() async -> Bool {
+        payments.isEmpty
+            ? await NotificationScheduler.currentAuthorization()
+            : await NotificationScheduler.requestAuthorization()
+    }
 
     private struct ScheduleInput: Equatable {
         let snapshots: [PaymentSnapshot]

@@ -159,6 +159,16 @@ struct SettingsView: View {
                 } footer: {
                     Text("Koyu veya açık tema. Değişiklik hemen uygulanır.")
                 }
+
+                Section {
+                    LabeledContent("Dolar, Euro", value: "TCMB döviz satış")
+                    LabeledContent("Altın", value: "finans.truncgil.com")
+                } header: {
+                    Text("Fiyat kaynakları")
+                } footer: {
+                    Text("Fiyatlar bilgi amaçlıdır, yatırım tavsiyesi değildir. Altın fiyatları resmi olmayan bir servisten alınır; gerçek alış-satış fiyatları farklı olabilir. Tüm kayıtlar sadece bu cihazda saklanır.")
+                }
+                .listRowBackground(Theme.surface)
             }
             .scrollContentBackground(.hidden)
             .background(Theme.background)

@@ -5,6 +5,11 @@ import UserNotifications
 enum NotificationScheduler {
     private static let monthlyPrefix = "monthly-"
 
+    /// İzni sormadan durumu okur. Henüz sorulmadıysa true (uyarı bandı gösterilmez).
+    static func currentAuthorization() async -> Bool {
+        await UNUserNotificationCenter.current().notificationSettings().authorizationStatus != .denied
+    }
+
     /// İzin hiç sorulmadıysa sorar. Bildirim gösterilebiliyorsa true.
     static func requestAuthorization() async -> Bool {
         let center = UNUserNotificationCenter.current()

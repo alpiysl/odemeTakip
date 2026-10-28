@@ -267,7 +267,7 @@ final class OdemeTakipUITests: XCTestCase {
         text(app, "Konut Kredisi").tap()
         let info = app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH '36 taksit'")).firstMatch
         XCTAssertTrue(info.waitForExistence(timeout: 3))
-        app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Önceki'")).firstMatch.tap()
+        app.buttons.matching(NSPredicate(format: "label CONTAINS 'taksiti göster'")).firstMatch.tap()
         let list = app.collectionViews.firstMatch
         list.swipeUp()
         list.swipeUp()

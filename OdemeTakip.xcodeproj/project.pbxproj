@@ -40,6 +40,7 @@
 		78E21B94B05447EDAF52C271 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA1C1CF9BB8B7230EC511CC4 /* Persistence.swift */; };
 		7BD314216191CB58299C0FBA /* HomeMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7189A71E531A8406ADF18E /* HomeMode.swift */; };
 		7BFF2BA7F5544B7B3B32BC1C /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFABF7B5D77BB45130291AA9 /* Asset.swift */; };
+		7F7F8FE90FB441C8464F7DC2 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 1B673DF872433EE0699D31C3 /* PrivacyInfo.xcprivacy */; };
 		81DC13696E07ACF7D02D63E6 /* RateStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E2EA5C15C00D602F734729CA /* RateStore.swift */; };
 		82E6168BA2D4D109C76949D9 /* OdemeTakipApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 121B3E8535A3A59E78D92CEE /* OdemeTakipApp.swift */; };
 		8421337CC3D5B5B26AC8091A /* SavingsHomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5D72461E60B0EA0B510775E /* SavingsHomeView.swift */; };
@@ -92,6 +93,7 @@
 		04DEECE9F86D84CB2DD76784 /* PaymentRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentRowView.swift; sourceTree = "<group>"; };
 		0C14F88A4D9A8AC81490953A /* PaymentSnapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentSnapshot.swift; sourceTree = "<group>"; };
 		121B3E8535A3A59E78D92CEE /* OdemeTakipApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OdemeTakipApp.swift; sourceTree = "<group>"; };
+		1B673DF872433EE0699D31C3 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		1CAC3CD2847A98CAF12107B3 /* MoneyFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoneyFormatter.swift; sourceTree = "<group>"; };
 		250996F8E0A526354F4B285B /* OdemeTakipUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = OdemeTakipUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2BB56F6CDAA1AE7EDE2A1735 /* Payment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Payment.swift; sourceTree = "<group>"; };
@@ -364,6 +366,7 @@
 			isa = PBXGroup;
 			children = (
 				5040EE6831DB33AD33915EA2 /* Assets.xcassets */,
+				1B673DF872433EE0699D31C3 /* PrivacyInfo.xcprivacy */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -476,6 +479,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				96F9C0D7C5CCEC8FC564F13D /* Assets.xcassets in Resources */,
+				7F7F8FE90FB441C8464F7DC2 /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
