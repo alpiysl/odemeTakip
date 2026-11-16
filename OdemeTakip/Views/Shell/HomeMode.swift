@@ -35,6 +35,7 @@ enum HomeMode: String, CaseIterable, Identifiable {
 struct HomeHeader: View {
     @Binding var mode: HomeMode
     var onSettings: () -> Void = {}
+    var onReport: () -> Void = {}
 
     var body: some View {
         // Sığmazsa başlık üstte, anahtar ve ayar altta.
@@ -92,6 +93,15 @@ struct HomeHeader: View {
             .padding(3)
             .background(Theme.surface, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
             .sensoryFeedback(.selection, trigger: mode)
+            Button(action: onReport) {
+                Image(systemName: "doc.text")
+                    .font(.body.weight(.semibold))
+                    .foregroundStyle(Theme.secondaryText)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+            }
+            .accessibilityLabel(L10n.Documents.createReport)
+            .accessibilityIdentifier("reportButton")
             Button(action: onSettings) {
                 Image(systemName: "gearshape")
                     .font(.body.weight(.semibold))

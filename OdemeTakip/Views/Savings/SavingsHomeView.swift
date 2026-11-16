@@ -23,6 +23,7 @@ struct SavingsHomeView: View {
     let rates: ExchangeRates?
     @Binding var mode: HomeMode
     var onSettings: () -> Void = {}
+    var onReport: () -> Void = {}
 
     @State private var filter: SavingsFilter = .all
     @Environment(\.isCompactHeader) private var compact
@@ -38,7 +39,7 @@ struct SavingsHomeView: View {
         let showReceivables = filter != .assets
 
         PinnedLayout {
-            HomeHeader(mode: $mode, onSettings: onSettings)
+            HomeHeader(mode: $mode, onSettings: onSettings, onReport: onReport)
             summaryCard
             NetWorthRow(net: summary.net)
             RateBar(rates: rates)

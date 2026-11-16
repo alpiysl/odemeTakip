@@ -12,6 +12,7 @@ struct RootView: View {
     /// Anahtarla seçilen, sadece bu oturumda geçerli ekran.
     @State private var sessionMode: HomeMode?
     @State private var showingSettings = false
+    @State private var showingReport = false
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.modelContext) private var context
     @State private var notificationsAllowed = true
@@ -54,7 +55,8 @@ struct RootView: View {
                                 summary: summary,
                                 rates: rateStore.rates,
                                 mode: mode,
-                                onSettings: { showingSettings = true })
+                                onSettings: { showingSettings = true },
+                                onReport: { showingReport = true })
             } else {
                 HomeView(payments: payments,
                          currentMonth: month.current,
@@ -62,6 +64,7 @@ struct RootView: View {
                          netWorth: summary.net,
                          mode: mode,
                          onSettings: { showingSettings = true },
+                         onReport: { showingReport = true },
                          notificationsAllowed: notificationsAllowed,
                          isTemporaryStore: isTemporaryStore)
             }
@@ -69,6 +72,9 @@ struct RootView: View {
         .tint(mode.wrappedValue == .savings ? Theme.paid : Theme.accent)
         .sheet(isPresented: $showingSettings) {
             SettingsView()
+        }
+        .sheet(isPresented: $showingReport) {
+            ReportComposerView(payments: payments + receivables, assets: assets)
         }
         .task {
             // Açılış ekranı oturum başında bir kez okunur; Ayarlar değişikliği sonraki açılışta geçerli.

@@ -21,5 +21,52 @@ extension L10n {
         static var fileNamePrefix: String { s("documents.receipt.fileNamePrefix") }
         static var shareReceipt: String { s("documents.receipt.share") }
         static var footer: String { s("documents.receipt.footer") }
+
+        // MARK: Rapor
+        static var reportTitle: String { s("documents.report.title") }
+        /// "Oluşturulma: 16 Kas 2026"
+        static func generated(_ date: String) -> String { s("documents.report.generated", date) }
+        /// "Ekim 2026 – Kasım 2026"
+        static func range(_ from: String, _ to: String) -> String { s("documents.report.range", from, to) }
+        static var sectionSummary: String { s("documents.report.sectionSummary") }
+        static var sectionSchedule: String { s("documents.report.sectionSchedule") }
+        static var sectionHistory: String { s("documents.report.sectionHistory") }
+        static var sectionReceivables: String { s("documents.report.sectionReceivables") }
+        static var sectionSavings: String { s("documents.report.sectionSavings") }
+        static var sectionDebts: String { s("documents.report.sectionDebts") }
+        static var remainingDebt: String { s("documents.report.remainingDebt") }
+        static var remainingReceivableTotal: String { s("documents.report.remainingReceivableTotal") }
+        static var recordCount: String { s("documents.report.recordCount") }
+        static var total: String { s("documents.report.total") }
+        static var paid: String { s("documents.report.paid") }
+        static var collected: String { s("documents.report.collected") }
+        static var statusPaid: String { s("documents.report.statusPaid") }
+        static var statusPending: String { s("documents.report.statusPending") }
+        /// "Kredi · ₺1.000 × 4"
+        static func creditSubtitle(_ kind: String, _ monthly: String, _ count: Int) -> String {
+            s("documents.report.creditSubtitle", kind, monthly, count)
+        }
+        static var columnNumber: String { s("documents.report.columnNumber") }
+        static var columnMonth: String { s("documents.report.columnMonth") }
+        static var columnAmount: String { s("documents.report.columnAmount") }
+        static var columnStatus: String { s("documents.report.columnStatus") }
+        static var columnDate: String { s("documents.report.columnDate") }
+        /// "Sayfa 2/3"
+        static func page(_ number: Int, _ count: Int) -> String { s("documents.report.page", number, count) }
+        static var fileNamePrefixReport: String { s("documents.report.fileNamePrefix") }
+        static var createReport: String { s("documents.report.create") }
+        static var sections: String { s("documents.report.sections") }
+        static var sectionsFooter: String { s("documents.report.sectionsFooter") }
+        static var records: String { s("documents.report.records") }
+        static var selectAll: String { s("documents.report.selectAll") }
+        static var selectNone: String { s("documents.report.selectNone") }
+        static var dateRange: String { s("documents.report.dateRange") }
+        static var limitRange: String { s("documents.report.limitRange") }
+        static var rangeFooter: String { s("documents.report.rangeFooter") }
+        static var from: String { s("documents.report.from") }
+        static var to: String { s("documents.report.to") }
+        static var generate: String { s("documents.report.generate") }
+        static var failed: String { s("documents.report.failed") }
+        static var empty: String { s("documents.report.empty") }
     }
 }

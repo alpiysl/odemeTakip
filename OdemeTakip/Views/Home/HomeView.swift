@@ -7,6 +7,7 @@ struct HomeView: View {
     let netWorth: Decimal?
     @Binding var mode: HomeMode
     var onSettings: () -> Void = {}
+    var onReport: () -> Void = {}
     let notificationsAllowed: Bool
     let isTemporaryStore: Bool
 
@@ -31,7 +32,7 @@ struct HomeView: View {
                     hideNotificationBanner = true
                 }
             }
-            HomeHeader(mode: $mode, onSettings: onSettings)
+            HomeHeader(mode: $mode, onSettings: onSettings, onReport: onReport)
             summaryCard(snapshots)
             NetWorthRow(net: netWorth)
             RateBar(rates: rates)
