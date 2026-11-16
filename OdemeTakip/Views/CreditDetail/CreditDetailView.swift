@@ -52,6 +52,11 @@ struct CreditDetailView: View {
                         InstallmentRowView(row: row, amount: amount)
                     }
                     .buttonStyle(.plain)
+                    .contextMenu {
+                        if let receipt = Receipt.make(installment: row.index, in: payment) {
+                            ShareReceiptLink(receipt: receipt)
+                        }
+                    }
                     .id(row.index)
                     .listRowBackground(row.isCurrent ? Theme.accent.opacity(0.08) : Color.clear)
                     .listRowSeparatorTint(Theme.divider)

@@ -54,6 +54,13 @@ struct CashDetailView: View {
                     .font(.subheadline)
                     .listRowBackground(Color.clear)
                     .listRowSeparatorTint(Theme.divider)
+                    .contextMenu {
+                        ShareReceiptLink(receipt: .make(for: entry, in: payment))
+                    }
+                    .swipeActions(edge: .leading) {
+                        ShareReceiptLink(receipt: .make(for: entry, in: payment))
+                            .tint(Theme.accent)
+                    }
                 }
                 .onDelete { offsets in
                     for index in offsets { payment.removeCashPayment(entries[index]) }

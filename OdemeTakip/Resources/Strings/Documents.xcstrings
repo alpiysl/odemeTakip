@@ -1,0 +1,127 @@
+{
+  "sourceLanguage": "tr",
+  "strings": {
+    "documents.receipt.collectionDone": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tahsilat yapıldı"
+          }
+        }
+      }
+    },
+    "documents.receipt.completed": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tamamlandı"
+          }
+        }
+      }
+    },
+    "documents.receipt.fileNamePrefix": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dekont"
+          }
+        }
+      }
+    },
+    "documents.receipt.footer": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Varlık Takip ile oluşturuldu"
+          }
+        }
+      }
+    },
+    "documents.receipt.fullDate": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ %@"
+          }
+        }
+      }
+    },
+    "documents.receipt.installmentDone": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taksit ödendi"
+          }
+        }
+      }
+    },
+    "documents.receipt.installmentOf": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taksit %lld/%lld"
+          }
+        }
+      }
+    },
+    "documents.receipt.paymentDone": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ödeme yapıldı"
+          }
+        }
+      }
+    },
+    "documents.receipt.remaining": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kalan"
+          }
+        }
+      }
+    },
+    "documents.receipt.remainingReceivable": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kalan alacak"
+          }
+        }
+      }
+    },
+    "documents.receipt.share": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dekontu paylaş"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
