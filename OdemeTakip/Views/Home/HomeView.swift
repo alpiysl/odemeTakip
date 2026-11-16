@@ -65,7 +65,7 @@ struct HomeView: View {
                 Button(L10n.Documents.importManual, systemImage: "square.and.pencil") { showingAdd = true }
                 Button(L10n.Documents.importFromPDF, systemImage: "doc.viewfinder", action: onImportPDF)
             } label: {
-                AddBarLabel(title: L10n.Home.newPayment, gradient: Theme.gradient)
+                AddBarLabel(title: L10n.Home.newPayment, fill: Theme.debtFill)
             }
             .accessibilityLabel(L10n.Home.newPayment)
             .accessibilityIdentifier("addMenu")

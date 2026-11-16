@@ -44,7 +44,7 @@ struct SavingsHomeView: View {
             NetWorthRow(net: summary.net)
             RateBar(rates: rates)
             if !(assets.isEmpty && receivables.isEmpty) {
-                FilterBar(selection: $filter, gradient: Theme.savingsGradient)
+                FilterBar(selection: $filter, fill: Theme.savingsFill)
             }
         } content: {
                     if assets.isEmpty && receivables.isEmpty {
@@ -114,7 +114,7 @@ struct SavingsHomeView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(compact ? 12 : 18)
-        .background(Theme.savingsGradient, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .background(Theme.savingsFill, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .foregroundStyle(.white)
     }
 
@@ -154,7 +154,7 @@ struct SavingsHomeView: View {
             Button(L10n.Savings.addAsset, systemImage: "leaf") { addingAsset = true }
             Button(L10n.Savings.addReceivable, systemImage: "person.crop.circle.badge.plus") { addingReceivable = true }
         } label: {
-            AddBarLabel(title: L10n.Savings.newRecord, gradient: Theme.savingsGradient)
+            AddBarLabel(title: L10n.Savings.newRecord, fill: Theme.savingsFill)
         }
         .accessibilityLabel(L10n.Savings.newRecord)
     }

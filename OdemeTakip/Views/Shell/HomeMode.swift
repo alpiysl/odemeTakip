@@ -23,10 +23,10 @@ enum HomeMode: String, CaseIterable, Identifiable {
         }
     }
 
-    var gradient: LinearGradient {
+    var fill: Color {
         switch self {
-        case .debt: Theme.gradient
-        case .savings: Theme.savingsGradient
+        case .debt: Theme.debtFill
+        case .savings: Theme.savingsFill
         }
     }
 }
@@ -79,7 +79,7 @@ struct HomeHeader: View {
                             .padding(.vertical, 8)
                             .background {
                                 if mode == option {
-                                    RoundedRectangle(cornerRadius: 7, style: .continuous).fill(option.gradient)
+                                    RoundedRectangle(cornerRadius: 7, style: .continuous).fill(option.fill)
                                 }
                             }
                             .foregroundStyle(mode == option ? Color.white : Theme.unselectedText)
@@ -294,7 +294,7 @@ struct OnboardingView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 15)
-                    .background(selection.gradient, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    .background(selection.fill, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
             }
             .padding(.horizontal, 22)
             .padding(.bottom, 24)

@@ -31,7 +31,7 @@ protocol FilterOption: CaseIterable, Identifiable, Hashable where AllCases: Rand
 
 struct FilterBar<Option: FilterOption>: View {
     @Binding var selection: Option
-    var gradient: LinearGradient = Theme.gradient
+    var fill: Color = Theme.debtFill
 
     var body: some View {
         HStack(spacing: 0) {
@@ -46,7 +46,7 @@ struct FilterBar<Option: FilterOption>: View {
                         .frame(maxWidth: .infinity, minHeight: 34)
                         .background {
                             if selection == filter {
-                                RoundedRectangle(cornerRadius: 8, style: .continuous).fill(gradient)
+                                RoundedRectangle(cornerRadius: 8, style: .continuous).fill(fill)
                             }
                         }
                         .foregroundStyle(selection == filter ? Color.white : Theme.unselectedText)

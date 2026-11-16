@@ -114,7 +114,7 @@ struct AssetDetailView: View {
                 .padding(.vertical, 12)
                 .background {
                     if filled {
-                        RoundedRectangle(cornerRadius: 14, style: .continuous).fill(Theme.savingsGradient)
+                        RoundedRectangle(cornerRadius: 14, style: .continuous).fill(Theme.savingsFill)
                     } else {
                         RoundedRectangle(cornerRadius: 14, style: .continuous).fill(Theme.surface)
                     }

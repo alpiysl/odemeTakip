@@ -97,7 +97,7 @@ struct CashDetailView: View {
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 13)
-                        .background(receivable ? Theme.savingsGradient : Theme.gradient,
+                        .background(receivable ? Theme.savingsFill : Theme.debtFill,
                                     in: RoundedRectangle(cornerRadius: 14, style: .continuous))
                 }
                 .buttonStyle(.plain)

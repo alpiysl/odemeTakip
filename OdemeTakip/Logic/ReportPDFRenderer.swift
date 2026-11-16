@@ -130,7 +130,7 @@ enum ReportPDFRenderer {
     private static let ink = UIColor(white: 0.08, alpha: 1)
     private static let muted = UIColor(white: 0.45, alpha: 1)
     private static let rule = UIColor(white: 0.86, alpha: 1)
-    private static let accent = UIColor(red: 0x5E / 255, green: 0x5C / 255, blue: 0xE6 / 255, alpha: 1)
+    private static let accent = UIColor(red: 0xC4 / 255, green: 0x53 / 255, blue: 0x2D / 255, alpha: 1)
     private static let paidColor = UIColor(red: 0x1F / 255, green: 0x9D / 255, blue: 0x45 / 255, alpha: 1)
 
     private static var contentWidth: CGFloat { pageSize.width - margin * 2 }

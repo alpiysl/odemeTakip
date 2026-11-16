@@ -75,7 +75,7 @@ struct ReceiptCardView: View {
         .foregroundStyle(.white)
         .padding(.horizontal, 20)
         .padding(.vertical, 16)
-        .background(receipt.kind == .receivable ? Theme.savingsGradient : Theme.gradient)
+        .background(receipt.kind == .receivable ? Theme.savingsFill : Theme.debtFill)
     }
 }
 

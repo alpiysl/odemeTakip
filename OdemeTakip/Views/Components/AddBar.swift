@@ -3,7 +3,7 @@ import SwiftUI
 /// Alttaki sabit, tam genişlik "＋ Yeni …" buton görünümü.
 struct AddBarLabel: View {
     let title: String
-    let gradient: LinearGradient
+    let fill: Color
 
     var body: some View {
         Label(title, systemImage: "plus")
@@ -12,7 +12,7 @@ struct AddBarLabel: View {
             .frame(maxWidth: .infinity)
             .padding(.vertical, 14)
             .lineLimit(1)
-            .background(gradient, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .background(fill, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
             .contentShape(Rectangle())
             .dynamicTypeSize(...DynamicTypeSize.accessibility1)
     }

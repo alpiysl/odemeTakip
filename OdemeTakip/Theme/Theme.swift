@@ -12,9 +12,8 @@ enum Theme {
     static let cash = Color(light: 0xB98900, dark: 0xFFD60A)
     static let paid = Color(light: 0x1F9D45, dark: 0x30D158)
     static let negative = Color(light: 0xD70015, dark: 0xFF6961)
-    static let accent = Color(light: 0xA444D8, dark: 0xBF5AF2)
-    static let gradientStart = Color(hex: 0x5E5CE6)
-    static let gradientEnd = Color(hex: 0xBF5AF2)
+    /// Vurgu: kiremit. Mavi (kredi), sarı (elden) ve yeşil (ödendi) anlam renkleriyle karışmaz.
+    static let accent = Color(light: 0xB84A26, dark: 0xE8734A)
     static let primaryText = Color(light: 0x000000, dark: 0xFFFFFF)
     static let secondaryText = Color(light: 0x000000, dark: 0xFFFFFF, lightAlpha: 0.55, darkAlpha: 0.5)
     static let tertiaryText = Color(light: 0x000000, dark: 0xFFFFFF, lightAlpha: 0.3, darkAlpha: 0.3)
@@ -26,17 +25,11 @@ enum Theme {
     static let toastBorder = Color(light: 0xDCDCE2, dark: 0x33333D)
     static let cardBorder = Color(light: 0xDCDCE2, dark: 0x2A2A33)
 
-    static let savingsStart = Color(hex: 0x0F9B8E)
-    static let savingsEnd = Color(hex: 0x30D158)
-
-    /// Kartlar beyaz yazılı; renkler her iki temada aynı kalır.
-    static var savingsGradient: LinearGradient {
-        LinearGradient(colors: [savingsStart, savingsEnd], startPoint: .topLeading, endPoint: .bottomTrailing)
-    }
-
-    static var gradient: LinearGradient {
-        LinearGradient(colors: [gradientStart, gradientEnd], startPoint: .topLeading, endPoint: .bottomTrailing)
-    }
+    /// Borç tarafının dolgu rengi (özet kartı, alt buton, seçili anahtar). Düz renk, geçiş yok.
+    /// Üstündeki yazı beyaz; renk her iki temada aynı kalır.
+    static let debtFill = Color(hex: 0xC4532D)
+    /// Birikim tarafının dolgu rengi: koyu çam yeşili.
+    static let savingsFill = Color(hex: 0x2F6B55)
 
     static func kindColor(_ kind: PaymentKind) -> Color {
         kind == .credit ? credit : cash

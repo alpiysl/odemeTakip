@@ -34,7 +34,7 @@ struct SummaryCardView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(compact ? 12 : 18)
-        .background(Theme.gradient, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .background(Theme.debtFill, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .foregroundStyle(.white)
     }
 
