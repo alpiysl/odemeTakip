@@ -34,8 +34,8 @@ struct AssetDraft: Equatable {
     }
 
     var validationMessage: String? {
-        if trimmedName.isEmpty { return "Ad gerekli" }
-        if !isEditing && amount == nil { return "Geçerli bir miktar gir" }
+        if trimmedName.isEmpty { return L10n.Validation.nameRequired }
+        if !isEditing && amount == nil { return L10n.Validation.invalidQuantity }
         return nil
     }
 
@@ -74,9 +74,9 @@ struct MovementDraft: Equatable {
     var validationMessage: String? {
         let text = amountText.trimmingCharacters(in: .whitespaces)
         if text.isEmpty || AmountParser.isIncomplete(text) { return nil }
-        guard let value = AmountParser.parse(text), value > 0 else { return "Geçerli bir miktar gir" }
+        guard let value = AmountParser.parse(text), value > 0 else { return L10n.Validation.invalidQuantity }
         if isWithdrawal && value > available {
-            return "Mevcut miktardan (\(MoneyFormatter.string(available, unit))) fazla çıkarılamaz"
+            return L10n.Validation.withdrawExceedsAvailable(MoneyFormatter.string(available, unit))
         }
         return nil
     }

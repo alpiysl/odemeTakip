@@ -22,7 +22,7 @@ struct OdemeTakipApp: App {
                 } else {
                     ZStack {
                         Theme.background.ignoresSafeArea()
-                        InfoBanner(text: "Veri deposu açılamadı. Uygulamayı kapatıp yeniden aç.", onClose: nil)
+                        InfoBanner(text: L10n.Common.storeUnavailable, onClose: nil)
                             .padding()
                     }
                 }

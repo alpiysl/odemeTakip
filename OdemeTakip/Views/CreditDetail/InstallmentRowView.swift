@@ -20,7 +20,7 @@ struct InstallmentRowView: View {
 
             HStack(spacing: 4) {
                 Text(row.month.longLabel).fontWeight(row.isCurrent ? .bold : .regular)
-                Text("· \(row.index + 1). taksit\(row.isCurrent ? " · bu ay" : "")")
+                Text(L10n.Debt.installmentSuffix(row.index + 1, current: row.isCurrent))
                     .font(.caption)
                     .foregroundStyle(Theme.secondaryText)
             }
@@ -36,6 +36,6 @@ struct InstallmentRowView: View {
         .padding(.vertical, 6)
         .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
-        .accessibilityValue(row.isPaid ? "Ödendi" : "Ödenmedi")
+        .accessibilityValue(row.isPaid ? L10n.Debt.paid : L10n.Debt.unpaid)
     }
 }

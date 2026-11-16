@@ -1,0 +1,182 @@
+{
+  "sourceLanguage": "tr",
+  "strings": {
+    "forms.deleteConfirmMessage": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tüm ödeme geçmişi de silinir."
+          }
+        }
+      }
+    },
+    "forms.deleteConfirmTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu kayıt silinsin mi?"
+          }
+        }
+      }
+    },
+    "forms.deleteRecord": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydı sil"
+          }
+        }
+      }
+    },
+    "forms.firstInstallmentMonth": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İlk taksit ayı"
+          }
+        }
+      }
+    },
+    "forms.installmentCount": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taksit sayısı"
+          }
+        }
+      }
+    },
+    "forms.kind": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tür"
+          }
+        }
+      }
+    },
+    "forms.lastInstallment": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Son taksit: %@"
+          }
+        }
+      }
+    },
+    "forms.month": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ay"
+          }
+        }
+      }
+    },
+    "forms.monthlyAmount": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aylık tutar"
+          }
+        }
+      }
+    },
+    "forms.newPayment": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yeni ödeme"
+          }
+        }
+      }
+    },
+    "forms.newReceivable": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yeni alacak"
+          }
+        }
+      }
+    },
+    "forms.prepaidCount": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ödenmiş taksit sayısı"
+          }
+        }
+      }
+    },
+    "forms.preview": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toplam %1$@ · Kalan %2$@"
+          }
+        }
+      }
+    },
+    "forms.totalDebt": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toplam borç"
+          }
+        }
+      }
+    },
+    "forms.totalReceivable": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toplam alacak"
+          }
+        }
+      }
+    },
+    "forms.year": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yıl"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

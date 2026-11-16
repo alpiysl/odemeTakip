@@ -21,10 +21,10 @@ struct CashPaymentDraft: Equatable {
     /// Boş girişte mesaj yok (Kaydet zaten pasif).
     var validationMessage: String? {
         if amountText.trimmingCharacters(in: .whitespaces).isEmpty || AmountParser.isIncomplete(amountText) { return nil }
-        guard let value = AmountParser.parse(amountText), value > 0 else { return "Geçerli bir tutar gir" }
+        guard let value = AmountParser.parse(amountText), value > 0 else { return L10n.Validation.invalidAmount }
         if value > remaining {
-            let limit = isReceivable ? "Kalan alacaktan" : "Kalan borçtan"
-            return "\(limit) (\(MoneyFormatter.string(remaining, currency))) fazla olamaz"
+            let limit = MoneyFormatter.string(remaining, currency)
+            return isReceivable ? L10n.Validation.exceedsRemainingReceivable(limit) : L10n.Validation.exceedsRemainingDebt(limit)
         }
         return nil
     }

@@ -36,7 +36,7 @@ struct PaymentFormView: View {
             Form {
                 if !draft.isEditing && draft.kind != .receivable {
                     Section {
-                        Picker("Tür", selection: $draft.kind) {
+                        Picker(L10n.Forms.kind, selection: $draft.kind) {
                             ForEach([PaymentKind.credit, .cash], id: \.self) { Text($0.title).tag($0) }
                         }
                         .pickerStyle(.segmented)
@@ -45,13 +45,10 @@ struct PaymentFormView: View {
                 }
 
                 Section {
-                    TextField("Ad", text: $draft.name)
+                    TextField(L10n.Common.name, text: $draft.name)
                         .textInputAutocapitalization(.words)
-                        .focused($focusedField, equals: "Ad")
-                    Picker("İkon", selection: $draft.icon) {
-                        ForEach(PaymentDraft.icons, id: \.self) { Text($0).tag($0) }
-                    }
-                    Picker("Para birimi", selection: $draft.currency) {
+                        .focused($focusedField, equals: "name")
+                    Picker(L10n.Common.currency, selection: $draft.currency) {
                         ForEach(PaymentDraft.currencyOptions) { Text($0.displayName).tag($0) }
                     }
                 }
@@ -59,17 +56,17 @@ struct PaymentFormView: View {
 
                 if draft.kind == .credit {
                     Section {
-                        numberField("Taksit sayısı", text: $draft.installmentCountText, decimal: false)
-                        numberField("Aylık tutar", text: $draft.monthlyAmountText, decimal: true)
-                        MonthPicker(title: "İlk taksit ayı", selection: $draft.firstMonth)
+                        numberField(L10n.Forms.installmentCount, text: $draft.installmentCountText, decimal: false)
+                        numberField(L10n.Forms.monthlyAmount, text: $draft.monthlyAmountText, decimal: true)
+                        MonthPicker(title: L10n.Forms.firstInstallmentMonth, selection: $draft.firstMonth)
                         if !draft.isEditing {
-                            numberField("Ödenmiş taksit sayısı", text: $draft.prepaidCountText, decimal: false)
+                            numberField(L10n.Forms.prepaidCount, text: $draft.prepaidCountText, decimal: false)
                         }
                     }
                     .listRowBackground(Theme.surface)
                 } else {
                     Section {
-                        numberField(draft.kind == .receivable ? "Toplam alacak" : "Toplam borç", text: $draft.totalDebtText, decimal: true)
+                        numberField(draft.kind == .receivable ? L10n.Forms.totalReceivable : L10n.Forms.totalDebt, text: $draft.totalDebtText, decimal: true)
                     }
                     .listRowBackground(Theme.surface)
                 }
@@ -77,10 +74,11 @@ struct PaymentFormView: View {
                 if let preview = draft.preview {
                     Section {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text("Toplam \(MoneyFormatter.string(PaymentCalculator.total(preview), preview.currency)) · Kalan \(MoneyFormatter.string(PaymentCalculator.remaining(preview), preview.currency))")
+                            Text(L10n.Forms.preview(MoneyFormatter.string(PaymentCalculator.total(preview), preview.currency),
+                                                    MoneyFormatter.string(PaymentCalculator.remaining(preview), preview.currency)))
                                 .font(.subheadline.weight(.semibold))
                             if let last = PaymentCalculator.lastInstallmentMonth(preview) {
-                                Text("Son taksit: \(last.longLabel)").font(.caption).foregroundStyle(Theme.secondaryText)
+                                Text(L10n.Forms.lastInstallment(last.longLabel)).font(.caption).foregroundStyle(Theme.secondaryText)
                             }
                         }
                     }
@@ -92,34 +90,50 @@ struct PaymentFormView: View {
                     .listRowBackground(Color.clear)
                 }
 
+                Section {
+                    IconGridPicker(selection: $draft.icon,
+                                   emojis: PaymentDraft.icons,
+                                   showsBanks: draft.kind == .credit || Bank(icon: draft.icon) != nil,
+                                   tint: Theme.kindColor(draft.kind == .receivable ? .credit : draft.kind))
+                } header: {
+                    Text(L10n.Common.icon)
+                }
+                .listRowBackground(Theme.surface)
+
                 if draft.isEditing {
                     Section {
-                        Button("Kaydı sil", role: .destructive) { confirmingDelete = true }
+                        Button(L10n.Forms.deleteRecord, role: .destructive) { confirmingDelete = true }
                     }
                     .listRowBackground(Theme.surface)
                 }
             }
             .scrollContentBackground(.hidden)
             .background(Theme.background)
-            .navigationTitle(draft.isEditing ? "Düzenle" : (draft.kind == .receivable ? "Yeni alacak" : "Yeni ödeme"))
+            .navigationTitle(draft.isEditing ? L10n.Common.edit : (draft.kind == .receivable ? L10n.Forms.newReceivable : L10n.Forms.newPayment))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("İptal") { dismiss() }
+                    Button(L10n.Common.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Kaydet") { save() }
+                    Button(L10n.Common.save) { save() }
                         .fontWeight(.bold)
                         .disabled(!draft.isValid)
                 }
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
-                    Button("Bitti") { focusedField = nil }
+                    Button(L10n.Common.done) { focusedField = nil }
                         .fontWeight(.semibold)
                 }
             }
             .scrollDismissesKeyboard(.interactively)
-            .onChange(of: draft.icon) { focusedField = nil }
+            .onChange(of: draft.icon) { _, icon in
+                focusedField = nil
+                // Banka seçilince ad boşsa banka adıyla doldur; kullanıcı sonra değiştirebilir.
+                if let bank = Bank(icon: icon), draft.trimmedName.isEmpty {
+                    draft.name = bank.name
+                }
+            }
             .onChange(of: draft.currency) { focusedField = nil }
             .onChange(of: draft.firstMonth) { focusedField = nil }
             .onChange(of: draft.kind) { _, newKind in
@@ -128,14 +142,14 @@ struct PaymentFormView: View {
                     draft.icon = PaymentDraft.defaultIcon(for: newKind)
                 }
             }
-            .confirmationDialog("Bu kayıt silinsin mi?", isPresented: $confirmingDelete, titleVisibility: .visible) {
-                Button("Sil", role: .destructive) {
+            .confirmationDialog(L10n.Forms.deleteConfirmTitle, isPresented: $confirmingDelete, titleVisibility: .visible) {
+                Button(L10n.Common.delete, role: .destructive) {
                     onDeleteRequested?()
                     dismiss()
                 }
-                Button("Vazgeç", role: .cancel) {}
+                Button(L10n.Common.dismiss, role: .cancel) {}
             } message: {
-                Text("Tüm ödeme geçmişi de silinir.")
+                Text(L10n.Forms.deleteConfirmMessage)
             }
         }
         .tint(Theme.accent)

@@ -22,11 +22,11 @@ enum SampleData {
         let now = YearMonth(date: .now)
 
         var home = PaymentDraft(firstMonth: now.adding(months: -13))
-        home.kind = .credit; home.name = "Konut Kredisi"; home.icon = "🏠"
+        home.kind = .credit; home.name = "Konut Kredisi"; home.icon = Bank.isbank.iconValue
         home.installmentCountText = "36"; home.monthlyAmountText = "15000"; home.prepaidCountText = "13"
 
         var car = PaymentDraft(firstMonth: now.adding(months: -8))
-        car.kind = .credit; car.name = "Araç Kredisi"; car.icon = "🚗"
+        car.kind = .credit; car.name = "Araç Kredisi"; car.icon = Bank.garanti.iconValue
         car.installmentCountText = "16"; car.monthlyAmountText = "7500"; car.prepaidCountText = "8"
 
         var friend = PaymentDraft(firstMonth: now)

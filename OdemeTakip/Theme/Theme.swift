@@ -54,8 +54,8 @@ enum AppAppearance: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .dark: "Koyu"
-        case .light: "Açık"
+        case .dark: L10n.Settings.appearanceDark
+        case .light: L10n.Settings.appearanceLight
         }
     }
 

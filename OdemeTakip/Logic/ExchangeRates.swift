@@ -20,7 +20,7 @@ struct ExchangeRates: Codable, Equatable, Sendable {
         }
     }
 
-    var label: String { "TCMB \(TurkishMonths.dayMonth(bulletinDate))" }
+    var label: String { L10n.Models.rateSource(TurkishMonths.dayMonth(bulletinDate)) }
 }
 
 enum CurrencyConverter {

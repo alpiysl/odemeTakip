@@ -54,6 +54,6 @@ extension FooterTotalsView.Line {
     /// Döviz/altın kayıtlar için "TL karşılığı ≈ ₺X"; TL veya fiyat yoksa nil.
     static func liraEquivalent(_ amount: Decimal, _ currency: Currency, rates: ExchangeRates?) -> Self? {
         guard currency != .TRY, let lira = CurrencyConverter.toTRY([currency: amount], rates: rates) else { return nil }
-        return .init(title: "TL karşılığı", value: "≈ " + MoneyFormatter.string(lira, .TRY))
+        return .init(title: L10n.Common.liraEquivalent, value: L10n.Common.approx(MoneyFormatter.string(lira, .TRY)))
     }
 }

@@ -10,16 +10,15 @@ enum AppCalendar {
 }
 
 enum TurkishMonths {
-    static let names = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
-                        "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"]
-    static let shortNames = ["Oca", "Şub", "Mar", "Nis", "May", "Haz",
-                             "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara"]
+    /// Ay adları `Common.xcstrings` dosyasından: "Ocak", "Şubat", ...
+    static var names: [String] { (1...12).map(L10n.Common.month) }
+    static var shortNames: [String] { (1...12).map(L10n.Common.monthShort) }
 
     static func dayMonth(_ date: Date, calendar: Calendar = AppCalendar.calendar) -> String {
         let comps = calendar.dateComponents([.day, .month], from: date)
         let day = comps.day ?? 1
         let month = min(max((comps.month ?? 1) - 1, 0), 11)
-        return "\(day) \(shortNames[month])"
+        return L10n.Common.dayMonth(day, L10n.Common.monthShort(month + 1))
     }
 }
 
@@ -52,9 +51,9 @@ struct YearMonth: Hashable, Comparable, Sendable, Codable {
         calendar.date(from: DateComponents(year: year, month: month, day: 1)) ?? .distantPast
     }
 
-    var name: String { TurkishMonths.names[month - 1] }
-    var longLabel: String { "\(name) \(year)" }
-    var shortLabel: String { "\(TurkishMonths.shortNames[month - 1]) \(year)" }
+    var name: String { L10n.Common.month(month) }
+    var longLabel: String { L10n.Common.monthYear(name, year) }
+    var shortLabel: String { L10n.Common.monthYear(L10n.Common.monthShort(month), year) }
 
     static func < (lhs: YearMonth, rhs: YearMonth) -> Bool {
         lhs.months(from: rhs) < 0

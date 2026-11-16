@@ -4,9 +4,12 @@ import SwiftUI
 struct RateBar: View {
     let rates: ExchangeRates?
 
-    private static let shown: [(Currency, String)] = [
-        (.USD, "Dolar"), (.EUR, "Euro"), (.gram, "Gram"), (.ceyrek, "Çeyrek"), (.yarim, "Yarım"), (.tam, "Tam"), (.resat, "Reşat"),
-    ]
+    private static var shown: [(Currency, String)] {
+        [
+            (.USD, L10n.Home.rateUSD), (.EUR, L10n.Home.rateEUR), (.gram, L10n.Home.rateGram), (.ceyrek, L10n.Home.rateCeyrek),
+            (.yarim, L10n.Home.rateYarim), (.tam, L10n.Home.rateTam), (.resat, L10n.Home.rateResat),
+        ]
+    }
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
@@ -20,7 +23,7 @@ struct RateBar: View {
                         .foregroundStyle(Theme.tertiaryText)
                         .padding(.leading, 2)
                 } else {
-                    Label("Kurlar yükleniyor…", systemImage: "arrow.triangle.2.circlepath")
+                    Label(L10n.Home.ratesLoading, systemImage: "arrow.triangle.2.circlepath")
                         .font(.caption)
                         .foregroundStyle(Theme.secondaryText)
                 }
@@ -54,8 +57,8 @@ struct RateBar: View {
     }
 
     private var text: String {
-        guard let rates else { return "Kurlar yükleniyor" }
-        let parts = items(rates).map { "\($0.label) \($0.value)" }
+        guard let rates else { return L10n.Home.ratesLoadingAccessibility }
+        let parts = items(rates).map { L10n.Home.rateItem($0.label, $0.value) }
         return (parts + [rates.label]).joined(separator: " · ")
     }
 }

@@ -61,7 +61,7 @@ enum NotificationScheduler {
     static func scheduleTest(payments: [PaymentSnapshot], rates: ExchangeRates?) async {
         let month = YearMonth(date: .now)
         let content = NotificationContentBuilder.content(for: month, payments: payments, rates: rates)
-            ?? NotificationContent(title: "\(month.name) ödemeleri", body: "Bu ay ödeme yok")
+            ?? NotificationContent(title: L10n.Notifications.title(month.name), body: L10n.Notifications.noPayments)
         let request = UNNotificationRequest(
             identifier: "debug-test",
             content: makeContent(content),

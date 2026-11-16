@@ -1,0 +1,160 @@
+{
+  "sourceLanguage": "tr",
+  "strings": {
+    "validation.exceedsRemainingDebt": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kalan borçtan (%@) fazla olamaz"
+          }
+        }
+      }
+    },
+    "validation.exceedsRemainingReceivable": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kalan alacaktan (%@) fazla olamaz"
+          }
+        }
+      }
+    },
+    "validation.installmentBelowPaid": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taksit sayısı ödenmiş taksitlerden (%lld) az olamaz"
+          }
+        }
+      }
+    },
+    "validation.installmentRange": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Taksit sayısı 1–%lld arası olmalı"
+          }
+        }
+      }
+    },
+    "validation.invalidAmount": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geçerli bir tutar gir"
+          }
+        }
+      }
+    },
+    "validation.invalidMonthlyAmount": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geçerli bir aylık tutar gir"
+          }
+        }
+      }
+    },
+    "validation.invalidQuantity": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geçerli bir miktar gir"
+          }
+        }
+      }
+    },
+    "validation.invalidTotalDebt": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geçerli bir toplam borç gir"
+          }
+        }
+      }
+    },
+    "validation.invalidTotalReceivable": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Geçerli bir toplam alacak gir"
+          }
+        }
+      }
+    },
+    "validation.nameRequired": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ad gerekli"
+          }
+        }
+      }
+    },
+    "validation.prepaidRange": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Önceden ödenen taksit 0–%lld arası olmalı"
+          }
+        }
+      }
+    },
+    "validation.totalDebtBelowPaid": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toplam borç ödenen tutardan (%@) az olamaz"
+          }
+        }
+      }
+    },
+    "validation.totalReceivableBelowCollected": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toplam alacak tahsil edilenden (%@) az olamaz"
+          }
+        }
+      }
+    },
+    "validation.withdrawExceedsAvailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mevcut miktardan (%@) fazla çıkarılamaz"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

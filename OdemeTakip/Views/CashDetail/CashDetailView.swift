@@ -30,7 +30,7 @@ struct CashDetailView: View {
         return List {
             Section {
                 if entries.isEmpty {
-                    Text(receivable ? "Henüz tahsilat yok" : "Henüz ödeme yok")
+                    Text(receivable ? L10n.Debt.noCollections : L10n.Debt.noPayments)
                         .font(.footnote)
                         .foregroundStyle(Theme.secondaryText)
                         .listRowBackground(Color.clear)
@@ -43,7 +43,7 @@ struct CashDetailView: View {
                         }
                         .frame(width: 24, height: 24)
                         Text(YearMonth(date: entry.date).longLabel)
-                        Text("· \(TurkishMonths.dayMonth(entry.date))")
+                        Text(L10n.Debt.historyDay(TurkishMonths.dayMonth(entry.date)))
                             .font(.caption)
                             .foregroundStyle(Theme.secondaryText)
                         Spacer()
@@ -60,13 +60,15 @@ struct CashDetailView: View {
                     context.saveQuietly()
                 }
             } header: {
-                Text(receivable ? "Tahsilat geçmişi" : "Ödeme geçmişi").font(.caption).foregroundStyle(Theme.secondaryText)
+                Text(receivable ? L10n.Debt.collectionHistory : L10n.Debt.paymentHistory).font(.caption).foregroundStyle(Theme.secondaryText)
             }
         }
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .pinnedTop {
-            Text("\(receivable ? "Alacak · Toplam alacak" : "Elden · Toplam borç") \(MoneyFormatter.string(snapshot.totalDebt, snapshot.currency))")
+            Text(receivable
+                 ? L10n.Debt.receivableInfo(MoneyFormatter.string(snapshot.totalDebt, snapshot.currency))
+                 : L10n.Debt.cashInfo(MoneyFormatter.string(snapshot.totalDebt, snapshot.currency)))
                 .font(.footnote)
                 .foregroundStyle(Theme.secondaryText)
             if !completed {
@@ -75,7 +77,7 @@ struct CashDetailView: View {
                             height: 6)
             }
             if completed {
-                Text(receivable ? "Alacak tamamlandı ✓" : "Borç tamamlandı ✓")
+                Text(receivable ? L10n.Debt.receivableCompleted : L10n.Debt.debtCompleted)
                     .font(.headline)
                     .foregroundStyle(Theme.paid)
                     .frame(maxWidth: .infinity)
@@ -83,7 +85,7 @@ struct CashDetailView: View {
                 Button {
                     addingPayment = true
                 } label: {
-                    Text(receivable ? "+ Tahsilat ekle" : "+ Ödeme ekle")
+                    Text(receivable ? L10n.Debt.addCollectionButton : L10n.Debt.addPaymentButton)
                         .font(.headline)
                         .foregroundStyle(.white)
                         .frame(maxWidth: .infinity)
@@ -97,20 +99,19 @@ struct CashDetailView: View {
         .safeAreaInset(edge: .bottom, spacing: 0) {
             FooterTotalsView(
                 lines: [
-                    .init(title: receivable ? "Toplam alacak" : "Toplam borç", value: MoneyFormatter.string(snapshot.totalDebt, snapshot.currency)),
-                    .init(title: "\(receivable ? "Tahsil edilen" : "Ödenen") (\(snapshot.cashPaymentCount))",
+                    .init(title: receivable ? L10n.Debt.totalReceivable : L10n.Debt.totalDebt, value: MoneyFormatter.string(snapshot.totalDebt, snapshot.currency)),
+                    .init(title: receivable ? L10n.Debt.collectedCount(snapshot.cashPaymentCount) : L10n.Debt.paidCount(snapshot.cashPaymentCount),
                           value: "− " + MoneyFormatter.string(snapshot.cashPaid, snapshot.currency),
                           color: Theme.paid),
                 ],
-                resultTitle: receivable ? "Kalan alacak" : "Kalan",
+                resultTitle: receivable ? L10n.Debt.remainingReceivable : L10n.Debt.remaining,
                 resultValue: MoneyFormatter.string(PaymentCalculator.remaining(snapshot), snapshot.currency),
                 footnote: .liraEquivalent(PaymentCalculator.remaining(snapshot), snapshot.currency, rates: rates))
         }
         .background(Theme.background.ignoresSafeArea())
-        .navigationTitle("\(payment.icon) \(payment.name)")
-        .navigationBarTitleDisplayMode(.inline)
+        .recordTitle(icon: payment.icon, name: payment.name)
         .toolbar {
-            Button("Düzenle") { editing = true }
+            Button(L10n.Common.edit) { editing = true }
         }
         .sheet(isPresented: $addingPayment) {
             AddCashPaymentView(payment: payment)

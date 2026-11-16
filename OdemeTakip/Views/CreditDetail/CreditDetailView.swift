@@ -35,7 +35,7 @@ struct CreditDetailView: View {
                     Button {
                         withAnimation { showAll.toggle() }
                     } label: {
-                        Label(showAll ? "Ödenmiş taksitleri gizle" : "Ödenmiş \(schedule.collapsedPaidCount) taksiti göster",
+                        Label(showAll ? L10n.Debt.hidePaid : L10n.Debt.showPaid(schedule.collapsedPaidCount),
                               systemImage: showAll ? "chevron.up" : "chevron.down")
                     }
                     .font(.footnote.weight(.semibold))
@@ -66,27 +66,27 @@ struct CreditDetailView: View {
             }
         }
         .pinnedTop {
-            Text("\(snapshot.installmentCount) taksit · \(amount)/ay · \(snapshot.firstMonth.shortLabel) başlangıç")
+            Text(L10n.Debt.creditInfo(snapshot.installmentCount, amount, snapshot.firstMonth.shortLabel))
                 .font(.footnote)
                 .foregroundStyle(Theme.secondaryText)
             VStack(alignment: .leading, spacing: 6) {
                 HStack {
-                    Text("\(PaymentCalculator.paidCount(snapshot))/\(snapshot.installmentCount) taksit ödendi")
+                    Text(L10n.Debt.paidOf(PaymentCalculator.paidCount(snapshot), snapshot.installmentCount))
                         .font(.subheadline.weight(.semibold))
                     Spacer()
                     if let next = PaymentCalculator.nextUnpaidMonth(snapshot) {
-                        Text("Sıradaki: \(next.longLabel)")
+                        Text(L10n.Debt.next(next.longLabel))
                             .font(.footnote)
                             .foregroundStyle(Theme.secondaryText)
                     } else {
-                        Text("Tamamlandı ✓").font(.footnote.weight(.semibold)).foregroundStyle(Theme.paid)
+                        Text(L10n.Debt.completed).font(.footnote.weight(.semibold)).foregroundStyle(Theme.paid)
                     }
                 }
                 ProgressBar(fraction: PaymentCalculator.progress(snapshot), height: 6)
             }
             .accessibilityElement(children: .combine)
             if !PaymentCalculator.isCompleted(snapshot) {
-                Label("Ödendi işaretlemek için taksite dokun", systemImage: "hand.tap")
+                Label(L10n.Debt.tapHint, systemImage: "hand.tap")
                     .font(.caption)
                     .foregroundStyle(Theme.tertiaryText)
             }
@@ -94,20 +94,19 @@ struct CreditDetailView: View {
         .safeAreaInset(edge: .bottom, spacing: 0) {
             FooterTotalsView(
                 lines: [
-                    .init(title: "Toplam", value: MoneyFormatter.string(PaymentCalculator.total(snapshot), snapshot.currency)),
-                    .init(title: "Ödenen (\(PaymentCalculator.paidCount(snapshot)))",
+                    .init(title: L10n.Debt.total, value: MoneyFormatter.string(PaymentCalculator.total(snapshot), snapshot.currency)),
+                    .init(title: L10n.Debt.paidCount(PaymentCalculator.paidCount(snapshot)),
                           value: "− " + MoneyFormatter.string(PaymentCalculator.paid(snapshot), snapshot.currency),
                           color: Theme.paid),
                 ],
-                resultTitle: "Kalan (\(snapshot.installmentCount - PaymentCalculator.paidCount(snapshot)))",
+                resultTitle: L10n.Debt.remainingCount(snapshot.installmentCount - PaymentCalculator.paidCount(snapshot)),
                 resultValue: MoneyFormatter.string(PaymentCalculator.remaining(snapshot), snapshot.currency),
                 footnote: .liraEquivalent(PaymentCalculator.remaining(snapshot), snapshot.currency, rates: rates))
         }
         .background(Theme.background.ignoresSafeArea())
-        .navigationTitle("\(payment.icon) \(payment.name)")
-        .navigationBarTitleDisplayMode(.inline)
+        .recordTitle(icon: payment.icon, name: payment.name)
         .toolbar {
-            Button("Düzenle") { editing = true }
+            Button(L10n.Common.edit) { editing = true }
         }
         .sensoryFeedback(.selection, trigger: payment.paidInstallmentIndexes)
         .sheet(isPresented: $editing, onDismiss: handleSheetDismiss) {

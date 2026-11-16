@@ -8,9 +8,9 @@ enum PaymentKind: String, CaseIterable, Codable, Sendable {
 
     var title: String {
         switch self {
-        case .credit: "Kredi"
-        case .cash: "Elden"
-        case .receivable: "Alacak"
+        case .credit: L10n.Models.kindCredit
+        case .cash: L10n.Models.kindCash
+        case .receivable: L10n.Models.kindReceivable
         }
     }
 }
@@ -36,11 +36,11 @@ enum Currency: String, CaseIterable, Codable, Sendable, Comparable, Identifiable
     var unitName: String {
         switch self {
         case .TRY, .USD, .EUR: ""
-        case .gram: "gr"
-        case .ceyrek: "çeyrek"
-        case .yarim: "yarım"
-        case .tam: "tam"
-        case .resat: "reşat"
+        case .gram: L10n.Models.unitGram
+        case .ceyrek: L10n.Models.unitCeyrek
+        case .yarim: L10n.Models.unitYarim
+        case .tam: L10n.Models.unitTam
+        case .resat: L10n.Models.unitResat
         }
     }
 
@@ -55,14 +55,14 @@ enum Currency: String, CaseIterable, Codable, Sendable, Comparable, Identifiable
 
     var displayName: String {
         switch self {
-        case .TRY: "₺ TL"
-        case .USD: "$ USD"
-        case .EUR: "€ EUR"
-        case .gram: "Gram altın"
-        case .ceyrek: "Çeyrek altın"
-        case .yarim: "Yarım altın"
-        case .tam: "Tam altın"
-        case .resat: "Reşat altın"
+        case .TRY: L10n.Models.currencyTRY
+        case .USD: L10n.Models.currencyUSD
+        case .EUR: L10n.Models.currencyEUR
+        case .gram: L10n.Models.currencyGram
+        case .ceyrek: L10n.Models.currencyCeyrek
+        case .yarim: L10n.Models.currencyYarim
+        case .tam: L10n.Models.currencyTam
+        case .resat: L10n.Models.currencyResat
         }
     }
 

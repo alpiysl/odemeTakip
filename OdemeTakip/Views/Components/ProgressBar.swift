@@ -18,8 +18,8 @@ struct ProgressBar: View {
                 }
             }
             .accessibilityElement()
-            .accessibilityLabel("İlerleme")
-            .accessibilityValue("Yüzde \(Int((min(max(fraction, 0), 1) * 100).rounded()))")
+            .accessibilityLabel(L10n.Debt.progress)
+            .accessibilityValue(L10n.Debt.progressValue(Int((min(max(fraction, 0), 1) * 100).rounded())))
     }
 }
 

@@ -29,14 +29,14 @@ struct AssetFormView: View {
         NavigationStack {
             Form {
                 Section {
-                    TextField("Ad", text: $draft.name)
+                    TextField(L10n.Common.name, text: $draft.name)
                         .textInputAutocapitalization(.words)
                         .focused($focusedField, equals: "Ad")
-                    Picker("İkon", selection: $draft.icon) {
+                    Picker(L10n.Common.icon, selection: $draft.icon) {
                         ForEach(AssetDraft.icons, id: \.self) { Text($0).tag($0) }
                     }
                     if !draft.isEditing {
-                        Picker("Tür", selection: $draft.unit) {
+                        Picker(L10n.Savings.kind, selection: $draft.unit) {
                             ForEach(Currency.allCases) { Text($0.displayName).tag($0) }
                         }
                     }
@@ -45,7 +45,7 @@ struct AssetFormView: View {
 
                 if !draft.isEditing {
                     Section {
-                        LabeledContent(draft.unit.isGold ? "Miktar (\(draft.unit.unitName))" : "Tutar") {
+                        LabeledContent(draft.unit.isGold ? L10n.Savings.quantityWithUnit(draft.unit.unitName) : L10n.Common.amount) {
                             TextField("0", text: $draft.amountText)
                                 .keyboardType(.decimalPad)
                                 .multilineTextAlignment(.trailing)
@@ -65,7 +65,7 @@ struct AssetFormView: View {
 
                 if draft.isEditing {
                     Section {
-                        Button("Kaydı sil", role: .destructive) { confirmingDelete = true }
+                        Button(L10n.Savings.deleteRecord, role: .destructive) { confirmingDelete = true }
                     }
                     .listRowBackground(Theme.surface)
                 }
@@ -73,20 +73,20 @@ struct AssetFormView: View {
             .scrollContentBackground(.hidden)
             .scrollDismissesKeyboard(.interactively)
             .background(Theme.background)
-            .navigationTitle(draft.isEditing ? "Düzenle" : "Yeni birikim")
+            .navigationTitle(draft.isEditing ? L10n.Common.edit : L10n.Savings.newAsset)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("İptal") { dismiss() }
+                    Button(L10n.Common.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Kaydet") { save() }
+                    Button(L10n.Common.save) { save() }
                         .fontWeight(.bold)
                         .disabled(!draft.isValid)
                 }
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
-                    Button("Bitti") { focusedField = nil }
+                    Button(L10n.Common.done) { focusedField = nil }
                         .fontWeight(.semibold)
                 }
             }
@@ -97,14 +97,14 @@ struct AssetFormView: View {
                     draft.icon = AssetDraft.defaultIcon(for: newUnit)
                 }
             }
-            .confirmationDialog("Bu birikim silinsin mi?", isPresented: $confirmingDelete, titleVisibility: .visible) {
-                Button("Sil", role: .destructive) {
+            .confirmationDialog(L10n.Savings.deleteConfirmTitle, isPresented: $confirmingDelete, titleVisibility: .visible) {
+                Button(L10n.Common.delete, role: .destructive) {
                     onDeleteRequested?()
                     dismiss()
                 }
-                Button("Vazgeç", role: .cancel) {}
+                Button(L10n.Common.dismiss, role: .cancel) {}
             } message: {
-                Text("Tüm hareket geçmişi de silinir.")
+                Text(L10n.Savings.deleteConfirmMessage)
             }
         }
         .tint(Theme.paid)

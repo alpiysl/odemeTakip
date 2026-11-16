@@ -1,0 +1,182 @@
+{
+  "sourceLanguage": "tr",
+  "strings": {
+    "banks.akbankMonogram": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AK"
+          }
+        }
+      }
+    },
+    "banks.akbankName": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Akbank"
+          }
+        }
+      }
+    },
+    "banks.garantiMonogram": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "G"
+          }
+        }
+      }
+    },
+    "banks.garantiName": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Garanti BBVA"
+          }
+        }
+      }
+    },
+    "banks.halkbankMonogram": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "H"
+          }
+        }
+      }
+    },
+    "banks.halkbankName": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halkbank"
+          }
+        }
+      }
+    },
+    "banks.isbankMonogram": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İŞ"
+          }
+        }
+      }
+    },
+    "banks.isbankName": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İş Bankası"
+          }
+        }
+      }
+    },
+    "banks.qnbMonogram": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "QNB"
+          }
+        }
+      }
+    },
+    "banks.qnbName": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "QNB"
+          }
+        }
+      }
+    },
+    "banks.sectionBanks": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bankalar"
+          }
+        }
+      }
+    },
+    "banks.sectionOther": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diğer"
+          }
+        }
+      }
+    },
+    "banks.vakifbankMonogram": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "V"
+          }
+        }
+      }
+    },
+    "banks.vakifbankName": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "VakıfBank"
+          }
+        }
+      }
+    },
+    "banks.ziraatMonogram": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Z"
+          }
+        }
+      }
+    },
+    "banks.ziraatName": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziraat Bankası"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}
