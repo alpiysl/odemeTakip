@@ -115,6 +115,30 @@ struct ReportBuilderTests {
         #expect(build([car], sections: [.summary, .history], range: range).rangeText != nil)
     }
 
+    @Test func correctedPaymentsAreMarkedInHistory() throws {
+        let fixed = ReportPaymentInput(id: UUID(), name: "Ahmet", icon: "🤝",
+                                       snapshot: .cash(debt: 500, paid: 300, paymentCount: 2),
+                                       cashPayments: [.init(amount: 100, date: day(2026, 9, 5)),
+                                                      .init(amount: 200, date: day(2026, 10, 7), correctedAt: now,
+                                                            originalAmount: 2_000)])
+        let block = try #require(build([fixed]).debts.first)
+        #expect(block.columns == ["Tarih", "Tutar", "Not"])
+        #expect(block.rows.map(\.cells) == [["7 Eki 2026", "₺200", "Düzeltildi · önceki ₺2.000"],
+                                             ["5 Eyl 2026", "₺100", ""]])
+    }
+
+    @Test func removedPaymentsAreListedButNotCounted() throws {
+        let p = ReportPaymentInput(id: UUID(), name: "Ahmet", icon: "🤝",
+                                   snapshot: .cash(debt: 500, paid: 100, paymentCount: 1),
+                                   cashPayments: [.init(amount: 100, date: day(2026, 9, 5)),
+                                                  .init(amount: 5, date: day(2026, 10, 7), removedAt: now)])
+        let block = try #require(build([p]).debts.first)
+        #expect(block.rows.map(\.cells) == [["7 Eki 2026", "₺5", "Silindi · toplama dahil değil"],
+                                             ["5 Eyl 2026", "₺100", ""]])
+        #expect(block.rows[0].isRemoved)
+        #expect(block.facts[1].value == "₺100")
+    }
+
     @Test func generatedTextUsesDate() {
         #expect(build([car]).generatedText == "Oluşturulma: 16 Kas 2026")
     }

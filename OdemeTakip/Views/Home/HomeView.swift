@@ -61,6 +61,7 @@ struct HomeView: View {
         }
         .background(Theme.background.ignoresSafeArea())
         .addBar {
+            if FeatureFlags.pdfImport {
             Menu {
                 Button(L10n.Documents.importManual, systemImage: "square.and.pencil") { showingAdd = true }
                 Button(L10n.Documents.importFromPDF, systemImage: "doc.viewfinder", action: onImportPDF)
@@ -69,6 +70,15 @@ struct HomeView: View {
             }
             .accessibilityLabel(L10n.Home.newPayment)
             .accessibilityIdentifier("addMenu")
+            } else {
+                Button {
+                    showingAdd = true
+                } label: {
+                    AddBarLabel(title: L10n.Home.newPayment, fill: Theme.debtFill)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(L10n.Home.newPayment)
+            }
         }
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showingAdd) {

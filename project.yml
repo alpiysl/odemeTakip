@@ -35,14 +35,12 @@ targets:
           - UIInterfaceOrientationPortrait
         UIUserInterfaceStyle: Dark
         ITSAppUsesNonExemptEncryption: false
-        # Bankadan gelen PDF'i "Birlikte aç / Varlık Takip'e kopyala" ile borç olarak eklemek için.
-        CFBundleDocumentTypes:
-          - CFBundleTypeName: PDF
-            CFBundleTypeRole: Viewer
-            LSHandlerRank: Alternate
-            LSItemContentTypes:
-              - com.adobe.pdf
-        LSSupportsOpeningDocumentsInPlace: false
+        # Dekont paylaşımında "Görseli Kaydet" için; bu metin olmadan iOS uygulamayı kapatır.
+        NSPhotoLibraryAddUsageDescription: Paylaştığın dekont görselini Fotoğraflar'a kaydedebilmek için.
+        # PDF'ten borç ekleme 1.2'de açılınca "Birlikte aç" için geri eklenecek:
+        # CFBundleDocumentTypes: [{CFBundleTypeName: PDF, CFBundleTypeRole: Viewer,
+        #   LSHandlerRank: Alternate, LSItemContentTypes: [com.adobe.pdf]}]
+        # LSSupportsOpeningDocumentsInPlace: false
   OdemeTakipTests:
     type: bundle.unit-test
     platform: iOS

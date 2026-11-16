@@ -9,6 +9,13 @@ extension L10n {
 
         static func showPaid(_ count: Int) -> String { s("debt.showPaid", count) }
         static var hidePaid: String { s("debt.hidePaid") }
+        static var editPaymentTitle: String { s("debt.editPaymentTitle") }
+        static var editCollectionTitle: String { s("debt.editCollectionTitle") }
+        static var deletePayment: String { s("debt.deletePayment") }
+        static var deleteCollection: String { s("debt.deleteCollection") }
+        static var deleteEntryConfirm: String { s("debt.deleteEntryConfirm") }
+        /// Düzenleme ekranındaki "raporlara yansır" bilgisi.
+        static var editNote: String { s("debt.editNote") }
         /// "36 taksit · ₺15.000/ay · Eyl 2025 başlangıç"
         static func creditInfo(_ count: Int, _ monthly: String, _ start: String) -> String { s("debt.creditInfo", count, monthly, start) }
         /// "13/36 taksit ödendi"

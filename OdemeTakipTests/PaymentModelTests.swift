@@ -99,6 +99,25 @@ struct PaymentModelTests {
         try context.save()
         #expect(p.snapshot.cashPaid == 20_000)
         #expect(p.makeDraft().minimumTotalDebt == 20_000)
+        #expect(p.sortedCashPayments.count == 1)
+    }
+
+    @Test func removedCashPaymentIsKeptForTheReport() throws {
+        let p = try cashPayment()
+        p.addCashPayment(amount: 5, date: .now)
+        let entry = try #require(p.sortedCashPayments.first)
+        p.removeCashPayment(entry)
+        try context.save()
+        #expect(p.sortedCashPayments.isEmpty)
+        #expect(p.snapshot.cashPaid == 0)
+        #expect(p.removedCashPayments.map(\.amount) == [5])
+        #expect(entry.removedAt != nil)
+
+        let input = ReportPaymentInput(p)
+        #expect(input.cashPayments.map(\.amount) == [5])
+        #expect(input.cashPayments.first?.removedAt != nil)
+        let data = ReportBuilder.build(payments: [input], assets: [], options: ReportOptions(selectedIDs: [p.id]))
+        #expect(data.debts.first?.rows.first?.cells.last == "Silindi · toplama dahil değil")
     }
 
     @Test func deletingPaymentCascades() throws {
@@ -133,5 +152,26 @@ struct PaymentModelTests {
         #expect(p.kind == .receivable)
         #expect(PaymentCalculator.remaining(p.snapshot) == 15)
         #expect(p.makeDraft().minimumTotalDebt == 5)
+    }
+
+    @Test func updateCashPaymentChangesAmountDateAndTotals() throws {
+        let p = try cashPayment(debt: "80000")
+        p.addCashPayment(amount: 5, date: .now)
+        p.addCashPayment(amount: 20_000, date: .now.addingTimeInterval(-86_400))
+        let wrong = try #require(p.sortedCashPayments.first { $0.amount == 5 })
+        let newDate = Date(timeIntervalSince1970: 1_790_000_000)
+
+        p.updateCashPayment(wrong, amount: 10_000, date: newDate)
+
+        #expect(wrong.amount == 10_000)
+        #expect(wrong.date == newDate)
+        #expect(p.snapshot.cashPaid == 30_000)
+        #expect(PaymentCalculator.remaining(p.snapshot) == 50_000)
+        #expect(p.snapshot.cashPaymentCount == 2)
+        #expect(wrong.correctedAt != nil)
+        #expect(wrong.originalAmount == 5)
+        p.updateCashPayment(wrong, amount: 9_000, date: newDate)
+        #expect(wrong.originalAmount == 5)
+        #expect(p.sortedCashPayments.first { $0.amount == 20_000 }?.correctedAt == nil)
     }
 }

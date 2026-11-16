@@ -35,6 +35,11 @@ struct ReportPaymentInput: Identifiable, Sendable {
     struct Entry: Sendable {
         var amount: Decimal
         var date: Date
+        /// Sonradan düzeltildiyse; raporda belirtilir ki alacaklı/borçlu farkı görsün.
+        var correctedAt: Date? = nil
+        var originalAmount: Decimal? = nil
+        /// Silinmiş ödeme: listede görünür, toplamlara dahil değil.
+        var removedAt: Date? = nil
     }
 
     var id: UUID
@@ -61,6 +66,8 @@ struct ReportRow: Equatable, Sendable {
     var cells: [String]
     /// Ödenmiş satırlar PDF'te yeşil.
     var isPaid = false
+    /// Silinmiş ödeme satırı: PDF'te soluk.
+    var isRemoved = false
 }
 
 struct ReportBlock: Equatable, Sendable {
@@ -165,17 +172,29 @@ enum ReportBuilder {
                           L10n.Documents.columnAmount, L10n.Documents.columnStatus],
                 rows: rows)
         case .cash, .receivable:
-            let rows = options.sections.contains(.history)
+            let rows: [ReportRow] = options.sections.contains(.history)
                 ? p.cashPayments
                     .filter { inRange(YearMonth(date: $0.date, calendar: calendar)) }
                     .sorted { $0.date > $1.date }
-                    .map { ReportRow(cells: [fullDate($0.date, calendar), money($0.amount)], isPaid: true) }
+                    .map { entry -> ReportRow in
+                        let note: String = if entry.removedAt != nil {
+                            L10n.Documents.noteRemoved
+                        } else if let original = entry.originalAmount {
+                            L10n.Documents.noteCorrectedFrom(money(original))
+                        } else if entry.correctedAt != nil {
+                            L10n.Documents.noteCorrected
+                        } else {
+                            ""
+                        }
+                        return ReportRow(cells: [fullDate(entry.date, calendar), money(entry.amount), note],
+                                         isPaid: entry.removedAt == nil, isRemoved: entry.removedAt != nil)
+                    }
                 : []
             return ReportBlock(
                 title: p.name,
                 subtitle: s.kind.title,
                 facts: facts,
-                columns: [L10n.Documents.columnDate, L10n.Documents.columnAmount],
+                columns: [L10n.Documents.columnDate, L10n.Documents.columnAmount, L10n.Documents.columnNote],
                 rows: rows)
         }
     }
@@ -184,7 +203,10 @@ enum ReportBuilder {
 extension ReportPaymentInput {
     init(_ payment: Payment) {
         self.init(id: payment.id, name: payment.name, icon: payment.icon, snapshot: payment.snapshot,
-                  cashPayments: payment.sortedCashPayments.map { Entry(amount: $0.amount, date: $0.date) })
+                  cashPayments: (payment.sortedCashPayments + payment.removedCashPayments).map {
+                      Entry(amount: $0.amount, date: $0.date, correctedAt: $0.correctedAt,
+                            originalAmount: $0.originalAmount, removedAt: $0.removedAt)
+                  })
     }
 }
 

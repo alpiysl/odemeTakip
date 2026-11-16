@@ -386,6 +386,17 @@
         }
       }
     },
+    "documents.report.columnNote": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not"
+          }
+        }
+      }
+    },
     "documents.report.columnNumber": {
       "extractionState": "manual",
       "localizations": {
@@ -474,6 +485,17 @@
         }
       }
     },
+    "documents.report.forRecord": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu kayıt için rapor"
+          }
+        }
+      }
+    },
     "documents.report.from": {
       "extractionState": "manual",
       "localizations": {
@@ -514,6 +536,39 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ay aralığıyla sınırla"
+          }
+        }
+      }
+    },
+    "documents.report.noteCorrected": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Düzeltildi"
+          }
+        }
+      }
+    },
+    "documents.report.noteCorrectedFrom": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Düzeltildi · önceki %@"
+          }
+        }
+      }
+    },
+    "documents.report.noteRemoved": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Silindi · toplama dahil değil"
           }
         }
       }

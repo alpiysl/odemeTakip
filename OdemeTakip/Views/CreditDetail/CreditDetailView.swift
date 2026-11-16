@@ -12,6 +12,7 @@ struct CreditDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var showAll = false
     @State private var editing = false
+    @State private var showingReport = false
     @State private var deleteRequested = false
 
     var body: some View {
@@ -111,7 +112,10 @@ struct CreditDetailView: View {
         .background(Theme.background.ignoresSafeArea())
         .recordTitle(icon: payment.icon, name: payment.name)
         .toolbar {
-            Button(L10n.Common.edit) { editing = true }
+            RecordToolbar(onReport: { showingReport = true }, onEdit: { editing = true })
+        }
+        .sheet(isPresented: $showingReport) {
+            ReportComposerView(single: payment)
         }
         .sensoryFeedback(.selection, trigger: payment.paidInstallmentIndexes)
         .sheet(isPresented: $editing, onDismiss: handleSheetDismiss) {

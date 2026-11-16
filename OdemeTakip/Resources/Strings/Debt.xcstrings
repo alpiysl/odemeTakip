@@ -111,6 +111,72 @@
         }
       }
     },
+    "debt.deleteCollection": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tahsilatı sil"
+          }
+        }
+      }
+    },
+    "debt.deleteEntryConfirm": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu kayıt silinsin mi? Raporlar ve kalan tutar buna göre güncellenir."
+          }
+        }
+      }
+    },
+    "debt.deletePayment": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ödemeyi sil"
+          }
+        }
+      }
+    },
+    "debt.editCollectionTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tahsilatı düzenle"
+          }
+        }
+      }
+    },
+    "debt.editNote": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Değişiklik kaydedilince raporlara ve dekontlara yansır; düzeltilen ödeme raporda \"düzeltildi\" olarak görünür. Daha önce paylaştığın bir rapor varsa yeniden oluşturup gönder."
+          }
+        }
+      }
+    },
+    "debt.editPaymentTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ödemeyi düzenle"
+          }
+        }
+      }
+    },
     "debt.hidePaid": {
       "extractionState": "manual",
       "localizations": {

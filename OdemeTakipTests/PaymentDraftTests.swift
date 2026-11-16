@@ -132,6 +132,19 @@ struct PaymentDraftTests {
         #expect(PaymentKind.receivable.title == "Alacak")
     }
 
+    @Test func editingDraftAllowsUpToRemainingPlusOriginal() {
+        let date = Date(timeIntervalSince1970: 1_790_000_000)
+        var d = CashPaymentDraft(editing: 5, date: date, remaining: 50_000, currency: .TRY)
+        #expect(d.amountText == "5")
+        #expect(d.date == date)
+        #expect(d.amount == 5)
+        d.amountText = "50.005"
+        #expect(d.amount == 50_005)
+        d.amountText = "50.006"
+        #expect(d.amount == nil)
+        #expect(d.validationMessage == "Kalan borçtan (₺50.005) fazla olamaz")
+    }
+
     @Test func receivableCollectionMessageMentionsReceivable() {
         var d = CashPaymentDraft(remaining: 4, currency: .ceyrek, isReceivable: true)
         d.amountText = "5"

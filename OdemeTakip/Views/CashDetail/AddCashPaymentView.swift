@@ -1,8 +1,10 @@
 import SwiftData
 import SwiftUI
 
+/// Elden ödeme / tahsilat ekleme; `editing` verilirse o kaydı düzeltme ya da silme.
 struct AddCashPaymentView: View {
     let payment: Payment
+    var editing: CashPayment? = nil
 
     @Environment(RateStore.self) private var rateStore
     private var rates: ExchangeRates? { rateStore.rates }
@@ -10,14 +12,31 @@ struct AddCashPaymentView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @State private var draft: CashPaymentDraft
+    @State private var confirmingDelete = false
     @FocusState private var amountFocused: Bool
 
-    init(payment: Payment) {
+    init(payment: Payment, editing: CashPayment? = nil) {
         self.payment = payment
-        _draft = State(initialValue: CashPaymentDraft(
-            remaining: PaymentCalculator.remaining(payment.snapshot),
-            currency: payment.currency,
-            isReceivable: payment.kind == .receivable))
+        self.editing = editing
+        let remaining = PaymentCalculator.remaining(payment.snapshot)
+        let receivable = payment.kind == .receivable
+        if let editing {
+            _draft = State(initialValue: CashPaymentDraft(
+                editing: editing.amount, date: editing.date, remaining: remaining,
+                currency: payment.currency, isReceivable: receivable))
+        } else {
+            _draft = State(initialValue: CashPaymentDraft(
+                remaining: remaining, currency: payment.currency, isReceivable: receivable))
+        }
+    }
+
+    private var title: String {
+        switch (editing != nil, draft.isReceivable) {
+        case (true, true): L10n.Debt.editCollectionTitle
+        case (true, false): L10n.Debt.editPaymentTitle
+        case (false, true): L10n.Debt.addCollectionTitle
+        case (false, false): L10n.Debt.addPaymentTitle
+        }
     }
 
     var body: some View {
@@ -27,6 +46,10 @@ struct AddCashPaymentView: View {
                     LabeledContent(L10n.Common.amount) {
                         TextField("0", text: $draft.amountText)
                             .keyboardType(.decimalPad)
+                            .onChange(of: draft.amountText) { _, text in
+                                let clean = AmountParser.sanitized(text)
+                                if clean != text { draft.amountText = clean }
+                            }
                             .multilineTextAlignment(.trailing)
                             .monospacedDigit()
                             .focused($amountFocused)
@@ -48,11 +71,27 @@ struct AddCashPaymentView: View {
                     }
                 }
                 .listRowBackground(Theme.surface)
+
+                if editing != nil {
+                    Section {
+                        Label(L10n.Debt.editNote, systemImage: "doc.text.magnifyingglass")
+                            .font(.footnote)
+                            .foregroundStyle(Theme.secondaryText)
+                            .accessibilityIdentifier("editNote")
+                    }
+                    .listRowBackground(Color.clear)
+
+                    Section {
+                        Button(draft.isReceivable ? L10n.Debt.deleteCollection : L10n.Debt.deletePayment,
+                               role: .destructive) { confirmingDelete = true }
+                    }
+                    .listRowBackground(Theme.surface)
+                }
             }
             .scrollContentBackground(.hidden)
             .scrollDismissesKeyboard(.interactively)
             .background(Theme.background)
-            .navigationTitle(draft.isReceivable ? L10n.Debt.addCollectionTitle : L10n.Debt.addPaymentTitle)
+            .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -69,7 +108,11 @@ struct AddCashPaymentView: View {
                         .fontWeight(.semibold)
                 }
             }
-            .onAppear { amountFocused = true }
+            .onAppear { if editing == nil { amountFocused = true } }
+            .confirmationDialog(L10n.Debt.deleteEntryConfirm, isPresented: $confirmingDelete, titleVisibility: .visible) {
+                Button(L10n.Common.delete, role: .destructive) { delete() }
+                Button(L10n.Common.dismiss, role: .cancel) {}
+            }
         }
         .tint(Theme.accent)
         .appColorScheme()
@@ -87,7 +130,18 @@ struct AddCashPaymentView: View {
 
     private func save() {
         guard let amount = draft.amount else { return }
-        payment.addCashPayment(amount: amount, date: draft.date)
+        if let editing {
+            payment.updateCashPayment(editing, amount: amount, date: draft.date)
+        } else {
+            payment.addCashPayment(amount: amount, date: draft.date)
+        }
+        context.saveQuietly()
+        dismiss()
+    }
+
+    private func delete() {
+        guard let editing else { return }
+        payment.removeCashPayment(editing)
         context.saveQuietly()
         dismiss()
     }

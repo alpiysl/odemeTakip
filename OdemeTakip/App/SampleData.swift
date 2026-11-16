@@ -164,6 +164,8 @@ struct DebugScreen: View {
             }
         case "settings":
             SettingsView()
+        case "report":
+            ReportComposerView(payments: payments, assets: [])
         default:
             PaymentFormView(mode: .create)
         }

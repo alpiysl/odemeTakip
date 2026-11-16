@@ -5,6 +5,8 @@ import SwiftUI
 struct ReportComposerView: View {
     let payments: [Payment]
     let assets: [Asset]
+    /// Tek kayıt raporu (düzenleme ekranından): kayıt listesi gizli, yalnız ilgili bölümler.
+    private var single: Payment?
 
     @Environment(\.dismiss) private var dismiss
     @State private var selected: Set<UUID>
@@ -20,6 +22,27 @@ struct ReportComposerView: View {
         self.payments = payments
         self.assets = assets
         _selected = State(initialValue: Set(payments.map(\.id) + assets.map(\.id)))
+    }
+
+    init(single payment: Payment) {
+        self.init(payments: [payment], assets: [])
+        self.single = payment
+        _sections = State(initialValue: Set(Self.sections(for: payment.kind)))
+    }
+
+    /// Kaydın türüne uyan bölümler; alacakta "Alacaklar" kaydın görünmesi için içeride açık tutulur.
+    private static func sections(for kind: PaymentKind) -> [ReportSection] {
+        switch kind {
+        case .credit: [.summary, .schedule]
+        case .cash: [.summary, .history]
+        case .receivable: [.summary, .history, .receivables]
+        }
+    }
+
+    /// Kullanıcıya gösterilen bölüm anahtarları.
+    private var visibleSections: [ReportSection] {
+        guard let single else { return ReportSection.allCases }
+        return Self.sections(for: single.kind).filter { $0 != .receivables }
     }
 
     private var debts: [Payment] { payments.filter { $0.kind != .receivable } }
@@ -42,7 +65,9 @@ struct ReportComposerView: View {
         NavigationStack {
             Form {
                 sectionsSection
-                if visibleIDs.isEmpty {
+                if single != nil {
+                    EmptyView()
+                } else if visibleIDs.isEmpty {
                     Section { Text(L10n.Documents.empty).foregroundStyle(Theme.secondaryText) }
                         .listRowBackground(Theme.surface)
                 } else {
@@ -52,7 +77,7 @@ struct ReportComposerView: View {
             }
             .scrollContentBackground(.hidden)
             .background(Theme.background)
-            .navigationTitle(L10n.Documents.createReport)
+            .navigationTitle(single?.name ?? L10n.Documents.createReport)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -82,7 +107,7 @@ struct ReportComposerView: View {
 
     private var sectionsSection: some View {
         Section {
-            ForEach(ReportSection.allCases) { section in
+            ForEach(visibleSections) { section in
                 Toggle(section.title, isOn: Binding(
                     get: { sections.contains(section) },
                     set: { on in

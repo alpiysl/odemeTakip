@@ -149,6 +149,10 @@ struct AddMovementView: View {
                 Section {
                     LabeledContent(draft.unit.isGold ? L10n.Savings.quantityWithUnit(draft.unit.unitName) : L10n.Common.amount) {
                         TextField("0", text: $draft.amountText)
+                            .onChange(of: draft.amountText) { _, text in
+                                let clean = AmountParser.sanitized(text)
+                                if clean != text { draft.amountText = clean }
+                            }
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
                             .monospacedDigit()

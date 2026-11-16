@@ -22,6 +22,23 @@ struct AmountParserTests {
         #expect(AmountParser.parse(input) == nil)
     }
 
+    @Test(arguments: [
+        ("-500", "500"),
+        ("−1.500,50", "1.500,50"),
+        ("1.500,5", "1.500,5"),
+        ("₺ 7.500", "7.500"),
+        ("abc12", "12"),
+        ("", ""),
+    ])
+    func sanitizedInputHasNoSignOrLetters(input: String, expected: String) {
+        #expect(AmountParser.sanitized(input) == expected)
+    }
+
+    @Test func wholeNumberInputKeepsDigitsOnly() {
+        #expect(AmountParser.sanitized("-12", allowsDecimal: false) == "12")
+        #expect(AmountParser.sanitized("1.2", allowsDecimal: false) == "12")
+    }
+
     @Test func editingTextRoundTrips() {
         let value = Decimal(string: "1500.5") ?? 0
         #expect(AmountParser.editingText(value) == "1500,5")
