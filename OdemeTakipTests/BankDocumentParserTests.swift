@@ -157,6 +157,44 @@ struct BankDocumentParserTests {
         #expect(ParsedDebt().bannerText == "Belgeden borç bilgisi okunamadı. Bilgileri elle girebilirsin.")
     }
 
+    // MARK: İnceleme bulguları
+
+    @Test func cardStatementWithInstallmentLinesStaysCard() {
+        let p = parse(cardStatement + "\nGelecek Dönem Taksit Tutarı: 1.250,00 TL\nVade Günü: 15")
+        #expect(p.kind == .cash)
+        #expect(p.totalDebt == Decimal(string: "12345.67"))
+        #expect(p.monthlyAmount == nil)
+    }
+
+    @Test func remainingOrPaidInstallmentTotalsAreNotMonthly() {
+        let p = parse("""
+        Kalan Taksit Tutarı: 50.000,00 TL
+        Ödenen Taksit Tutarı: 22.000,00 TL
+        Taksit Tutarı: 2.000,00 TL
+        Taksit Sayısı: 36
+        """)
+        #expect(p.monthlyAmount == 2000)
+    }
+
+    @Test func vadeInsideOtherWordsIsIgnored() {
+        let p = parse("Vadesiz Hesap No: 0123 456 789\nVade Günü: 15\n" + paymentPlan)
+        #expect(p.installmentCount == 4)
+    }
+
+    @Test func vadeDayAloneDoesNotMakeACredit() {
+        #expect(parse("Vade Günü: 15").isEmpty)
+    }
+
+    @Test func paymentPlanCountBeatsLooseVadeLabel() {
+        let p = parse("Vade: 12\n" + paymentPlan)
+        #expect(p.installmentCount == 4)
+    }
+
+    @Test(arguments: ["Taksit Tutarı: 4,812.35 TL", "Taksit Tutarı: 1234.567,89 TL"])
+    func malformedOrEnglishAmountsAreNotMisread(line: String) {
+        #expect(parse(line).monthlyAmount == nil)
+    }
+
     @Test func foundFieldsListWhatWasRead() {
         let p = parse(loanSummary)
         #expect(Set(p.foundFields) == [.bank, .monthlyAmount, .installmentCount, .firstMonth, .paidCount])

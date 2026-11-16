@@ -1,6 +1,7 @@
 import SwiftData
 import SwiftUI
 import UIKit
+import UniformTypeIdentifiers
 
 struct RootView: View {
     let isTemporaryStore: Bool
@@ -79,11 +80,17 @@ struct RootView: View {
         }
         .pdfDebtImport(isPickerPresented: $showingPDFPicker, incomingURL: $incomingPDF)
         .onOpenURL { url in
-            guard url.isFileURL, url.pathExtension.lowercased() == "pdf" else { return }
+            guard url.isFileURL, UTType(filenameExtension: url.pathExtension)?.conforms(to: .pdf) ?? true else { return }
+            // Açık sayfa varken yeni sayfa sunulamaz: önce kapat, kapanma animasyonu bitince içe aktar.
+            let hadSheet = showingSettings || showingReport || showingPDFPicker
             showingSettings = false
             showingReport = false
+            showingPDFPicker = false
             sessionMode = .debt
-            incomingPDF = url
+            Task {
+                if hadSheet { try? await Task.sleep(for: .milliseconds(600)) }
+                incomingPDF = url
+            }
         }
         .sheet(isPresented: $showingReport) {
             ReportComposerView(payments: payments + receivables, assets: assets)

@@ -6,6 +6,9 @@ import Vision
 enum PDFTextExtractor {
     enum ExtractError: Error, Equatable {
         case unreadable
+        /// Şifreli PDF; parola gerekiyor.
+        case locked
+        case wrongPassword
     }
 
     /// Bundan kısa gömülü metin, taranmış sayfa sayılır.
@@ -13,11 +16,15 @@ enum PDFTextExtractor {
     /// OCR en fazla bu kadar sayfaya uygulanır.
     private static let maxOCRPages = 10
 
-    static func extractText(from url: URL) async throws -> String {
+    static func extractText(from url: URL, password: String? = nil) async throws -> String {
         try await Task.detached(priority: .userInitiated) {
-            guard let document = PDFDocument(url: url), document.pageCount > 0 else {
-                throw ExtractError.unreadable
+            guard let document = PDFDocument(url: url) else { throw ExtractError.unreadable }
+            // Banka e-ekstreleri genellikle şifreli gelir (çoğunlukla TC kimlik no / doğum tarihi).
+            if document.isLocked {
+                guard let password, !password.isEmpty else { throw ExtractError.locked }
+                guard document.unlock(withPassword: password) else { throw ExtractError.wrongPassword }
             }
+            guard document.pageCount > 0 else { throw ExtractError.unreadable }
             let embedded = document.string ?? ""
             if embedded.trimmingCharacters(in: .whitespacesAndNewlines).count >= minimumTextLength {
                 return embedded

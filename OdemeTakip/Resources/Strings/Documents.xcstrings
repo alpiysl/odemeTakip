@@ -133,6 +133,50 @@
         }
       }
     },
+    "documents.import.open": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Aç"
+          }
+        }
+      }
+    },
+    "documents.import.password": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Şifre"
+          }
+        }
+      }
+    },
+    "documents.import.passwordMessage": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bankanın e-ekstre şifresini gir. Şifre yalnızca dosyayı açmak için kullanılır, saklanmaz."
+          }
+        }
+      }
+    },
+    "documents.import.passwordTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF şifreli"
+          }
+        }
+      }
+    },
     "documents.import.reading": {
       "extractionState": "manual",
       "localizations": {
@@ -162,6 +206,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "Dosya bozuk ya da şifreli olabilir. Başka bir PDF dene."
+          }
+        }
+      }
+    },
+    "documents.import.wrongPassword": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Şifre yanlış. Tekrar dene."
           }
         }
       }

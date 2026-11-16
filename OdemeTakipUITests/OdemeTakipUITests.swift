@@ -303,6 +303,19 @@ final class OdemeTakipUITests: XCTestCase {
         XCTAssertTrue(text(app, "Garanti BBVA kredisi").waitForExistence(timeout: 5))
     }
 
+    func testLockedPDFAsksForPasswordThenPrefills() {
+        let app = launch(["-importLockedSamplePDF"])
+        let alert = app.alerts["PDF şifreli"]
+        XCTAssertTrue(alert.waitForExistence(timeout: 10))
+        alert.secureTextFields.firstMatch.typeText("0000")
+        alert.buttons["Aç"].tap()
+        XCTAssertTrue(app.alerts["PDF şifreli"].staticTexts["Şifre yanlış. Tekrar dene."].waitForExistence(timeout: 5))
+        app.alerts["PDF şifreli"].secureTextFields.firstMatch.typeText("1234")
+        app.alerts["PDF şifreli"].buttons["Aç"].tap()
+        XCTAssertTrue(app.descendants(matching: .any)["importBanner"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.textFields["Ad"].value as? String == "Garanti BBVA kredisi")
+    }
+
     func testAddMenuOffersPDFImport() {
         let app = launch()
         XCTAssertTrue(app.buttons["Yeni ödeme"].waitForExistence(timeout: 5))

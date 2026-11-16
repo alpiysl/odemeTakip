@@ -18,10 +18,13 @@ struct Receipt: Equatable, Sendable {
 
     /// Elden ödeme ya da alacak tahsilatı.
     static func cashPayment(amount: Decimal, date: Date, snapshot: PaymentSnapshot,
-                            name: String, icon: String,
+                            name: String, icon: String, paidThrough: Decimal? = nil,
                             calendar: Calendar = AppCalendar.calendar) -> Receipt {
         let year = calendar.component(.year, from: date)
         let receivable = snapshot.kind == .receivable
+        // Kalan, bu ödemeden hemen sonraki durum; bugünkü değil.
+        var snapshot = snapshot
+        if let paidThrough { snapshot.cashPaid = paidThrough }
         return Receipt(
             headline: receivable ? L10n.Documents.collectionDone : L10n.Documents.paymentDone,
             title: name, icon: icon, kind: snapshot.kind,
@@ -40,6 +43,9 @@ struct Receipt: Equatable, Sendable {
         guard snapshot.kind == .credit, (0..<snapshot.installmentCount).contains(index),
               snapshot.paidInstallments.contains(index) else { return nil }
         let month = PaymentCalculator.installmentMonth(snapshot, index: index)
+        // Kalan, bu taksit ödendiğindeki durum: sonraki taksitler sayılmaz.
+        var snapshot = snapshot
+        snapshot.paidInstallments = snapshot.paidInstallments.filter { $0 <= index }
         return Receipt(
             headline: L10n.Documents.installmentDone,
             title: name, icon: icon, kind: .credit,
@@ -70,8 +76,13 @@ struct Receipt: Equatable, Sendable {
 
 extension Receipt {
     static func make(for entry: CashPayment, in payment: Payment) -> Receipt {
-        cashPayment(amount: entry.amount, date: entry.date, snapshot: payment.snapshot,
-                    name: payment.name, icon: payment.icon)
+        var paidThrough: Decimal = 0
+        for other in payment.sortedCashPayments.reversed() {
+            paidThrough += other.amount
+            if other.id == entry.id { break }
+        }
+        return cashPayment(amount: entry.amount, date: entry.date, snapshot: payment.snapshot,
+                           name: payment.name, icon: payment.icon, paidThrough: paidThrough)
     }
 
     static func make(installment index: Int, in payment: Payment) -> Receipt? {

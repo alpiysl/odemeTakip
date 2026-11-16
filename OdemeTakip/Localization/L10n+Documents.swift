@@ -88,5 +88,10 @@ extension L10n {
         static var importReading: String { s("documents.import.reading") }
         static var importUnreadable: String { s("documents.import.unreadable") }
         static var importUnreadableMessage: String { s("documents.import.unreadableMessage") }
+        static var passwordTitle: String { s("documents.import.passwordTitle") }
+        static var passwordMessage: String { s("documents.import.passwordMessage") }
+        static var wrongPassword: String { s("documents.import.wrongPassword") }
+        static var password: String { s("documents.import.password") }
+        static var open: String { s("documents.import.open") }
     }
 }

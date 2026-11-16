@@ -81,14 +81,15 @@ enum BankDocumentParser {
         result.bank = Bank.detect(in: text)
         result.currency = currency(in: lines)
 
-        var monthly = amount(after: Labels.monthly, in: lines)
+        var monthly = amount(after: Labels.monthly, excluding: Labels.monthlyExclusions, in: lines)
         var count = integer(after: Labels.count, excluding: Labels.countExclusions, in: lines)
         var first = date(after: Labels.firstDate, in: lines)
         let explicitPaid = integer(after: Labels.paid, excluding: [], in: lines)
         let repayment = amount(after: Labels.totalRepayment, in: lines)
 
         if let plan = paymentPlan(in: lines) {
-            count = count ?? plan.count
+            // Tablodaki satır numaraları, serbest "vade" etiketinden daha güvenilir.
+            count = plan.count
             first = first ?? plan.first
             monthly = monthly ?? plan.monthly
         }
@@ -96,7 +97,13 @@ enum BankDocumentParser {
             monthly = rounded(repayment / Decimal(count))
         }
 
-        if monthly != nil || count != nil {
+        let isCardStatement = lines.contains { line in Labels.cardMarkers.contains { line.contains($0) } }
+        if isCardStatement, let debt = amount(after: Labels.cardDebt, in: lines) {
+            // Ekstrede "gelecek dönem taksit tutarı" gibi satırlar olsa da bu bir kart borcu.
+            result.kind = .cash
+            result.totalDebt = debt
+            result.suggestedName = result.bank.map { L10n.Documents.cardName($0.name) }
+        } else if monthly != nil || count != nil {
             result.kind = .credit
             result.monthlyAmount = monthly
             result.installmentCount = count
@@ -120,15 +127,21 @@ enum BankDocumentParser {
 
     private enum Labels {
         static let monthly = ["taksit tutari", "aylik taksit", "aylik odeme tutari", "aylik odeme"]
+        /// "Kalan / ödenen / gelecek dönem taksit tutarı" aylık taksit değildir.
+        static let monthlyExclusions = ["toplam", "kalan", "odenen", "odenmis", "gelecek", "gecikmis", "donem"]
         static let count = ["taksit sayisi", "vade sayisi", "toplam taksit", "vade suresi", "kredi vadesi", "vade (ay)", "vade"]
-        static let countExclusions = ["odenen", "odenmis", "kalan", "tarihi"]
+        static let countExclusions = ["odenen", "odenmis", "kalan", "tarihi", "gunu", "hesap"]
         static let paid = ["odenen taksit sayisi", "odenmis taksit sayisi", "odenen taksit"]
         static let firstDate = ["ilk taksit tarihi", "ilk taksit odeme tarihi", "ilk odeme tarihi"]
         static let totalRepayment = ["toplam geri odeme", "geri odenecek toplam", "toplam odeme tutari"]
         static let cardDebt = ["donem borcu", "hesap ozeti borcu", "toplam borc"]
+        /// Bunlardan biri varsa belge kredi kartı ekstresidir.
+        static let cardMarkers = ["donem borcu", "son odeme tarihi", "asgari odeme"]
     }
 
-    private static let amountPattern = #"\d{1,3}(?:\.\d{3})+,\d{2}|\d+,\d{2}"#
+    /// Türkçe tutar: "4.812,35" / "250,00". Sınırlar, "4,812.35" (İngilizce) ve "1234.567,89" gibi
+    /// biçimlerin bir parçasının yanlışlıkla okunmasını engeller.
+    private static let amountPattern = #"(?<![\d.,])(?:\d{1,3}(?:\.\d{3})+,\d{2}|\d+,\d{2})(?![\d,]|\.\d)"#
     private static let numericDatePattern = #"(\d{1,2})[./-](\d{1,2})[./-](\d{4})"#
     private static let monthNames = ["ocak", "subat", "mart", "nisan", "mayis", "haziran",
                                      "temmuz", "agustos", "eylul", "ekim", "kasim", "aralik"]
@@ -139,8 +152,10 @@ enum BankDocumentParser {
     private static func values(after labels: [String], excluding: [String] = [], in lines: [String]) -> [String] {
         var found: [String] = []
         for label in labels {
+            // Etiket kelime olarak geçmeli: "vade" ≠ "vadesiz".
+            let pattern = "(?<![a-z])" + NSRegularExpression.escapedPattern(for: label) + "(?![a-z])"
             for (index, line) in lines.enumerated() {
-                guard let range = line.range(of: label),
+                guard let range = line.range(of: pattern, options: .regularExpression),
                       !excluding.contains(where: { line.contains($0) }) else { continue }
                 let rest = String(line[range.upperBound...])
                 if rest.trimmingCharacters(in: CharacterSet(charactersIn: " :.-()")).isEmpty {
@@ -153,8 +168,8 @@ enum BankDocumentParser {
         return found
     }
 
-    private static func amount(after labels: [String], in lines: [String]) -> Decimal? {
-        for text in values(after: labels, in: lines) {
+    private static func amount(after labels: [String], excluding: [String] = [], in lines: [String]) -> Decimal? {
+        for text in values(after: labels, excluding: excluding, in: lines) {
             if let match = text.range(of: amountPattern, options: .regularExpression),
                let value = AmountParser.parse(String(text[match])), value > 0 {
                 return value
@@ -180,18 +195,31 @@ enum BankDocumentParser {
         values(after: labels, in: lines).lazy.compactMap(firstDate(in:)).first
     }
 
+    // ICU (NSRegularExpression): Swift `Regex` lookbehind desteklemiyor. Desenler sabit; bir kez derlenir.
+    private static let numericDateRegex = try! NSRegularExpression(pattern: numericDatePattern)
+    private static let namedDateRegex = try! NSRegularExpression(
+        pattern: #"\d{1,2} ("# + monthNames.joined(separator: "|") + #") (\d{4})"#)
+    private static let planRowRegex = try! NSRegularExpression(
+        pattern: #"^(\d{1,3}) +(\d{1,2}[./-]\d{1,2}[./-]\d{4}) +("# + amountPattern + ")")
+
+    /// Eşleşmenin gruplarını metin olarak döner; eşleşme yoksa nil.
+    private static func groups(_ regex: NSRegularExpression, in text: String) -> [String]? {
+        let ns = text as NSString
+        guard let match = regex.firstMatch(in: text, range: NSRange(location: 0, length: ns.length)) else { return nil }
+        return (0..<match.numberOfRanges).map { index in
+            let range = match.range(at: index)
+            return range.location == NSNotFound ? "" : ns.substring(with: range)
+        }
+    }
+
     /// "15.01.2026", "15/01/2026", "15 ocak 2026".
     private static func firstDate(in text: String) -> YearMonth? {
-        if let match = text.firstMatch(of: try! Regex(numericDatePattern)),
-           let month = match.output[2].substring.flatMap({ Int($0) }),
-           let year = match.output[3].substring.flatMap({ Int($0) }), (1...12).contains(month) {
+        if let g = groups(numericDateRegex, in: text), let month = Int(g[2]), let year = Int(g[3]),
+           (1...12).contains(month) {
             return YearMonth(year: year, month: month)
         }
-        let names = monthNames.joined(separator: "|")
-        if let match = text.firstMatch(of: try! Regex(#"\d{1,2} ("# + names + #") (\d{4})"#)),
-           let name = match.output[1].substring.map(String.init),
-           let year = match.output[2].substring.flatMap({ Int($0) }),
-           let index = monthNames.firstIndex(of: name) {
+        if let g = groups(namedDateRegex, in: text), let year = Int(g[2]),
+           let index = monthNames.firstIndex(of: g[1]) {
             return YearMonth(year: year, month: index + 1)
         }
         return nil
@@ -199,13 +227,10 @@ enum BankDocumentParser {
 
     /// "1 05/03/2026 2.150,00 …" satırlarından oluşan ödeme planı.
     private static func paymentPlan(in lines: [String]) -> (count: Int, first: YearMonth, monthly: Decimal)? {
-        let regex = try! Regex(#"^(\d{1,3}) +(\d{1,2}[./-]\d{1,2}[./-]\d{4}) +("# + amountPattern + ")")
         var rows: [(number: Int, month: YearMonth, amount: Decimal)] = []
         for line in lines {
-            guard let match = line.firstMatch(of: regex),
-                  let number = match.output[1].substring.flatMap({ Int($0) }),
-                  let month = match.output[2].substring.flatMap({ firstDate(in: String($0)) }),
-                  let amount = match.output[3].substring.flatMap({ AmountParser.parse(String($0)) }) else { continue }
+            guard let g = groups(planRowRegex, in: line), let number = Int(g[1]),
+                  let month = firstDate(in: g[2]), let amount = AmountParser.parse(g[3]) else { continue }
             rows.append((number, month, amount))
         }
         guard rows.count >= 2, let start = rows.min(by: { $0.number < $1.number }),

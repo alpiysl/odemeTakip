@@ -116,11 +116,19 @@ enum SampleData {
     }
 
     /// `-importSamplePDF`: örnek banka kredisi PDF'i üretir; açılışta "Birlikte aç" ile gelmiş gibi içe aktarılır.
+    /// `-importLockedSamplePDF`: aynısı, "1234" şifreli.
     static func samplePDFIfRequested() -> URL? {
-        guard ProcessInfo.processInfo.arguments.contains("-importSamplePDF") else { return nil }
+        let args = ProcessInfo.processInfo.arguments
+        let locked = args.contains("-importLockedSamplePDF")
+        guard locked || args.contains("-importSamplePDF") else { return nil }
+        let format = UIGraphicsPDFRendererFormat()
+        if locked {
+            format.documentInfo = [kCGPDFContextUserPassword as String: "1234",
+                                   kCGPDFContextOwnerPassword as String: "1234"]
+        }
         let lines = ["GARANTİ BBVA", "İhtiyaç Kredisi Bilgilendirme", "Kredi Tutarı: 100.000,00 TL",
                      "Taksit Tutarı: 4.812,35 TL", "Taksit Sayısı: 36", "İlk Taksit Tarihi: 15.01.2026"]
-        let data = UIGraphicsPDFRenderer(bounds: CGRect(x: 0, y: 0, width: 595, height: 842)).pdfData { context in
+        let data = UIGraphicsPDFRenderer(bounds: CGRect(x: 0, y: 0, width: 595, height: 842), format: format).pdfData { context in
             context.beginPage()
             for (index, line) in lines.enumerated() {
                 NSAttributedString(string: line, attributes: [.font: UIFont.systemFont(ofSize: 18)])

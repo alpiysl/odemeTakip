@@ -46,6 +46,7 @@
 		5B46269FEE19B4086C915337 /* PaymentKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77B8F527FAD862CB9192E3BD /* PaymentKind.swift */; };
 		5D25C26BFE8B7B37A1D84D77 /* L10n+Banks.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2B82F10591E3C75A2F9FD5 /* L10n+Banks.swift */; };
 		5E24C0310B0A9E89C2624E72 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5BB158EC0E7670F72F77F579 /* HomeView.swift */; };
+		5E64E73D4707D85DF1CD6C8B /* ImportFileTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71E1124BC25A66D56AECDA62 /* ImportFileTests.swift */; };
 		632BA158AF7AB8AFF34AB752 /* L10n+Documents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595213B5D8D7671B20AF36CE /* L10n+Documents.swift */; };
 		66B0A2AB840BED3130EE1988 /* AssetFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE4DDAFF30F6DAF2799300D1 /* AssetFormView.swift */; };
 		7026AC9BD6BD9171E4AAEB50 /* AddCashPaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817E8FA7E5F02FE744996C15 /* AddCashPaymentView.swift */; };
@@ -107,6 +108,7 @@
 		EA5FB0F36D8D3CA1CD0301A0 /* L10n+Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D3A53C9641D775904070C9C /* L10n+Common.swift */; };
 		EE60945FBD5DA523360FCA09 /* Models.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 3910E0270B972B2986A98F20 /* Models.xcstrings */; };
 		F28FBE809D3686ADF453C9DF /* AddBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9C4027E083D7DE71A5691F34 /* AddBar.swift */; };
+		F416B7B3CCF6533A712FEDB7 /* ImportFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6823735C46E6B3CE7BADE9FD /* ImportFile.swift */; };
 		FA6C734E0941ECB0FECD81C1 /* Forms.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = B93328C6D16875DCFD5D841D /* Forms.xcstrings */; };
 /* End PBXBuildFile section */
 
@@ -164,8 +166,10 @@
 		5D3A53C9641D775904070C9C /* L10n+Common.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "L10n+Common.swift"; sourceTree = "<group>"; };
 		6081AC848CDA356CB9D1BC18 /* YearMonth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YearMonth.swift; sourceTree = "<group>"; };
 		61B06A01C996481C06E266A8 /* Theme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
+		6823735C46E6B3CE7BADE9FD /* ImportFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportFile.swift; sourceTree = "<group>"; };
 		69690146152DA445844FB9F4 /* SummaryCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SummaryCardView.swift; sourceTree = "<group>"; };
 		6ED57E5CFBB44FD69D90CABC /* AssetDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetDraft.swift; sourceTree = "<group>"; };
+		71E1124BC25A66D56AECDA62 /* ImportFileTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportFileTests.swift; sourceTree = "<group>"; };
 		75404D7C902D64D32B9EEF07 /* Settings.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Settings.xcstrings; sourceTree = "<group>"; };
 		760A30D93D7F5DA4FA0103D3 /* PaymentFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentFormView.swift; sourceTree = "<group>"; };
 		766118F3B242A97224E9FA56 /* MonthTrackerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MonthTrackerTests.swift; sourceTree = "<group>"; };
@@ -342,6 +346,7 @@
 				46F354A9F3E9E24F388716B0 /* BankTests.swift */,
 				95E377CFC0610B4EF0CF1942 /* ExchangeRatesTests.swift */,
 				77DC0DE05EEC84D1BCFACA82 /* GoldPricesTests.swift */,
+				71E1124BC25A66D56AECDA62 /* ImportFileTests.swift */,
 				92B94D19885E304088284208 /* LocalizationTests.swift */,
 				A604D0877591C6593549497F /* MoneyFormatterTests.swift */,
 				766118F3B242A97224E9FA56 /* MonthTrackerTests.swift */,
@@ -476,6 +481,7 @@
 			isa = PBXGroup;
 			children = (
 				E7626B6CD12A11A1F9CC7B5B /* BankDocumentParser.swift */,
+				6823735C46E6B3CE7BADE9FD /* ImportFile.swift */,
 				9A4CA2507FCA8770F4087D53 /* PDFTextExtractor.swift */,
 			);
 			path = Import;
@@ -675,6 +681,7 @@
 				D6EDEE445F300C3A97A10450 /* BankTests.swift in Sources */,
 				14BB2F1D315475BE3D039EB5 /* ExchangeRatesTests.swift in Sources */,
 				0D09DD6C00D5465420C2B186 /* GoldPricesTests.swift in Sources */,
+				5E64E73D4707D85DF1CD6C8B /* ImportFileTests.swift in Sources */,
 				92739652F0595AB83E87CCDE /* LocalizationTests.swift in Sources */,
 				388CA95F5B6CD7F502236C3E /* MoneyFormatterTests.swift in Sources */,
 				87FAA002E7F30A21FEC93069 /* MonthTrackerTests.swift in Sources */,
@@ -722,6 +729,7 @@
 				2741F454D7B7CFF90B413D03 /* FooterTotalsView.swift in Sources */,
 				7BD314216191CB58299C0FBA /* HomeMode.swift in Sources */,
 				5E24C0310B0A9E89C2624E72 /* HomeView.swift in Sources */,
+				F416B7B3CCF6533A712FEDB7 /* ImportFile.swift in Sources */,
 				735DF3A390CB6AE39FDB199C /* InfoBanner.swift in Sources */,
 				DE8B9C7AAFE09735C70FC653 /* InstallmentRowView.swift in Sources */,
 				5D25C26BFE8B7B37A1D84D77 /* L10n+Banks.swift in Sources */,
