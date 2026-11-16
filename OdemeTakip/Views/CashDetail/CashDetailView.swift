@@ -26,6 +26,7 @@ struct CashDetailView: View {
         let entries = payment.sortedCashPayments
         let completed = PaymentCalculator.isCompleted(snapshot)
         let receivable = payment.kind == .receivable
+        let receipts = Receipt.all(in: payment)
 
         return List {
             Section {
@@ -55,11 +56,12 @@ struct CashDetailView: View {
                     .listRowBackground(Color.clear)
                     .listRowSeparatorTint(Theme.divider)
                     .contextMenu {
-                        ShareReceiptLink(receipt: .make(for: entry, in: payment))
+                        if let receipt = receipts[entry.id] { ShareReceiptLink(receipt: receipt) }
                     }
                     .swipeActions(edge: .leading) {
-                        ShareReceiptLink(receipt: .make(for: entry, in: payment))
-                            .tint(Theme.accent)
+                        if let receipt = receipts[entry.id] {
+                            ShareReceiptLink(receipt: receipt).tint(Theme.accent)
+                        }
                     }
                 }
                 .onDelete { offsets in

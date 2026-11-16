@@ -80,17 +80,8 @@ struct RootView: View {
         }
         .pdfDebtImport(isPickerPresented: $showingPDFPicker, incomingURL: $incomingPDF)
         .onOpenURL { url in
-            guard url.isFileURL, UTType(filenameExtension: url.pathExtension)?.conforms(to: .pdf) ?? true else { return }
-            // Açık sayfa varken yeni sayfa sunulamaz: önce kapat, kapanma animasyonu bitince içe aktar.
-            let hadSheet = showingSettings || showingReport || showingPDFPicker
-            showingSettings = false
-            showingReport = false
-            showingPDFPicker = false
-            sessionMode = .debt
-            Task {
-                if hadSheet { try? await Task.sleep(for: .milliseconds(600)) }
-                incomingPDF = url
-            }
+            guard url.isFileURL, Self.isPDF(url) else { return }
+            receivePDF(url)
         }
         .sheet(isPresented: $showingReport) {
             ReportComposerView(payments: payments + receivables, assets: assets)
@@ -100,7 +91,7 @@ struct RootView: View {
             if sessionMode == nil { sessionMode = HomeMode(rawValue: homeModeRaw) }
             #if DEBUG
             SampleData.insertIfRequested(into: context)
-            if let url = SampleData.samplePDFIfRequested() { incomingPDF = url }
+            if let url = SampleData.samplePDFIfRequested() { receivePDF(url) }
             #endif
             await rateStore.refreshIfNeeded(force: true)
             notificationsAllowed = await authorizeNotificationsIfNeeded()
@@ -143,6 +134,30 @@ struct RootView: View {
         #endif
         // En dışta: sheet ve tam ekran sunumlar dahil her alt görünüm canlı kura erişir.
         .environment(rateStore)
+    }
+
+    /// Uzantısız gelse de içerik türü PDF olan dosya.
+    private static func isPDF(_ url: URL) -> Bool {
+        if let type = try? url.resourceValues(forKeys: [.contentTypeKey]).contentType {
+            return type.conforms(to: .pdf)
+        }
+        return url.pathExtension.isEmpty || UTType(filenameExtension: url.pathExtension)?.conforms(to: .pdf) == true
+    }
+
+    /// "Birlikte aç" ile gelen PDF'i borç ekranında içe aktarır.
+    private func receivePDF(_ url: URL) {
+        // İlk açılış seçimi yapılmadan borç eklendiyse borç ekranı seçilmiş sayılır.
+        if HomeMode(rawValue: homeModeRaw) == nil { homeModeRaw = HomeMode.debt.rawValue }
+        // Açık sayfa varken yeni sayfa sunulamaz: önce kapat, kapanma animasyonu bitince içe aktar.
+        let hadSheet = showingSettings || showingReport || showingPDFPicker
+        showingSettings = false
+        showingReport = false
+        showingPDFPicker = false
+        sessionMode = .debt
+        Task {
+            if hadSheet { try? await Task.sleep(for: .milliseconds(600)) }
+            incomingPDF = url
+        }
     }
 
     #if DEBUG

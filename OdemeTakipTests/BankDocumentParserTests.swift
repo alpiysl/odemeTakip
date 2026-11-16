@@ -195,6 +195,36 @@ struct BankDocumentParserTests {
         #expect(parse(line).monthlyAmount == nil)
     }
 
+    // MARK: Ertelenen bulgular
+
+    @Test func tryStatementWithManyUSDSpendLinesStaysTRY() {
+        let p = parse(cardStatement + """
+
+        AMAZON.COM 12,99 USD
+        APPLE.COM 4,99 USD
+        NETFLIX 9,99 USD
+        SPOTIFY 5,99 USD
+        """)
+        #expect(p.currency == .TRY)
+    }
+
+    @Test func currencyNextToKeyAmountWinsEvenWithoutSpace() {
+        #expect(parse("Tutar (TL)\nTaksit Tutarı: 4.812,35TL\nTaksit Sayısı: 12").currency == .TRY)
+        #expect(parse("Taksit Tutarı: 4.812,35 EUR\nTaksit Sayısı: 12\nMasraf 10,00 TL\nSigorta 20,00 TL").currency == .EUR)
+    }
+
+    @Test func planWithInstallmentInLaterColumnUsesTheRepeatingColumn() {
+        let p = parse("""
+        HALKBANK
+        Taksit No  Tarih  Anapara  Faiz  BSMV  Taksit Tutarı  Kalan Anapara
+        1  10.02.2026  1.700,00  400,00  50,00  2.150,00  48.300,00
+        2  10.03.2026  1.720,00  380,00  50,00  2.150,00  46.580,00
+        3  10.04.2026  1.740,00  360,00  50,00  2.150,00  44.840,00
+        """)
+        #expect(p.monthlyAmount == 2150)
+        #expect(p.installmentCount == 3)
+    }
+
     @Test func foundFieldsListWhatWasRead() {
         let p = parse(loanSummary)
         #expect(Set(p.foundFields) == [.bank, .monthlyAmount, .installmentCount, .firstMonth, .paidCount])

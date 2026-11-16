@@ -103,6 +103,18 @@ struct ReportBuilderTests {
         #expect(none.savings.isEmpty)
     }
 
+    @Test func noDebtsMeansNoRemainingDebtLine() {
+        let data = build([receivable], assets: [gold])
+        #expect(data.summary.first { $0.label == "Kalan borç" } == nil)
+        #expect(data.summary.first { $0.label == "Kalan alacak" } != nil)
+    }
+
+    @Test func rangeSubtitleOnlyWhenRowsAreShown() {
+        let range = YearMonth(year: 2026, month: 10)...YearMonth(year: 2026, month: 11)
+        #expect(build([car], sections: [.summary], range: range).rangeText == nil)
+        #expect(build([car], sections: [.summary, .history], range: range).rangeText != nil)
+    }
+
     @Test func generatedTextUsesDate() {
         #expect(build([car]).generatedText == "Oluşturulma: 16 Kas 2026")
     }

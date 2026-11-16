@@ -316,6 +316,14 @@ final class OdemeTakipUITests: XCTestCase {
         XCTAssertTrue(app.textFields["Ad"].value as? String == "Garanti BBVA kredisi")
     }
 
+    func testImportDuringOnboardingSkipsOnboardingAfterSave() {
+        let app = launch(["-importSamplePDF"], mode: "none")
+        XCTAssertTrue(app.descendants(matching: .any)["importBanner"].waitForExistence(timeout: 10))
+        app.buttons["Kaydet"].tap()
+        XCTAssertTrue(text(app, "Garanti BBVA kredisi").waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons["mode-debt"].exists)
+    }
+
     func testAddMenuOffersPDFImport() {
         let app = launch()
         XCTAssertTrue(app.buttons["Yeni ödeme"].waitForExistence(timeout: 5))

@@ -43,7 +43,8 @@ enum Bank: String, CaseIterable, Identifiable {
     var keywords: [String] {
         switch self {
         case .isbank: ["is bankasi", "isbank", "isbankasi"]
-        case .garanti: ["garanti"]
+        // Yalın "garanti" sıradan bir kelime ("2 yıl garanti"); banka adıyla birlikte aranır.
+        case .garanti: ["garanti bbva", "garanti bankasi", "garantibbva"]
         case .akbank: ["akbank", "axess"]
         case .qnb: ["qnb", "finansbank"]
         case .halkbank: ["halkbank", "halk bankasi"]
@@ -52,11 +53,18 @@ enum Bank: String, CaseIterable, Identifiable {
         }
     }
 
-    /// Metinde en çok anılan banka; hiçbiri yoksa nil.
+    /// Belgenin başı (logo, unvan) bankayı işlem satırlarından daha iyi gösterir.
+    private static let headerLineCount = 8
+    private static let headerWeight = 3
+
+    /// Metinde en çok anılan banka; ilk satırlardaki anılma daha ağır sayılır. Hiçbiri yoksa nil.
     static func detect(in text: String) -> Bank? {
-        let folded = text.foldedForMatching
+        let lines = text.foldedForMatching.components(separatedBy: .newlines).filter { !$0.isEmpty }
         let scores = allCases.map { bank in
-            (bank, bank.keywords.reduce(0) { $0 + folded.components(separatedBy: $1).count - 1 })
+            (bank, lines.enumerated().reduce(0) { total, item in
+                let hits = bank.keywords.reduce(0) { $0 + item.element.components(separatedBy: $1).count - 1 }
+                return total + hits * (item.offset < headerLineCount ? headerWeight : 1)
+            })
         }
         guard let best = scores.max(by: { $0.1 < $1.1 }), best.1 > 0 else { return nil }
         return scores.first { $0.1 == best.1 }?.0

@@ -94,8 +94,10 @@ enum ReportBuilder {
 
         var summary: [ReportLine] = []
         if options.sections.contains(.summary) {
-            summary.append(ReportLine(label: L10n.Documents.remainingDebt,
-                                      value: MoneyFormatter.joined(remainingByCurrency(debts))))
+            if !debts.isEmpty {
+                summary.append(ReportLine(label: L10n.Documents.remainingDebt,
+                                          value: MoneyFormatter.joined(remainingByCurrency(debts))))
+            }
             if !receivables.isEmpty {
                 summary.append(ReportLine(label: L10n.Documents.remainingReceivableTotal,
                                           value: MoneyFormatter.joined(remainingByCurrency(receivables))))
@@ -104,7 +106,9 @@ enum ReportBuilder {
                                       value: String(debts.count + receivables.count + savings.count)))
         }
 
-        let range = options.range
+        // Aralık yalnız satırları süzer; satır gösteren bölüm kapalıysa alt başlıkta anlamsız.
+        let showsRows = options.sections.contains(.schedule) || options.sections.contains(.history)
+        let range = showsRows ? options.range : nil
         return ReportData(
             title: L10n.Documents.reportTitle,
             generatedText: L10n.Documents.generated(fullDate(now, calendar)),

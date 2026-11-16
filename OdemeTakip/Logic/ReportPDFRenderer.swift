@@ -37,6 +37,20 @@ enum ReportPDFRenderer {
 
     // MARK: Layout
 
+    /// Test için: sayfa başına öğe türleri ("section", "row"…).
+    static func pageLayout(_ data: ReportData) -> [[String]] {
+        paginate(items(for: data)).map { $0.map(\.item.kind) }
+    }
+
+    private static let valueFont = UIFont.monospacedDigitSystemFont(ofSize: 11, weight: .semibold)
+
+    /// Etiket–değer satırında değer kendi genişliğini alır (en az %25, en çok %70); etikete kalanı kalır.
+    static func lineWidths(value: String) -> (label: CGFloat, value: CGFloat) {
+        let measured = ceil((value as NSString).size(withAttributes: [.font: valueFont]).width) + 4
+        let valueWidth = min(max(measured, contentWidth * 0.25), contentWidth * 0.7)
+        return (contentWidth - valueWidth - 12, valueWidth)
+    }
+
     private enum Item {
         case title(String, String)
         case section(String)
@@ -57,6 +71,20 @@ enum ReportPDFRenderer {
             case .spacer(let h): h
             }
         }
+
+        var kind: String {
+            switch self {
+            case .title: "title"
+            case .section: "section"
+            case .blockHeader: "blockHeader"
+            case .line: "line"
+            case .tableHeader: "tableHeader"
+            case .row: "row"
+            case .spacer: "spacer"
+            }
+        }
+
+        var isHeader: Bool { ["section", "blockHeader", "tableHeader"].contains(kind) }
     }
 
     private struct Placed {
@@ -101,14 +129,11 @@ enum ReportPDFRenderer {
         var pages: [[Placed]] = [[]]
         var y = top
         var lastHeader: Item?
-        for item in items {
+        for (index, item) in items.enumerated() {
             if case .tableHeader = item { lastHeader = item }
             if case .blockHeader = item { lastHeader = nil }
-            // Başlık sayfa sonunda yalnız kalmasın.
-            let keepWithNext: CGFloat = switch item {
-            case .section, .blockHeader, .tableHeader: 40
-            default: 0
-            }
+            // Başlık sayfa sonunda yalnız kalmasın: arkasındaki başlıklar ve ilk iki satırla aynı sayfada olsun.
+            let keepWithNext = item.isHeader ? keepHeight(items, after: index) : 0
             if y + item.height + keepWithNext > bottom {
                 pages.append([])
                 y = top
@@ -123,6 +148,20 @@ enum ReportPDFRenderer {
             y += item.height
         }
         return pages
+    }
+
+    /// Başlıktan sonra gelen başlık zinciri + ilk iki içerik satırının yüksekliği.
+    private static func keepHeight(_ items: [Item], after index: Int) -> CGFloat {
+        var height: CGFloat = 0
+        var content = 0
+        for item in items.dropFirst(index + 1) {
+            height += item.height
+            if !item.isHeader, item.kind != "spacer" {
+                content += 1
+                if content == 2 { break }
+            }
+        }
+        return height
     }
 
     // MARK: Drawing
@@ -167,10 +206,10 @@ enum ReportPDFRenderer {
             text(title, CGRect(x: margin, y: y + 6, width: contentWidth, height: 18), .systemFont(ofSize: 14, weight: .semibold), ink)
             text(subtitle, CGRect(x: margin, y: y + 24, width: contentWidth, height: 14), .systemFont(ofSize: 10), muted)
         case let .line(line):
-            let font = UIFont.systemFont(ofSize: 11)
-            text(line.label, CGRect(x: margin, y: y + 2, width: contentWidth * 0.6, height: 15), font, muted)
-            text(line.value, CGRect(x: margin + contentWidth * 0.4, y: y + 2, width: contentWidth * 0.6, height: 15),
-                 .monospacedDigitSystemFont(ofSize: 11, weight: .semibold), ink, align: .right)
+            let widths = lineWidths(value: line.value)
+            text(line.label, CGRect(x: margin, y: y + 2, width: widths.label, height: 15), .systemFont(ofSize: 11), muted)
+            text(line.value, CGRect(x: margin + contentWidth - widths.value, y: y + 2, width: widths.value, height: 15),
+                 valueFont, ink, align: .right)
         case let .tableHeader(columns):
             fill(UIColor(white: 0.95, alpha: 1), CGRect(x: margin, y: y, width: contentWidth, height: 20))
             drawCells(columns, y: y + 4, font: .systemFont(ofSize: 9, weight: .bold), colors: Array(repeating: muted, count: columns.count))

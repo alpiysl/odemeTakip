@@ -32,6 +32,16 @@ struct BankTests {
         #expect(Bank.detect(in: "Market alışverişi 250,00 TL") == nil)
     }
 
+    @Test func plainWordGarantiIsNotABank() {
+        #expect(Bank.detect(in: "Ürün 2 yıl garanti kapsamındadır") == nil)
+    }
+
+    @Test func headerBankBeatsBanksInTransactionLines() {
+        let text = (["AKBANK T.A.Ş.", "Hesap Özeti", "Müşteri No 123"] + Array(repeating: "Market 10,00 TL", count: 8)
+                    + ["GARANTI BBVA EFT 100,00", "GARANTI BBVA EFT 200,00"]).joined(separator: "\n")
+        #expect(Bank.detect(in: text) == .akbank)
+    }
+
     @Test func mostMentionedBankWins() {
         #expect(Bank.detect(in: "Garanti BBVA\nAkbank'a EFT\nGaranti müşteri hizmetleri") == .garanti)
     }

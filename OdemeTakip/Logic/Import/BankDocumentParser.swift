@@ -79,9 +79,8 @@ enum BankDocumentParser {
 
         var result = ParsedDebt()
         result.bank = Bank.detect(in: text)
-        result.currency = currency(in: lines)
-
-        var monthly = amount(after: Labels.monthly, excluding: Labels.monthlyExclusions, in: lines)
+        let monthlyMatch = amountMatch(after: Labels.monthly, excluding: Labels.monthlyExclusions, in: lines)
+        var monthly = monthlyMatch?.value
         var count = integer(after: Labels.count, excluding: Labels.countExclusions, in: lines)
         var first = date(after: Labels.firstDate, in: lines)
         let explicitPaid = integer(after: Labels.paid, excluding: [], in: lines)
@@ -98,7 +97,12 @@ enum BankDocumentParser {
         }
 
         let isCardStatement = lines.contains { line in Labels.cardMarkers.contains { line.contains($0) } }
-        if isCardStatement, let debt = amount(after: Labels.cardDebt, in: lines) {
+        let debtMatch = amountMatch(after: Labels.cardDebt, in: lines)
+        // Para birimi: önce ana tutarın yanındaki birim, yoksa belgenin genelinde en çok geçen.
+        let keyCurrency = isCardStatement ? (debtMatch?.currency ?? monthlyMatch?.currency) : (monthlyMatch?.currency ?? debtMatch?.currency)
+        result.currency = keyCurrency ?? currency(in: lines)
+
+        if isCardStatement, let debt = debtMatch?.value {
             // Ekstrede "gelecek dönem taksit tutarı" gibi satırlar olsa da bu bir kart borcu.
             result.kind = .cash
             result.totalDebt = debt
@@ -169,14 +173,35 @@ enum BankDocumentParser {
     }
 
     private static func amount(after labels: [String], excluding: [String] = [], in lines: [String]) -> Decimal? {
+        amountMatch(after: labels, excluding: excluding, in: lines)?.value
+    }
+
+    /// Etiketten sonraki ilk tutar ve hemen yanındaki para birimi ("4.812,35 TL", "4.812,35TL", "$500,00").
+    private static func amountMatch(after labels: [String], excluding: [String] = [],
+                                    in lines: [String]) -> (value: Decimal, currency: Currency?)? {
         for text in values(after: labels, excluding: excluding, in: lines) {
-            if let match = text.range(of: amountPattern, options: .regularExpression),
-               let value = AmountParser.parse(String(text[match])), value > 0 {
-                return value
-            }
+            guard let match = text.range(of: amountPattern, options: .regularExpression),
+                  let value = AmountParser.parse(String(text[match])), value > 0 else { continue }
+            let after = String(text[match.upperBound...].prefix(5))
+            let before = String(text[..<match.lowerBound].suffix(3))
+            return (value, currencyToken(in: after) ?? currencyToken(in: before))
         }
         return nil
     }
+
+    private static func currencyToken(in text: String) -> Currency? {
+        for (currency, pattern) in currencyPatterns where text.range(of: pattern, options: .regularExpression) != nil {
+            return currency
+        }
+        return nil
+    }
+
+    /// Para birimi işaretleri; harf kısaltmaları kelime olarak ("try" ≠ "country").
+    private static let currencyPatterns: [(Currency, String)] = [
+        (.TRY, #"(?<![a-z])(tl|try)(?![a-z])|₺"#),
+        (.USD, #"(?<![a-z])usd(?![a-z])|\$"#),
+        (.EUR, #"(?<![a-z])(eur|euro)(?![a-z])|€"#),
+    ]
 
     private static func integer(after labels: [String], excluding: [String], in lines: [String]) -> Int? {
         for text in values(after: labels, excluding: excluding, in: lines) {
@@ -200,7 +225,8 @@ enum BankDocumentParser {
     private static let namedDateRegex = try! NSRegularExpression(
         pattern: #"\d{1,2} ("# + monthNames.joined(separator: "|") + #") (\d{4})"#)
     private static let planRowRegex = try! NSRegularExpression(
-        pattern: #"^(\d{1,3}) +(\d{1,2}[./-]\d{1,2}[./-]\d{4}) +("# + amountPattern + ")")
+        pattern: #"^(\d{1,3}) +(\d{1,2}[./-]\d{1,2}[./-]\d{4}) +(.*)$"#)
+    private static let amountRegex = try! NSRegularExpression(pattern: amountPattern)
 
     /// Eşleşmenin gruplarını metin olarak döner; eşleşme yoksa nil.
     private static func groups(_ regex: NSRegularExpression, in text: String) -> [String]? {
@@ -225,33 +251,48 @@ enum BankDocumentParser {
         return nil
     }
 
-    /// "1 05/03/2026 2.150,00 …" satırlarından oluşan ödeme planı.
+    /// "1 05/03/2026 2.150,00 1.700,00 …" satırlarından oluşan ödeme planı.
+    /// Taksit sütunu: satırların çoğunda aynı kalan sütunlar içinde değeri en büyük olan
+    /// (sabit BSMV/masraf sütunundan büyük, her satırda değişen kalan anapara sütunundan farklı).
     private static func paymentPlan(in lines: [String]) -> (count: Int, first: YearMonth, monthly: Decimal)? {
-        var rows: [(number: Int, month: YearMonth, amount: Decimal)] = []
+        var rows: [(number: Int, month: YearMonth, amounts: [Decimal])] = []
         for line in lines {
             guard let g = groups(planRowRegex, in: line), let number = Int(g[1]),
-                  let month = firstDate(in: g[2]), let amount = AmountParser.parse(g[3]) else { continue }
-            rows.append((number, month, amount))
+                  let month = firstDate(in: g[2]) else { continue }
+            let rest = g[3] as NSString
+            let amounts = amountRegex.matches(in: g[3], range: NSRange(location: 0, length: rest.length))
+                .compactMap { AmountParser.parse(rest.substring(with: $0.range)) }
+            guard !amounts.isEmpty else { continue }
+            rows.append((number, month, amounts))
         }
         guard rows.count >= 2, let start = rows.min(by: { $0.number < $1.number }),
-              let count = rows.map(\.number).max() else { return nil }
-        var frequency: [Decimal: Int] = [:]
-        for row in rows { frequency[row.amount, default: 0] += 1 }
-        // En sık tutar; eşitlikte ilk satırınki (`max(by:)` eşitlikte ilkini tutar).
-        let monthly = rows.max { frequency[$0.amount, default: 0] < frequency[$1.amount, default: 0] }?.amount ?? start.amount
+              let count = rows.map(\.number).max(),
+              let columns = rows.map(\.amounts.count).min() else { return nil }
+
+        var best: (value: Decimal, frequency: Int)?
+        for column in 0..<columns {
+            var frequency: [Decimal: Int] = [:]
+            for row in rows { frequency[row.amounts[column], default: 0] += 1 }
+            // En sık değer; eşitlikte ilk satırınki.
+            guard let mode = rows.map({ $0.amounts[column] }).max(by: { frequency[$0]! < frequency[$1]! }),
+                  frequency[mode]! * 2 >= rows.count else { continue }
+            if best == nil || mode > best!.value { best = (mode, frequency[mode]!) }
+        }
+        let monthly = best?.value ?? start.amounts[0]
         return (count, start.month.adding(months: -(start.number - 1)), monthly)
     }
 
+    /// Belgede en çok geçen para birimi; yabancı para TL'den açıkça fazla değilse TL.
     private static func currency(in lines: [String]) -> Currency {
-        let text = " " + lines.joined(separator: " ") + " "
-        func count(_ tokens: [String]) -> Int {
-            tokens.reduce(0) { $0 + text.components(separatedBy: $1).count - 1 }
+        let text = lines.joined(separator: "\n")
+        func count(_ currency: Currency) -> Int {
+            guard let pattern = currencyPatterns.first(where: { $0.0 == currency })?.1,
+                  let regex = try? NSRegularExpression(pattern: pattern) else { return 0 }
+            return regex.numberOfMatches(in: text, range: NSRange(location: 0, length: (text as NSString).length))
         }
-        let tl = count([" tl", "try", "₺"])
-        let usd = count(["usd", "$"])
-        let eur = count(["eur", "€"])
-        if usd > tl, usd >= eur { return .USD }
-        if eur > tl { return .EUR }
+        let tl = count(.TRY), usd = count(.USD), eur = count(.EUR)
+        if usd > tl * 2, usd >= eur { return .USD }
+        if eur > tl * 2 { return .EUR }
         return .TRY
     }
 

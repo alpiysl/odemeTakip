@@ -14,6 +14,7 @@ struct ReportComposerView: View {
     @State private var to = YearMonth(date: .now).adding(months: 3)
     @State private var previewURL: URL?
     @State private var failed = false
+    @State private var generating = false
 
     init(payments: [Payment], assets: [Asset]) {
         self.payments = payments
@@ -58,10 +59,14 @@ struct ReportComposerView: View {
                     Button(L10n.Common.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(L10n.Documents.generate, action: generate)
-                        .fontWeight(.semibold)
-                        .disabled(!options.canGenerate)
-                        .accessibilityIdentifier("generateReport")
+                    if generating {
+                        ProgressView()
+                    } else {
+                        Button(L10n.Documents.generate, action: generate)
+                            .fontWeight(.semibold)
+                            .disabled(!options.canGenerate)
+                            .accessibilityIdentifier("generateReport")
+                    }
                 }
             }
             .navigationDestination(item: $previewURL) { url in
@@ -131,15 +136,23 @@ struct ReportComposerView: View {
         .listRowBackground(Theme.surface)
     }
 
+    /// Kayıtlar ana iş parçacığında değer kopyasına çevrilir; rapor ve PDF arka planda hazırlanır.
     private func generate() {
-        let data = ReportBuilder.build(payments: payments.map(ReportPaymentInput.init),
-                                       assets: assets.map(ReportAssetInput.init),
-                                       options: options)
+        let paymentInputs = payments.map(ReportPaymentInput.init)
+        let assetInputs = assets.map(ReportAssetInput.init)
+        let options = options
         let directory = FileManager.default.temporaryDirectory.appending(path: "Reports")
-        do {
-            previewURL = try ReportPDFRenderer.write(data, to: directory)
-        } catch {
-            failed = true
+        generating = true
+        Task {
+            defer { generating = false }
+            do {
+                previewURL = try await Task.detached(priority: .userInitiated) {
+                    let data = ReportBuilder.build(payments: paymentInputs, assets: assetInputs, options: options)
+                    return try ReportPDFRenderer.write(data, to: directory)
+                }.value
+            } catch {
+                failed = true
+            }
         }
     }
 }

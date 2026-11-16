@@ -64,25 +64,35 @@ struct Receipt: Equatable, Sendable {
             : MoneyFormatter.string(PaymentCalculator.remaining(snapshot), snapshot.currency)
     }
 
+    static let maxNameLength = 60
+
     /// "Dekont-Ev-Kira-2026-10-20.png": dosya sistemine ve mesajlaşma uygulamalarına uygun.
     static func fileName(name: String, date: Date, calendar: Calendar = AppCalendar.calendar) -> String {
         let c = calendar.dateComponents([.year, .month, .day], from: date)
         let stamp = String(format: "%04d-%02d-%02d", c.year ?? 0, c.month ?? 0, c.day ?? 0)
         let words = name.components(separatedBy: CharacterSet.alphanumerics.inverted).filter { !$0.isEmpty }
-        let parts = [L10n.Documents.fileNamePrefix] + words + [stamp]
+        // Uzun adlar mesajlaşma uygulamalarında kesilir; ad kısmı en çok 60 karakter.
+        var title = words.joined(separator: "-")
+        if title.count > maxNameLength {
+            title = String(title.prefix(maxNameLength)).trimmingCharacters(in: CharacterSet(charactersIn: "-"))
+        }
+        let parts = [L10n.Documents.fileNamePrefix] + (title.isEmpty ? [] : [title]) + [stamp]
         return parts.joined(separator: "-") + ".png"
     }
 }
 
 extension Receipt {
-    static func make(for entry: CashPayment, in payment: Payment) -> Receipt {
+    /// Kaydın tüm ödeme dekontları, kimliğe göre. Kalanlar tek geçişte, eskiden yeniye biriken toplamla.
+    static func all(in payment: Payment) -> [UUID: Receipt] {
+        let snapshot = payment.snapshot
         var paidThrough: Decimal = 0
-        for other in payment.sortedCashPayments.reversed() {
-            paidThrough += other.amount
-            if other.id == entry.id { break }
+        var result: [UUID: Receipt] = [:]
+        for entry in payment.sortedCashPayments.reversed() {
+            paidThrough += entry.amount
+            result[entry.id] = cashPayment(amount: entry.amount, date: entry.date, snapshot: snapshot,
+                                           name: payment.name, icon: payment.icon, paidThrough: paidThrough)
         }
-        return cashPayment(amount: entry.amount, date: entry.date, snapshot: payment.snapshot,
-                           name: payment.name, icon: payment.icon, paidThrough: paidThrough)
+        return result
     }
 
     static func make(installment index: Int, in payment: Payment) -> Receipt? {

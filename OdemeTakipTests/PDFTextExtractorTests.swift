@@ -44,6 +44,39 @@ struct PDFTextExtractorTests {
         #expect(parsed.monthlyAmount == Decimal(string: "4812.35"), "OCR text: \(text)")
     }
 
+    @Test func scannedPageWithDigitalFooterIsStillRead() async throws {
+        let image = UIGraphicsImageRenderer(size: CGSize(width: 595, height: 760)).image { ctx in
+            UIColor.white.setFill()
+            ctx.fill(CGRect(x: 0, y: 0, width: 595, height: 760))
+            drawLines(at: CGPoint(x: 40, y: 60))
+        }
+        let url = try writePDF("footer") { _ in
+            image.draw(in: CGRect(x: 0, y: 0, width: 595, height: 760))
+            NSAttributedString(string: "Bu belge elektronik ortamda oluşturulmuştur. Sayfa 1/1 www.banka.com.tr",
+                               attributes: [.font: UIFont.systemFont(ofSize: 8)]).draw(at: CGPoint(x: 40, y: 800))
+        }
+        let text = try await PDFTextExtractor.extractText(from: url)
+        let parsed = BankDocumentParser.parse(text, today: YearMonth(year: 2026, month: 11))
+        #expect(parsed.installmentCount == 36, "text: \(text)")
+    }
+
+    @Test func cancellingStopsOCR() async throws {
+        let image = UIGraphicsImageRenderer(size: CGSize(width: 595, height: 842)).image { ctx in
+            UIColor.white.setFill()
+            ctx.fill(CGRect(x: 0, y: 0, width: 595, height: 842))
+            drawLines(at: CGPoint(x: 40, y: 60))
+        }
+        let bounds = CGRect(x: 0, y: 0, width: 595, height: 842)
+        let data = UIGraphicsPDFRenderer(bounds: bounds).pdfData { context in
+            for _ in 0..<10 { context.beginPage(); image.draw(in: bounds) }
+        }
+        let url = FileManager.default.temporaryDirectory.appending(path: "many-\(UUID().uuidString).pdf")
+        try data.write(to: url)
+        let task = Task { try await PDFTextExtractor.extractText(from: url) }
+        task.cancel()
+        await #expect(throws: CancellationError.self) { try await task.value }
+    }
+
     @Test func notAPDFThrows() async throws {
         let url = FileManager.default.temporaryDirectory.appending(path: "not-\(UUID().uuidString).pdf")
         try Data("hello".utf8).write(to: url)

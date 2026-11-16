@@ -43,6 +43,24 @@ struct ReportPDFRendererTests {
         #expect(pdf.string?.contains("120") == true)
     }
 
+    @Test(arguments: Array(1...45))
+    func headersNeverEndAPage(installments: Int) {
+        let pages = ReportPDFRenderer.pageLayout(data(installments: installments))
+        #expect(!pages.isEmpty)
+        for page in pages.dropLast() {
+            let last = page.last { $0 != "spacer" }
+            #expect(!["section", "blockHeader", "tableHeader"].contains(last ?? ""), "\(installments): \(page.suffix(4))")
+        }
+    }
+
+    @Test func longValuesGetTheRoomTheyNeed() {
+        let short = ReportPDFRenderer.lineWidths(value: "₺500")
+        let long = ReportPDFRenderer.lineWidths(value: "₺1.234.567,89 + $12.345,67 + €9.876,54 + 12 çeyrek")
+        #expect(long.value > short.value)
+        #expect(long.label + long.value <= ReportPDFRenderer.pageSize.width - 80)
+        #expect(short.label > long.label)
+    }
+
     @Test func fileNameIsDated() {
         #expect(ReportPDFRenderer.fileName(date: now) == "Rapor-2026-11-16.pdf")
     }

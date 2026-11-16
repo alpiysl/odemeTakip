@@ -11,13 +11,16 @@ enum PDFTextExtractor {
         case wrongPassword
     }
 
-    /// Bundan kısa gömülü metin, taranmış sayfa sayılır.
-    private static let minimumTextLength = 40
+    /// Bundan kısa gömülü metni olan sayfa taranmış sayılır (dijital altbilgi/filigran bu kadar uzun olmaz).
+    private static let minimumPageTextLength = 200
     /// OCR en fazla bu kadar sayfaya uygulanır.
     private static let maxOCRPages = 10
 
+    /// Sayfa sayfa okur: metni yeterli sayfa olduğu gibi, az metinli sayfa OCR ile.
+    /// Çağıran görev iptal edilirse OCR durur ve `CancellationError` atılır.
     static func extractText(from url: URL, password: String? = nil) async throws -> String {
-        try await Task.detached(priority: .userInitiated) {
+        try Task.checkCancellation()
+        let work = Task.detached(priority: .userInitiated) { () throws -> String in
             guard let document = PDFDocument(url: url) else { throw ExtractError.unreadable }
             // Banka e-ekstreleri genellikle şifreli gelir (çoğunlukla TC kimlik no / doğum tarihi).
             if document.isLocked {
@@ -25,14 +28,28 @@ enum PDFTextExtractor {
                 guard document.unlock(withPassword: password) else { throw ExtractError.wrongPassword }
             }
             guard document.pageCount > 0 else { throw ExtractError.unreadable }
-            let embedded = document.string ?? ""
-            if embedded.trimmingCharacters(in: .whitespacesAndNewlines).count >= minimumTextLength {
-                return embedded
+            var parts: [String] = []
+            var ocrPages = 0
+            for index in 0..<document.pageCount {
+                try Task.checkCancellation()
+                guard let page = document.page(at: index) else { continue }
+                let embedded = page.string ?? ""
+                if embedded.trimmingCharacters(in: .whitespacesAndNewlines).count >= minimumPageTextLength
+                    || ocrPages >= maxOCRPages {
+                    parts.append(embedded)
+                    continue
+                }
+                ocrPages += 1
+                let recognized = try autoreleasepool { try recognizeText(on: page) }
+                parts.append([embedded, recognized].filter { !$0.isEmpty }.joined(separator: "\n"))
             }
-            let pages = (0..<min(document.pageCount, maxOCRPages)).compactMap { document.page(at: $0) }
-            let recognized = try pages.map(recognizeText).joined(separator: "\n")
-            return recognized.isEmpty ? embedded : recognized
-        }.value
+            return parts.joined(separator: "\n")
+        }
+        return try await withTaskCancellationHandler {
+            try await work.value
+        } onCancel: {
+            work.cancel()
+        }
     }
 
     private static func recognizeText(on page: PDFPage) throws -> String {

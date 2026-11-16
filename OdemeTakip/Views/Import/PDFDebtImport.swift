@@ -14,6 +14,8 @@ struct PDFDebtImportModifier: ViewModifier {
     @State private var lockedFile: URL?
     @State private var password = ""
     @State private var wrongPassword = false
+    @State private var queue = ImportQueue()
+    @State private var readTask: Task<Void, Never>?
 
     func body(content: Content) -> some View {
         content
@@ -27,18 +29,22 @@ struct PDFDebtImportModifier: ViewModifier {
             }
             .overlay {
                 if reading {
-                    ProgressView(L10n.Documents.importReading)
-                        .padding(20)
-                        .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                        .accessibilityIdentifier("importProgress")
+                    VStack(spacing: 14) {
+                        ProgressView(L10n.Documents.importReading)
+                        Button(L10n.Common.cancel, role: .cancel) { readTask?.cancel() }
+                            .font(.subheadline.weight(.semibold))
+                    }
+                    .padding(20)
+                    .background(.regularMaterial, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .accessibilityIdentifier("importProgress")
                 }
             }
-            .sheet(item: $imported) { item in
+            .sheet(item: $imported, onDismiss: next) { item in
                 PaymentFormView(mode: .createFromImport(item.parsed))
             }
             .alert(L10n.Documents.passwordTitle, isPresented: Binding(
                 get: { lockedFile != nil },
-                set: { if !$0, let file = lockedFile { lockedFile = nil; discard(file) } })) {
+                set: { if !$0, let file = lockedFile { lockedFile = nil; discard(file); next() } })) {
                 SecureField(L10n.Documents.password, text: $password)
                 Button(L10n.Documents.open) {
                     guard let file = lockedFile else { return }
@@ -50,14 +56,19 @@ struct PDFDebtImportModifier: ViewModifier {
                 Text(wrongPassword ? L10n.Documents.wrongPassword : L10n.Documents.passwordMessage)
             }
             .alert(L10n.Documents.importUnreadable, isPresented: $unreadable) {
-                Button(L10n.Common.close, role: .cancel) {}
+                Button(L10n.Common.close, role: .cancel) { next() }
             } message: {
                 Text(L10n.Documents.importUnreadableMessage)
             }
     }
 
+    /// Meşgulse (okuma, parola sorusu ya da açık form) dosya sıraya girer; o iş bitince başlar.
     private func start(_ url: URL) {
-        guard !reading, lockedFile == nil else { return }
+        guard let url = queue.request(url) else { return }
+        begin(url)
+    }
+
+    private func begin(_ url: URL) {
         do {
             read(try ImportFile.copyToTemporary(url), password: nil)
         } catch {
@@ -65,10 +76,15 @@ struct PDFDebtImportModifier: ViewModifier {
         }
     }
 
+    /// Mevcut içe aktarma bitti; sırada bekleyen varsa başlat.
+    private func next() {
+        if let url = queue.finished() { begin(url) }
+    }
+
     /// Metni çıkarır ve ayrıştırır (ana iş parçacığı dışında); şifreliyse parola sorar.
     private func read(_ file: URL, password: String?) {
         reading = true
-        Task {
+        readTask = Task {
             defer { reading = false }
             do {
                 let text = try await PDFTextExtractor.extractText(from: file, password: password)
@@ -85,6 +101,9 @@ struct PDFDebtImportModifier: ViewModifier {
                 self.password = ""
                 wrongPassword = true
                 lockedFile = file
+            } catch is CancellationError {
+                discard(file)
+                next()
             } catch {
                 discard(file)
                 unreadable = true
