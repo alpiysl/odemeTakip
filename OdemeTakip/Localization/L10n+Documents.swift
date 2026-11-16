@@ -54,6 +54,12 @@ extension L10n {
         /// "Sayfa 2/3"
         static func page(_ number: Int, _ count: Int) -> String { s("documents.report.page", number, count) }
         static var fileNamePrefixReport: String { s("documents.report.fileNamePrefix") }
+        static var columnNote: String { s("documents.report.columnNote") }
+        static var noteCorrected: String { s("documents.report.noteCorrected") }
+        /// "Düzeltildi · önceki ₺2.000"
+        static func noteCorrectedFrom(_ amount: String) -> String { s("documents.report.noteCorrectedFrom", amount) }
+        static var noteRemoved: String { s("documents.report.noteRemoved") }
+        static var reportForRecord: String { s("documents.report.forRecord") }
         static var createReport: String { s("documents.report.create") }
         static var sections: String { s("documents.report.sections") }
         static var sectionsFooter: String { s("documents.report.sectionsFooter") }

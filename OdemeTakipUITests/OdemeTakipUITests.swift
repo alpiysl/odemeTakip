@@ -324,6 +324,67 @@ final class OdemeTakipUITests: XCTestCase {
         XCTAssertTrue(app.buttons["mode-debt"].exists)
     }
 
+    func testEditCashPaymentFixesWrongAmount() {
+        let app = launch()
+        XCTAssertTrue(text(app, "Ahmet'e borç").waitForExistence(timeout: 5))
+        text(app, "Ahmet'e borç").tap()
+        let row = app.buttons.matching(NSPredicate(format: "label CONTAINS '₺10.000'")).firstMatch
+        XCTAssertTrue(row.waitForExistence(timeout: 3))
+        row.tap()
+        XCTAssertTrue(app.navigationBars["Ödemeyi düzenle"].waitForExistence(timeout: 3))
+        XCTAssertTrue(app.descendants(matching: .any)["editNote"].exists)
+        let field = app.textFields.firstMatch
+        XCTAssertEqual(field.value as? String, "10000")
+        // Tutarı seçip üzerine yaz (imleç konumuna bağlı kalmasın).
+        field.doubleTap()
+        field.typeText("-5000")
+        XCTAssertEqual(field.value as? String, "5000")
+        app.buttons["Kaydet"].tap()
+        XCTAssertTrue(text(app, "₺55.000").waitForExistence(timeout: 3))
+    }
+
+    func testDeleteCashPaymentFromEditSheet() {
+        let app = launch()
+        XCTAssertTrue(text(app, "Ahmet'e borç").waitForExistence(timeout: 5))
+        text(app, "Ahmet'e borç").tap()
+        app.buttons.matching(NSPredicate(format: "label CONTAINS '₺10.000'")).firstMatch.tap()
+        app.buttons["Ödemeyi sil"].tap()
+        app.buttons["Sil"].firstMatch.tap()
+        XCTAssertTrue(text(app, "₺60.000").waitForExistence(timeout: 3))
+    }
+
+    func testDeletedPaymentStaysInPersonReport() {
+        let app = launch()
+        XCTAssertTrue(text(app, "Ahmet'e borç").waitForExistence(timeout: 5))
+        text(app, "Ahmet'e borç").tap()
+        app.buttons.matching(NSPredicate(format: "label CONTAINS '₺10.000'")).firstMatch.tap()
+        app.buttons["Ödemeyi sil"].tap()
+        app.buttons["Sil"].firstMatch.tap()
+        // Düzenleme sayfası kapanıp kalan güncellensin.
+        XCTAssertTrue(text(app, "₺60.000").waitForExistence(timeout: 5))
+        app.buttons["recordReportButton"].tap()
+        XCTAssertTrue(app.buttons["generateReport"].waitForExistence(timeout: 5))
+        app.buttons["generateReport"].tap()
+        // PDF içeriği birim testlerinde (ReportBuilder, PaymentModel) doğrulanıyor; burada önizleme açılıyor mu.
+        XCTAssertTrue(app.navigationBars.matching(NSPredicate(format: "identifier BEGINSWITH 'Rapor-'")).firstMatch
+            .waitForExistence(timeout: 5))
+    }
+
+    func testRecordReportFromDetailPage() {
+        let app = launch()
+        XCTAssertTrue(text(app, "Konut Kredisi").waitForExistence(timeout: 5))
+        text(app, "Konut Kredisi").tap()
+        let report = app.buttons["recordReportButton"]
+        XCTAssertTrue(report.waitForExistence(timeout: 3))
+        report.tap()
+        XCTAssertTrue(app.navigationBars["Konut Kredisi"].waitForExistence(timeout: 3))
+        XCTAssertFalse(app.staticTexts["Kayıtlar"].exists)
+        XCTAssertFalse(app.switches["Birikimler"].exists)
+        app.buttons["generateReport"].tap()
+        XCTAssertTrue(app.navigationBars.matching(NSPredicate(format: "identifier BEGINSWITH 'Rapor-'")).firstMatch
+            .waitForExistence(timeout: 5))
+    }
+
     func testAddMenuOffersPDFImport() {
         let app = launch()
         XCTAssertTrue(app.buttons["Yeni ödeme"].waitForExistence(timeout: 5))

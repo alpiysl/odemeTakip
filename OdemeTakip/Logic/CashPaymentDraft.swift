@@ -13,6 +13,13 @@ struct CashPaymentDraft: Equatable {
         self.isReceivable = isReceivable
     }
 
+    /// Kayıtlı ödemeyi düzenleme: üst sınır, kalan + bu ödemenin kendisi (ödeme geri alınmış gibi).
+    init(editing amount: Decimal, date: Date, remaining: Decimal, currency: Currency, isReceivable: Bool = false) {
+        self.init(remaining: remaining + amount, currency: currency, isReceivable: isReceivable)
+        self.amountText = AmountParser.editingText(amount)
+        self.date = date
+    }
+
     var amount: Decimal? {
         guard let value = AmountParser.parse(amountText), value > 0, value <= remaining else { return nil }
         return value

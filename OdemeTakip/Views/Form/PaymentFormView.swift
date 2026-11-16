@@ -173,6 +173,10 @@ struct PaymentFormView: View {
         LabeledContent(title) {
             TextField("0", text: text)
                 .keyboardType(decimal ? .decimalPad : .numberPad)
+                .onChange(of: text.wrappedValue) { _, value in
+                    let clean = AmountParser.sanitized(value, allowsDecimal: decimal)
+                    if clean != value { text.wrappedValue = clean }
+                }
                 .focused($focusedField, equals: title)
                 .multilineTextAlignment(.trailing)
                 .monospacedDigit()

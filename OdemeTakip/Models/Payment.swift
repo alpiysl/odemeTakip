@@ -46,7 +46,12 @@ final class Payment {
     var isLive: Bool { !isDeleted && modelContext != nil }
 
     private var liveCashPayments: [CashPayment] {
-        (cashPayments ?? []).filter { !$0.isDeleted }
+        (cashPayments ?? []).filter { !$0.isDeleted && $0.removedAt == nil }
+    }
+
+    /// Silinmiş ödemeler, yeniden eskiye; sadece raporda "silindi" notu için.
+    var removedCashPayments: [CashPayment] {
+        (cashPayments ?? []).filter { !$0.isDeleted && $0.removedAt != nil }.sorted { $0.date > $1.date }
     }
 
     var sortedCashPayments: [CashPayment] {
@@ -130,7 +135,16 @@ final class Payment {
         entry.payment = self
     }
 
+    /// Yanlış girilen ödemenin tutarını ve tarihini düzeltir.
+    func updateCashPayment(_ entry: CashPayment, amount: Decimal, date: Date) {
+        if entry.originalAmount == nil, entry.amount != amount { entry.originalAmount = entry.amount }
+        entry.amount = amount
+        entry.date = date
+        entry.correctedAt = .now
+    }
+
+    /// Ödemeyi toplamlardan çıkarır ama kaydı tutar: raporda "silindi" olarak görünür.
     func removeCashPayment(_ entry: CashPayment) {
-        modelContext?.delete(entry)
+        entry.removedAt = .now
     }
 }

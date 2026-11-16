@@ -10,7 +10,9 @@ struct CashDetailView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @State private var addingPayment = false
+    @State private var editingEntry: CashPayment?
     @State private var editing = false
+    @State private var showingReport = false
     @State private var deleteRequested = false
 
     var body: some View {
@@ -37,6 +39,7 @@ struct CashDetailView: View {
                         .listRowBackground(Color.clear)
                 }
                 ForEach(entries) { entry in
+                    Button { editingEntry = entry } label: {
                     HStack(spacing: 12) {
                         ZStack {
                             Circle().fill(Theme.paid)
@@ -52,10 +55,14 @@ struct CashDetailView: View {
                             .monospacedDigit()
                             .foregroundStyle(Theme.paid)
                     }
+                    .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
                     .font(.subheadline)
                     .listRowBackground(Color.clear)
                     .listRowSeparatorTint(Theme.divider)
                     .contextMenu {
+                        Button(L10n.Common.edit, systemImage: "pencil") { editingEntry = entry }
                         if let receipt = receipts[entry.id] { ShareReceiptLink(receipt: receipt) }
                     }
                     .swipeActions(edge: .leading) {
@@ -120,10 +127,16 @@ struct CashDetailView: View {
         .background(Theme.background.ignoresSafeArea())
         .recordTitle(icon: payment.icon, name: payment.name)
         .toolbar {
-            Button(L10n.Common.edit) { editing = true }
+            RecordToolbar(onReport: { showingReport = true }, onEdit: { editing = true })
+        }
+        .sheet(isPresented: $showingReport) {
+            ReportComposerView(single: payment)
         }
         .sheet(isPresented: $addingPayment) {
             AddCashPaymentView(payment: payment)
+        }
+        .sheet(item: $editingEntry) { entry in
+            AddCashPaymentView(payment: payment, editing: entry)
         }
         .sheet(isPresented: $editing, onDismiss: handleSheetDismiss) {
             PaymentFormView(mode: .edit(payment), onDeleteRequested: { deleteRequested = true })

@@ -24,6 +24,12 @@ enum AmountParser {
         return Decimal(string: value, locale: Locale(identifier: "en_US_POSIX"))
     }
 
+    /// Alana yazılabilen karakterler: rakam ve (ondalıklıysa) "." ile ",". Eksi işareti, harf ve
+    /// para simgeleri atılır; yapıştırılan "-500" de "500" olur. Tutarlar hiçbir zaman negatif girilemez.
+    static func sanitized(_ text: String, allowsDecimal: Bool = true) -> String {
+        String(text.filter { $0.isASCII && ($0.isNumber || (allowsDecimal && ($0 == "." || $0 == ","))) })
+    }
+
     /// Yazımı süren ondalık ("1500,") — henüz hata sayılmaz.
     static func isIncomplete(_ text: String) -> Bool {
         let trimmed = text.trimmingCharacters(in: .whitespaces)

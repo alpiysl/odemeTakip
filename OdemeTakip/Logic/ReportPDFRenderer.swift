@@ -214,8 +214,9 @@ enum ReportPDFRenderer {
             fill(UIColor(white: 0.95, alpha: 1), CGRect(x: margin, y: y, width: contentWidth, height: 20))
             drawCells(columns, y: y + 4, font: .systemFont(ofSize: 9, weight: .bold), colors: Array(repeating: muted, count: columns.count))
         case let .row(row, count):
-            var colors = Array(repeating: ink, count: count)
+            var colors = Array(repeating: row.isRemoved ? muted : ink, count: count)
             if row.isPaid, count == 4 { colors[3] = paidColor }
+            if count == 3, !row.isRemoved { colors[2] = muted }
             drawCells(row.cells, y: y + 2, font: .monospacedDigitSystemFont(ofSize: 10, weight: .regular), colors: colors)
             fill(rule, CGRect(x: margin, y: y + 17.5, width: contentWidth, height: 0.5))
         case .spacer:
@@ -225,9 +226,11 @@ enum ReportPDFRenderer {
 
     /// 4 sütun: No | Ay | Tutar | Durum; 2 sütun: Tarih | Tutar.
     private static func drawCells(_ cells: [String], y: CGFloat, font: UIFont, colors: [UIColor]) {
-        let layout: [(CGFloat, CGFloat, NSTextAlignment)] = cells.count == 4
-            ? [(0, 0.1, .left), (0.1, 0.4, .left), (0.5, 0.25, .right), (0.78, 0.22, .left)]
-            : [(0, 0.6, .left), (0.6, 0.4, .right)]
+        let layout: [(CGFloat, CGFloat, NSTextAlignment)] = switch cells.count {
+        case 4: [(0, 0.1, .left), (0.1, 0.4, .left), (0.5, 0.25, .right), (0.78, 0.22, .left)]
+        case 3: [(0, 0.28, .left), (0.28, 0.24, .right), (0.56, 0.44, .left)]
+        default: [(0, 0.6, .left), (0.6, 0.4, .right)]
+        }
         for (index, cell) in cells.enumerated() where index < layout.count {
             let (start, width, align) = layout[index]
             let rect = CGRect(x: margin + 6 + contentWidth * start, y: y,
