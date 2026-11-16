@@ -6,21 +6,6 @@
 	<string>tr</string>
 	<key>CFBundleDisplayName</key>
 	<string>Varlık Takip</string>
-	<key>CFBundleDocumentTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeName</key>
-			<string>PDF</string>
-			<key>CFBundleTypeRole</key>
-			<string>Viewer</string>
-			<key>LSHandlerRank</key>
-			<string>Alternate</string>
-			<key>LSItemContentTypes</key>
-			<array>
-				<string>com.adobe.pdf</string>
-			</array>
-		</dict>
-	</array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -37,8 +22,8 @@
 	<string>1</string>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-	<key>LSSupportsOpeningDocumentsInPlace</key>
-	<false/>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Paylaştığın dekont görselini Fotoğraflar'a kaydedebilmek için.</string>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>

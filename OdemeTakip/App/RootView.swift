@@ -80,7 +80,7 @@ struct RootView: View {
         }
         .pdfDebtImport(isPickerPresented: $showingPDFPicker, incomingURL: $incomingPDF)
         .onOpenURL { url in
-            guard url.isFileURL, Self.isPDF(url) else { return }
+            guard FeatureFlags.pdfImport, url.isFileURL, Self.isPDF(url) else { return }
             receivePDF(url)
         }
         .sheet(isPresented: $showingReport) {
@@ -91,7 +91,7 @@ struct RootView: View {
             if sessionMode == nil { sessionMode = HomeMode(rawValue: homeModeRaw) }
             #if DEBUG
             SampleData.insertIfRequested(into: context)
-            if let url = SampleData.samplePDFIfRequested() { receivePDF(url) }
+            if FeatureFlags.pdfImport, let url = SampleData.samplePDFIfRequested() { receivePDF(url) }
             #endif
             await rateStore.refreshIfNeeded(force: true)
             notificationsAllowed = await authorizeNotificationsIfNeeded()

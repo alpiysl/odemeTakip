@@ -66,7 +66,6 @@ final class OdemeTakipUITests: XCTestCase {
         let app = launch()
         XCTAssertTrue(app.buttons["Yeni ödeme"].waitForExistence(timeout: 5))
         app.buttons["Yeni ödeme"].tap()
-        app.buttons["Bilgileri elle gir"].tap()
 
         XCTAssertFalse(app.buttons["Kaydet"].isEnabled)
         app.textFields["Ad"].tap()
@@ -238,6 +237,15 @@ final class OdemeTakipUITests: XCTestCase {
 
     // MARK: Dekont, rapor, PDF'ten borç
 
+    /// 1.0: PDF'ten ekleme kapalı; alt buton doğrudan formu açar.
+    func testPDFImportIsHiddenInThisVersion() {
+        let app = launch()
+        XCTAssertTrue(app.buttons["Yeni ödeme"].waitForExistence(timeout: 5))
+        app.buttons["Yeni ödeme"].tap()
+        XCTAssertFalse(app.buttons["PDF'ten ekle"].exists)
+        XCTAssertTrue(app.textFields["Ad"].waitForExistence(timeout: 3))
+    }
+
     func testShareReceiptFromCashPaymentRow() {
         let app = launch()
         XCTAssertTrue(text(app, "Ahmet'e borç").waitForExistence(timeout: 5))
@@ -293,7 +301,7 @@ final class OdemeTakipUITests: XCTestCase {
     }
 
     func testImportedPDFPrefillsCreditForm() {
-        let app = launch(["-importSamplePDF"])
+        let app = launch(["-importSamplePDF", "-enablePDFImport"])
         XCTAssertTrue(app.descendants(matching: .any)["importBanner"].waitForExistence(timeout: 10))
         XCTAssertTrue(app.textFields["Ad"].value as? String == "Garanti BBVA kredisi")
         XCTAssertTrue(app.textFields["4812,35"].exists || app.textFields.matching(NSPredicate(format: "value == '4812,35'")).count == 1)
@@ -304,7 +312,7 @@ final class OdemeTakipUITests: XCTestCase {
     }
 
     func testLockedPDFAsksForPasswordThenPrefills() {
-        let app = launch(["-importLockedSamplePDF"])
+        let app = launch(["-importLockedSamplePDF", "-enablePDFImport"])
         let alert = app.alerts["PDF şifreli"]
         XCTAssertTrue(alert.waitForExistence(timeout: 10))
         alert.secureTextFields.firstMatch.typeText("0000")
@@ -317,7 +325,7 @@ final class OdemeTakipUITests: XCTestCase {
     }
 
     func testImportDuringOnboardingSkipsOnboardingAfterSave() {
-        let app = launch(["-importSamplePDF"], mode: "none")
+        let app = launch(["-importSamplePDF", "-enablePDFImport"], mode: "none")
         XCTAssertTrue(app.descendants(matching: .any)["importBanner"].waitForExistence(timeout: 10))
         app.buttons["Kaydet"].tap()
         XCTAssertTrue(text(app, "Garanti BBVA kredisi").waitForExistence(timeout: 5))
@@ -386,7 +394,7 @@ final class OdemeTakipUITests: XCTestCase {
     }
 
     func testAddMenuOffersPDFImport() {
-        let app = launch()
+        let app = launch(["-enablePDFImport"])
         XCTAssertTrue(app.buttons["Yeni ödeme"].waitForExistence(timeout: 5))
         app.buttons["Yeni ödeme"].tap()
         XCTAssertTrue(app.buttons["PDF'ten ekle"].waitForExistence(timeout: 3))

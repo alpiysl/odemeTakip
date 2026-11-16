@@ -122,7 +122,13 @@ private struct ImportedDebt: Identifiable {
 }
 
 extension View {
+    /// Özellik kapalıyken (1.0) hiçbir şey eklemez.
+    @ViewBuilder
     func pdfDebtImport(isPickerPresented: Binding<Bool>, incomingURL: Binding<URL?>) -> some View {
-        modifier(PDFDebtImportModifier(isPickerPresented: isPickerPresented, incomingURL: incomingURL))
+        if FeatureFlags.pdfImport {
+            modifier(PDFDebtImportModifier(isPickerPresented: isPickerPresented, incomingURL: incomingURL))
+        } else {
+            self
+        }
     }
 }
