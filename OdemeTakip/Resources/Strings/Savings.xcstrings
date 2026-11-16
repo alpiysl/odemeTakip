@@ -1,0 +1,358 @@
+{
+  "sourceLanguage": "tr",
+  "strings": {
+    "savings.addAsset": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Birikim ekle"
+          }
+        }
+      }
+    },
+    "savings.addReceivable": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alacak ekle"
+          }
+        }
+      }
+    },
+    "savings.available": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mevcut: %@"
+          }
+        }
+      }
+    },
+    "savings.deleteConfirmMessage": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tüm hareket geçmişi de silinir."
+          }
+        }
+      }
+    },
+    "savings.deleteConfirmTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu birikim silinsin mi?"
+          }
+        }
+      }
+    },
+    "savings.deleteRecord": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kaydı sil"
+          }
+        }
+      }
+    },
+    "savings.depositButton": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ Ekle"
+          }
+        }
+      }
+    },
+    "savings.depositTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ekle"
+          }
+        }
+      }
+    },
+    "savings.emptyMessage": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Döviz, altın veya TL birikimini ya da sana olan alacakları ekle."
+          }
+        }
+      }
+    },
+    "savings.emptyTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Henüz birikim yok"
+          }
+        }
+      }
+    },
+    "savings.filterAssets": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Birikim"
+          }
+        }
+      }
+    },
+    "savings.filterReceivables": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alacak"
+          }
+        }
+      }
+    },
+    "savings.goldSubtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ · %2$@"
+          }
+        }
+      }
+    },
+    "savings.kind": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tür"
+          }
+        }
+      }
+    },
+    "savings.legendReceivables": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alacak"
+          }
+        }
+      }
+    },
+    "savings.legendSavings": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Birikim"
+          }
+        }
+      }
+    },
+    "savings.liraSavings": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Türk lirası birikim"
+          }
+        }
+      }
+    },
+    "savings.liraValue": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TL değeri"
+          }
+        }
+      }
+    },
+    "savings.movementDay": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "· %@"
+          }
+        }
+      }
+    },
+    "savings.movementsHeader": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hareketler"
+          }
+        }
+      }
+    },
+    "savings.newAsset": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yeni birikim"
+          }
+        }
+      }
+    },
+    "savings.newRecord": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yeni kayıt"
+          }
+        }
+      }
+    },
+    "savings.noMovements": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Henüz hareket yok"
+          }
+        }
+      }
+    },
+    "savings.priceSelling": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ = %2$@ (satış)"
+          }
+        }
+      }
+    },
+    "savings.priceWaiting": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ — fiyat bekleniyor"
+          }
+        }
+      }
+    },
+    "savings.quantity": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Miktar"
+          }
+        }
+      }
+    },
+    "savings.quantityWithUnit": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Miktar (%@)"
+          }
+        }
+      }
+    },
+    "savings.rateWaiting": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kur bekleniyor"
+          }
+        }
+      }
+    },
+    "savings.totalWealth": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toplam varlık"
+          }
+        }
+      }
+    },
+    "savings.withdrawAll": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tümünü çıkar"
+          }
+        }
+      }
+    },
+    "savings.withdrawButton": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "− Çıkar"
+          }
+        }
+      }
+    },
+    "savings.withdrawTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çıkar"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

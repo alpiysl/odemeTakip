@@ -7,10 +7,10 @@ struct MonthPicker: View {
     var body: some View {
         LabeledContent(title) {
             HStack(spacing: 4) {
-                Picker("Ay", selection: monthBinding) {
+                Picker(L10n.Forms.month, selection: monthBinding) {
                     ForEach(1...12, id: \.self) { Text(TurkishMonths.names[$0 - 1]).tag($0) }
                 }
-                Picker("Yıl", selection: yearBinding) {
+                Picker(L10n.Forms.year, selection: yearBinding) {
                     ForEach(years, id: \.self) { Text(String($0)).tag($0) }
                 }
             }

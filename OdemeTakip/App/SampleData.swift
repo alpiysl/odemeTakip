@@ -22,11 +22,11 @@ enum SampleData {
         let now = YearMonth(date: .now)
 
         var home = PaymentDraft(firstMonth: now.adding(months: -13))
-        home.kind = .credit; home.name = "Konut Kredisi"; home.icon = "🏠"
+        home.kind = .credit; home.name = "Konut Kredisi"; home.icon = Bank.isbank.iconValue
         home.installmentCountText = "36"; home.monthlyAmountText = "15000"; home.prepaidCountText = "13"
 
         var car = PaymentDraft(firstMonth: now.adding(months: -8))
-        car.kind = .credit; car.name = "Araç Kredisi"; car.icon = "🚗"
+        car.kind = .credit; car.name = "Araç Kredisi"; car.icon = Bank.garanti.iconValue
         car.installmentCountText = "16"; car.monthlyAmountText = "7500"; car.prepaidCountText = "8"
 
         var friend = PaymentDraft(firstMonth: now)
@@ -113,6 +113,30 @@ enum SampleData {
         } else {
             UserDefaults.standard.set(value, forKey: HomeMode.storageKey)
         }
+    }
+
+    /// `-importSamplePDF`: örnek banka kredisi PDF'i üretir; açılışta "Birlikte aç" ile gelmiş gibi içe aktarılır.
+    /// `-importLockedSamplePDF`: aynısı, "1234" şifreli.
+    static func samplePDFIfRequested() -> URL? {
+        let args = ProcessInfo.processInfo.arguments
+        let locked = args.contains("-importLockedSamplePDF")
+        guard locked || args.contains("-importSamplePDF") else { return nil }
+        let format = UIGraphicsPDFRendererFormat()
+        if locked {
+            format.documentInfo = [kCGPDFContextUserPassword as String: "1234",
+                                   kCGPDFContextOwnerPassword as String: "1234"]
+        }
+        let lines = ["GARANTİ BBVA", "İhtiyaç Kredisi Bilgilendirme", "Kredi Tutarı: 100.000,00 TL",
+                     "Taksit Tutarı: 4.812,35 TL", "Taksit Sayısı: 36", "İlk Taksit Tarihi: 15.01.2026"]
+        let data = UIGraphicsPDFRenderer(bounds: CGRect(x: 0, y: 0, width: 595, height: 842), format: format).pdfData { context in
+            context.beginPage()
+            for (index, line) in lines.enumerated() {
+                NSAttributedString(string: line, attributes: [.font: UIFont.systemFont(ofSize: 18)])
+                    .draw(at: CGPoint(x: 40, y: 60 + CGFloat(index) * 32))
+            }
+        }
+        let url = FileManager.default.temporaryDirectory.appending(path: "sample-loan.pdf")
+        return (try? data.write(to: url)) != nil ? url : nil
     }
 
     /// `-debugScreen <credit|cash|settings|form>` argümanının değeri.

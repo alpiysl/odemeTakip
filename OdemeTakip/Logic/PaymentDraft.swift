@@ -59,27 +59,27 @@ struct PaymentDraft: Equatable {
     }
 
     var validationMessage: String? {
-        if trimmedName.isEmpty { return "Ad gerekli" }
+        if trimmedName.isEmpty { return L10n.Validation.nameRequired }
         switch kind {
         case .credit:
             guard let count = Int(Self.trim(installmentCountText)),
                   (1...Self.maxInstallments).contains(count) else {
-                return "Taksit sayısı 1–\(Self.maxInstallments) arası olmalı"
+                return L10n.Validation.installmentRange(Self.maxInstallments)
             }
             if count < minimumInstallmentCount {
-                return "Taksit sayısı ödenmiş taksitlerden (\(minimumInstallmentCount)) az olamaz"
+                return L10n.Validation.installmentBelowPaid(minimumInstallmentCount)
             }
-            if monthlyAmount == nil { return "Geçerli bir aylık tutar gir" }
-            if prepaidCount == nil { return "Önceden ödenen taksit 0–\(count) arası olmalı" }
+            if monthlyAmount == nil { return L10n.Validation.invalidMonthlyAmount }
+            if prepaidCount == nil { return L10n.Validation.prepaidRange(count) }
         case .cash:
-            guard let debt = Self.positiveAmount(totalDebtText) else { return "Geçerli bir toplam borç gir" }
+            guard let debt = Self.positiveAmount(totalDebtText) else { return L10n.Validation.invalidTotalDebt }
             if debt < minimumTotalDebt {
-                return "Toplam borç ödenen tutardan (\(MoneyFormatter.string(minimumTotalDebt, currency))) az olamaz"
+                return L10n.Validation.totalDebtBelowPaid(MoneyFormatter.string(minimumTotalDebt, currency))
             }
         case .receivable:
-            guard let total = Self.positiveAmount(totalDebtText) else { return "Geçerli bir toplam alacak gir" }
+            guard let total = Self.positiveAmount(totalDebtText) else { return L10n.Validation.invalidTotalReceivable }
             if total < minimumTotalDebt {
-                return "Toplam alacak tahsil edilenden (\(MoneyFormatter.string(minimumTotalDebt, currency))) az olamaz"
+                return L10n.Validation.totalReceivableBelowCollected(MoneyFormatter.string(minimumTotalDebt, currency))
             }
         }
         return nil

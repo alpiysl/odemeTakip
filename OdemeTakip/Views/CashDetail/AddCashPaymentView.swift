@@ -24,7 +24,7 @@ struct AddCashPaymentView: View {
         NavigationStack {
             Form {
                 Section {
-                    LabeledContent("Tutar") {
+                    LabeledContent(L10n.Common.amount) {
                         TextField("0", text: $draft.amountText)
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
@@ -34,18 +34,17 @@ struct AddCashPaymentView: View {
                     Button {
                         draft.amountText = AmountParser.editingText(draft.remaining)
                     } label: {
-                        Label(draft.isReceivable ? "Kalan alacağın tamamı" : "Kalan borcun tamamı",
+                        Label(draft.isReceivable ? L10n.Debt.payAllReceivable : L10n.Debt.payAllDebt,
                               systemImage: "equal.circle")
                     }
-                    DatePicker("Tarih", selection: $draft.date, displayedComponents: .date)
+                    DatePicker(L10n.Common.date, selection: $draft.date, displayedComponents: .date)
                         .onChange(of: draft.date) { amountFocused = false }
-                        .environment(\.locale, Locale(identifier: "tr_TR"))
+                        .environment(\.locale, L10n.locale)
                 } footer: {
                     if let message = draft.validationMessage {
                         Text(message).foregroundStyle(Theme.cash)
                     } else {
-                        Text("Kalan: \(MoneyFormatter.string(draft.remaining, draft.currency))"
-                             + (FooterTotalsView.Line.liraEquivalent(draft.remaining, draft.currency, rates: rates).map { " (\($0.value))" } ?? ""))
+                        Text(remainingFooter)
                     }
                 }
                 .listRowBackground(Theme.surface)
@@ -53,20 +52,20 @@ struct AddCashPaymentView: View {
             .scrollContentBackground(.hidden)
             .scrollDismissesKeyboard(.interactively)
             .background(Theme.background)
-            .navigationTitle(draft.isReceivable ? "Tahsilat ekle" : "Ödeme ekle")
+            .navigationTitle(draft.isReceivable ? L10n.Debt.addCollectionTitle : L10n.Debt.addPaymentTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("İptal") { dismiss() }
+                    Button(L10n.Common.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Kaydet") { save() }
+                    Button(L10n.Common.save) { save() }
                         .fontWeight(.bold)
                         .disabled(draft.amount == nil)
                 }
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
-                    Button("Bitti") { amountFocused = false }
+                    Button(L10n.Common.done) { amountFocused = false }
                         .fontWeight(.semibold)
                 }
             }
@@ -75,6 +74,15 @@ struct AddCashPaymentView: View {
         .tint(Theme.accent)
         .appColorScheme()
         .presentationDetents([.medium, .large])
+    }
+
+    /// "Kalan: $2.400 (≈ ₺96.000)"
+    private var remainingFooter: String {
+        let remaining = MoneyFormatter.string(draft.remaining, draft.currency)
+        guard let lira = FooterTotalsView.Line.liraEquivalent(draft.remaining, draft.currency, rates: rates) else {
+            return L10n.Debt.remainingFooter(remaining)
+        }
+        return L10n.Debt.remainingFooter(remaining, lira: lira.value)
     }
 
     private func save() {

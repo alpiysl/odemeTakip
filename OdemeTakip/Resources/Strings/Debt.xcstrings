@@ -1,0 +1,424 @@
+{
+  "sourceLanguage": "tr",
+  "strings": {
+    "debt.addCollectionButton": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ Tahsilat ekle"
+          }
+        }
+      }
+    },
+    "debt.addCollectionTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tahsilat ekle"
+          }
+        }
+      }
+    },
+    "debt.addPaymentButton": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+ Ödeme ekle"
+          }
+        }
+      }
+    },
+    "debt.addPaymentTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ödeme ekle"
+          }
+        }
+      }
+    },
+    "debt.cashInfo": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elden · Toplam borç %@"
+          }
+        }
+      }
+    },
+    "debt.collectedCount": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tahsil edilen (%lld)"
+          }
+        }
+      }
+    },
+    "debt.collectionHistory": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tahsilat geçmişi"
+          }
+        }
+      }
+    },
+    "debt.completed": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tamamlandı ✓"
+          }
+        }
+      }
+    },
+    "debt.creditInfo": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld taksit · %2$@/ay · %3$@ başlangıç"
+          }
+        }
+      }
+    },
+    "debt.debtCompleted": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Borç tamamlandı ✓"
+          }
+        }
+      }
+    },
+    "debt.hidePaid": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ödenmiş taksitleri gizle"
+          }
+        }
+      }
+    },
+    "debt.historyDay": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "· %@"
+          }
+        }
+      }
+    },
+    "debt.installmentSuffix": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "· %lld. taksit"
+          }
+        }
+      }
+    },
+    "debt.installmentSuffixCurrent": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "· %lld. taksit · bu ay"
+          }
+        }
+      }
+    },
+    "debt.next": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sıradaki: %@"
+          }
+        }
+      }
+    },
+    "debt.noCollections": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Henüz tahsilat yok"
+          }
+        }
+      }
+    },
+    "debt.noPayments": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Henüz ödeme yok"
+          }
+        }
+      }
+    },
+    "debt.paid": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ödendi"
+          }
+        }
+      }
+    },
+    "debt.paidCount": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ödenen (%lld)"
+          }
+        }
+      }
+    },
+    "debt.paidOf": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld/%2$lld taksit ödendi"
+          }
+        }
+      }
+    },
+    "debt.payAllDebt": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kalan borcun tamamı"
+          }
+        }
+      }
+    },
+    "debt.payAllReceivable": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kalan alacağın tamamı"
+          }
+        }
+      }
+    },
+    "debt.paymentHistory": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ödeme geçmişi"
+          }
+        }
+      }
+    },
+    "debt.progress": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "İlerleme"
+          }
+        }
+      }
+    },
+    "debt.progressValue": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yüzde %lld"
+          }
+        }
+      }
+    },
+    "debt.receivableCompleted": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alacak tamamlandı ✓"
+          }
+        }
+      }
+    },
+    "debt.receivableInfo": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alacak · Toplam alacak %@"
+          }
+        }
+      }
+    },
+    "debt.remaining": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kalan"
+          }
+        }
+      }
+    },
+    "debt.remainingCount": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kalan (%lld)"
+          }
+        }
+      }
+    },
+    "debt.remainingFooter": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kalan: %@"
+          }
+        }
+      }
+    },
+    "debt.remainingFooterWithLira": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kalan: %1$@ (%2$@)"
+          }
+        }
+      }
+    },
+    "debt.remainingReceivable": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kalan alacak"
+          }
+        }
+      }
+    },
+    "debt.showPaid": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ödenmiş %lld taksiti göster"
+          }
+        }
+      }
+    },
+    "debt.tapHint": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ödendi işaretlemek için taksite dokun"
+          }
+        }
+      }
+    },
+    "debt.total": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toplam"
+          }
+        }
+      }
+    },
+    "debt.totalDebt": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toplam borç"
+          }
+        }
+      }
+    },
+    "debt.totalReceivable": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toplam alacak"
+          }
+        }
+      }
+    },
+    "debt.unpaid": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ödenmedi"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

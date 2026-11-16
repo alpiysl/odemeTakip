@@ -7,6 +7,8 @@ struct HomeView: View {
     let netWorth: Decimal?
     @Binding var mode: HomeMode
     var onSettings: () -> Void = {}
+    var onReport: () -> Void = {}
+    var onImportPDF: () -> Void = {}
     let notificationsAllowed: Bool
     let isTemporaryStore: Bool
 
@@ -24,14 +26,14 @@ struct HomeView: View {
 
         PinnedLayout {
             if isTemporaryStore {
-                InfoBanner(text: "Veri deposu açılamadı. Girilen veriler uygulama kapanınca silinir.", onClose: nil)
+                InfoBanner(text: L10n.Home.storeUnavailable, onClose: nil)
             }
             if !notificationsAllowed && !hideNotificationBanner {
-                InfoBanner(text: "Bildirimler kapalı — Ayarlar'dan açabilirsin") {
+                InfoBanner(text: L10n.Home.notificationsOff) {
                     hideNotificationBanner = true
                 }
             }
-            HomeHeader(mode: $mode, onSettings: onSettings)
+            HomeHeader(mode: $mode, onSettings: onSettings, onReport: onReport)
             summaryCard(snapshots)
             NetWorthRow(net: netWorth)
             RateBar(rates: rates)
@@ -46,7 +48,7 @@ struct HomeView: View {
                     ForEach(active) { row($0) }
                 }
                 if !completed.isEmpty {
-                    Text("Tamamlananlar")
+                    Text(L10n.Common.completedSection)
                         .font(.caption.weight(.semibold))
                         .textCase(.uppercase)
                         .foregroundStyle(Theme.secondaryText)
@@ -59,13 +61,14 @@ struct HomeView: View {
         }
         .background(Theme.background.ignoresSafeArea())
         .addBar {
-            Button {
-                showingAdd = true
+            Menu {
+                Button(L10n.Documents.importManual, systemImage: "square.and.pencil") { showingAdd = true }
+                Button(L10n.Documents.importFromPDF, systemImage: "doc.viewfinder", action: onImportPDF)
             } label: {
-                AddBarLabel(title: "Yeni ödeme", gradient: Theme.gradient)
+                AddBarLabel(title: L10n.Home.newPayment, fill: Theme.debtFill)
             }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Yeni ödeme")
+            .accessibilityLabel(L10n.Home.newPayment)
+            .accessibilityIdentifier("addMenu")
         }
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showingAdd) {
@@ -109,7 +112,7 @@ struct HomeView: View {
         case .credit:
             if let index = PaymentCalculator.installmentIndex(snapshot, in: currentMonth) {
                 let paid = snapshot.paidInstallments.contains(index)
-                Button(paid ? "Bu ayın taksitini ödenmedi yap" : "Bu ayın taksitini ödendi işaretle",
+                Button(paid ? L10n.Home.markThisMonthUnpaid : L10n.Home.markThisMonthPaid,
                        systemImage: paid ? "arrow.uturn.backward.circle" : "checkmark.circle") {
                     payment.toggleInstallment(index)
                     context.saveQuietly()
@@ -117,14 +120,14 @@ struct HomeView: View {
             }
         case .cash, .receivable:
             if !PaymentCalculator.isCompleted(snapshot) {
-                Button("Ödeme ekle", systemImage: "plus.circle") { cashTarget = payment }
+                Button(L10n.Home.addPayment, systemImage: "plus.circle") { cashTarget = payment }
             }
         }
     }
 
     private var emptyState: some View {
         EmptyStateView(systemImage: "creditcard",
-                       title: "Henüz ödeme yok",
-                       message: "Kredi veya elden borcunu ekle, kalan tutarı ve aylık taksitleri buradan takip et.")
+                       title: L10n.Home.emptyTitle,
+                       message: L10n.Home.emptyMessage)
     }
 }

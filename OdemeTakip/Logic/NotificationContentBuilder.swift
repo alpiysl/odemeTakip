@@ -16,16 +16,16 @@ enum NotificationContentBuilder {
         if !due.isEmpty {
             let amounts = due.mapValues(\.amount)
             let count = due.values.reduce(0) { $0 + $1.count }
-            lines.append("Kredi: \(MoneyFormatter.total(amounts, rates: rates)) (\(count) taksit)")
+            lines.append(L10n.Notifications.creditLine(MoneyFormatter.total(amounts, rates: rates), count))
         }
 
         let cash = PaymentCalculator.totals(payments).cash
         if !cash.isEmpty {
-            lines.append("Elden kalan: \(MoneyFormatter.total(cash, rates: rates))")
+            lines.append(L10n.Notifications.cashLine(MoneyFormatter.total(cash, rates: rates)))
         }
 
         guard !lines.isEmpty else { return nil }
-        return NotificationContent(title: "\(month.name) ödemeleri", body: lines.joined(separator: "\n"))
+        return NotificationContent(title: L10n.Notifications.title(month.name), body: lines.joined(separator: "\n"))
     }
 
     static func triggerDate(for month: YearMonth, calendar: Calendar) -> Date {

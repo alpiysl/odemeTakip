@@ -5,6 +5,11 @@ import UserNotifications
 enum NotificationScheduler {
     private static let monthlyPrefix = "monthly-"
 
+    /// İzni sormadan durumu okur. Henüz sorulmadıysa true (uyarı bandı gösterilmez).
+    static func currentAuthorization() async -> Bool {
+        await UNUserNotificationCenter.current().notificationSettings().authorizationStatus != .denied
+    }
+
     /// İzin hiç sorulmadıysa sorar. Bildirim gösterilebiliyorsa true.
     static func requestAuthorization() async -> Bool {
         let center = UNUserNotificationCenter.current()
@@ -56,7 +61,7 @@ enum NotificationScheduler {
     static func scheduleTest(payments: [PaymentSnapshot], rates: ExchangeRates?) async {
         let month = YearMonth(date: .now)
         let content = NotificationContentBuilder.content(for: month, payments: payments, rates: rates)
-            ?? NotificationContent(title: "\(month.name) ödemeleri", body: "Bu ay ödeme yok")
+            ?? NotificationContent(title: L10n.Notifications.title(month.name), body: L10n.Notifications.noPayments)
         let request = UNNotificationRequest(
             identifier: "debug-test",
             content: makeContent(content),

@@ -34,7 +34,7 @@ struct AssetDetailView: View {
         return List {
             Section {
                 if movements.isEmpty {
-                    Text("Henüz hareket yok")
+                    Text(L10n.Savings.noMovements)
                         .font(.footnote)
                         .foregroundStyle(Theme.secondaryText)
                         .listRowBackground(Color.clear)
@@ -44,7 +44,7 @@ struct AssetDetailView: View {
                         Image(systemName: movement.amount >= 0 ? "plus.circle.fill" : "minus.circle.fill")
                             .foregroundStyle(movement.amount >= 0 ? Theme.paid : Theme.negative)
                         Text(YearMonth(date: movement.date).longLabel)
-                        Text("· \(TurkishMonths.dayMonth(movement.date))")
+                        Text(L10n.Savings.movementDay(TurkishMonths.dayMonth(movement.date)))
                             .font(.caption)
                             .foregroundStyle(Theme.secondaryText)
                         Spacer()
@@ -62,7 +62,7 @@ struct AssetDetailView: View {
                     context.saveQuietly()
                 }
             } header: {
-                Text("Hareketler").font(.caption).foregroundStyle(Theme.secondaryText)
+                Text(L10n.Savings.movementsHeader).font(.caption).foregroundStyle(Theme.secondaryText)
             }
         }
         .listStyle(.plain)
@@ -72,23 +72,23 @@ struct AssetDetailView: View {
                 .font(.footnote)
                 .foregroundStyle(Theme.secondaryText)
             HStack(spacing: 10) {
-                actionButton("+ Ekle", filled: true) { sheet = .deposit }
-                actionButton("− Çıkar", filled: false) { sheet = .withdrawal }
+                actionButton(L10n.Savings.depositButton, filled: true) { sheet = .deposit }
+                actionButton(L10n.Savings.withdrawButton, filled: false) { sheet = .withdrawal }
                     .disabled(snapshot.quantity <= 0)
                     .opacity(snapshot.quantity <= 0 ? 0.4 : 1)
             }
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             FooterTotalsView(
-                lines: [.init(title: "Miktar", value: MoneyFormatter.string(snapshot.quantity, snapshot.unit))],
-                resultTitle: "TL değeri",
-                resultValue: lira.map { MoneyFormatter.string($0, .TRY) } ?? "Kur bekleniyor")
+                lines: [.init(title: L10n.Savings.quantity, value: MoneyFormatter.string(snapshot.quantity, snapshot.unit))],
+                resultTitle: L10n.Savings.liraValue,
+                resultValue: lira.map { MoneyFormatter.string($0, .TRY) } ?? L10n.Savings.rateWaiting)
         }
         .background(Theme.background.ignoresSafeArea())
         .navigationTitle("\(asset.icon) \(asset.name)")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            Button("Düzenle") { editing = true }
+            Button(L10n.Common.edit) { editing = true }
         }
         .sheet(item: $sheet) { kind in
             AddMovementView(asset: asset, isWithdrawal: kind == .withdrawal)
@@ -99,10 +99,10 @@ struct AssetDetailView: View {
     }
 
     private func priceText(_ unit: Currency) -> String {
-        guard unit != .TRY else { return "Türk lirası birikim" }
+        guard unit != .TRY else { return L10n.Savings.liraSavings }
         let one = MoneyFormatter.string(1, unit)
-        guard let price = rates?.rate(for: unit) else { return "\(one) — fiyat bekleniyor" }
-        return "\(one) = \(MoneyFormatter.string(price, .TRY)) (satış)"
+        guard let price = rates?.rate(for: unit) else { return L10n.Savings.priceWaiting(one) }
+        return L10n.Savings.priceSelling(one, MoneyFormatter.string(price, .TRY))
     }
 
     private func actionButton(_ title: String, filled: Bool, action: @escaping () -> Void) -> some View {
@@ -114,7 +114,7 @@ struct AssetDetailView: View {
                 .padding(.vertical, 12)
                 .background {
                     if filled {
-                        RoundedRectangle(cornerRadius: 14, style: .continuous).fill(Theme.savingsGradient)
+                        RoundedRectangle(cornerRadius: 14, style: .continuous).fill(Theme.savingsFill)
                     } else {
                         RoundedRectangle(cornerRadius: 14, style: .continuous).fill(Theme.surface)
                     }
@@ -147,7 +147,7 @@ struct AddMovementView: View {
         NavigationStack {
             Form {
                 Section {
-                    LabeledContent(draft.unit.isGold ? "Miktar (\(draft.unit.unitName))" : "Tutar") {
+                    LabeledContent(draft.unit.isGold ? L10n.Savings.quantityWithUnit(draft.unit.unitName) : L10n.Common.amount) {
                         TextField("0", text: $draft.amountText)
                             .keyboardType(.decimalPad)
                             .multilineTextAlignment(.trailing)
@@ -158,17 +158,17 @@ struct AddMovementView: View {
                         Button {
                             draft.amountText = AmountParser.editingText(draft.available)
                         } label: {
-                            Label("Tümünü çıkar", systemImage: "equal.circle")
+                            Label(L10n.Savings.withdrawAll, systemImage: "equal.circle")
                         }
                     }
-                    DatePicker("Tarih", selection: $draft.date, displayedComponents: .date)
+                    DatePicker(L10n.Common.date, selection: $draft.date, displayedComponents: .date)
                         .environment(\.locale, Locale(identifier: "tr_TR"))
                         .onChange(of: draft.date) { amountFocused = false }
                 } footer: {
                     if let message = draft.validationMessage {
                         Text(message).foregroundStyle(Theme.cash)
                     } else {
-                        Text("Mevcut: \(MoneyFormatter.string(draft.available, draft.unit))")
+                        Text(L10n.Savings.available(MoneyFormatter.string(draft.available, draft.unit)))
                     }
                 }
                 .listRowBackground(Theme.surface)
@@ -176,20 +176,20 @@ struct AddMovementView: View {
             .scrollContentBackground(.hidden)
             .scrollDismissesKeyboard(.interactively)
             .background(Theme.background)
-            .navigationTitle(draft.isWithdrawal ? "Çıkar" : "Ekle")
+            .navigationTitle(draft.isWithdrawal ? L10n.Savings.withdrawTitle : L10n.Savings.depositTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("İptal") { dismiss() }
+                    Button(L10n.Common.cancel) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Kaydet") { save() }
+                    Button(L10n.Common.save) { save() }
                         .fontWeight(.bold)
                         .disabled(draft.signedAmount == nil)
                 }
                 ToolbarItemGroup(placement: .keyboard) {
                     Spacer()
-                    Button("Bitti") { amountFocused = false }
+                    Button(L10n.Common.done) { amountFocused = false }
                         .fontWeight(.semibold)
                 }
             }

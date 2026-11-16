@@ -13,7 +13,7 @@ struct InfoBanner: View {
                 Button(action: onClose) {
                     Image(systemName: "xmark").font(.caption.weight(.bold)).foregroundStyle(Theme.secondaryText)
                 }
-                .accessibilityLabel("Kapat")
+                .accessibilityLabel(L10n.Common.close)
             }
         }
         .padding(12)

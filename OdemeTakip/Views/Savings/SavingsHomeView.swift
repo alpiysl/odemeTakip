@@ -1,11 +1,19 @@
 import SwiftUI
 
-enum SavingsFilter: String, CaseIterable, Identifiable {
-    case all = "Tümü"
-    case assets = "Birikim"
-    case receivables = "Alacak"
+enum SavingsFilter: String, FilterOption {
+    case all
+    case assets
+    case receivables
 
     var id: String { rawValue }
+
+    var title: String {
+        switch self {
+        case .all: L10n.Common.all
+        case .assets: L10n.Savings.filterAssets
+        case .receivables: L10n.Savings.filterReceivables
+        }
+    }
 }
 
 struct SavingsHomeView: View {
@@ -15,6 +23,7 @@ struct SavingsHomeView: View {
     let rates: ExchangeRates?
     @Binding var mode: HomeMode
     var onSettings: () -> Void = {}
+    var onReport: () -> Void = {}
 
     @State private var filter: SavingsFilter = .all
     @Environment(\.isCompactHeader) private var compact
@@ -30,12 +39,12 @@ struct SavingsHomeView: View {
         let showReceivables = filter != .assets
 
         PinnedLayout {
-            HomeHeader(mode: $mode, onSettings: onSettings)
+            HomeHeader(mode: $mode, onSettings: onSettings, onReport: onReport)
             summaryCard
             NetWorthRow(net: summary.net)
             RateBar(rates: rates)
             if !(assets.isEmpty && receivables.isEmpty) {
-                FilterBar(selection: $filter, gradient: Theme.savingsGradient)
+                FilterBar(selection: $filter, fill: Theme.savingsFill)
             }
         } content: {
                     if assets.isEmpty && receivables.isEmpty {
@@ -57,7 +66,7 @@ struct SavingsHomeView: View {
                             }
                         }
                         if showReceivables && !closedReceivables.isEmpty {
-                            Text("Tamamlananlar")
+                            Text(L10n.Common.completedSection)
                                 .font(.caption.weight(.semibold))
                                 .textCase(.uppercase)
                                 .foregroundStyle(Theme.secondaryText)
@@ -90,7 +99,7 @@ struct SavingsHomeView: View {
         }
 
         return VStack(alignment: .leading, spacing: 2) {
-            Text("Toplam varlık").font(.caption).opacity(0.85)
+            Text(L10n.Savings.totalWealth).font(.caption).opacity(0.85)
             Text(total)
                 .font(.system(size: compact ? compactTotalSize : totalSize, weight: .heavy))
                 .monospacedDigit()
@@ -105,15 +114,15 @@ struct SavingsHomeView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(compact ? 12 : 18)
-        .background(Theme.savingsGradient, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .background(Theme.savingsFill, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .foregroundStyle(.white)
     }
 
     @ViewBuilder
     private func legends(_ assetTotals: [Currency: Decimal], _ receivableTotals: [Currency: Decimal]) -> some View {
-        legend(color: .white, title: "Birikim",
+        legend(color: .white, title: L10n.Savings.legendSavings,
                value: summary.savings.map { MoneyFormatter.string($0, .TRY) } ?? MoneyFormatter.joined(assetTotals))
-        legend(color: Theme.credit, title: "Alacak",
+        legend(color: Theme.credit, title: L10n.Savings.legendReceivables,
                value: summary.receivable.map { MoneyFormatter.string($0, .TRY) } ?? MoneyFormatter.joined(receivableTotals))
     }
 
@@ -136,18 +145,18 @@ struct SavingsHomeView: View {
 
     private var emptyState: some View {
         EmptyStateView(systemImage: "leaf",
-                       title: "Henüz birikim yok",
-                       message: "Döviz, altın veya TL birikimini ya da sana olan alacakları ekle.")
+                       title: L10n.Savings.emptyTitle,
+                       message: L10n.Savings.emptyMessage)
     }
 
     private var addMenu: some View {
         Menu {
-            Button("Birikim ekle", systemImage: "leaf") { addingAsset = true }
-            Button("Alacak ekle", systemImage: "person.crop.circle.badge.plus") { addingReceivable = true }
+            Button(L10n.Savings.addAsset, systemImage: "leaf") { addingAsset = true }
+            Button(L10n.Savings.addReceivable, systemImage: "person.crop.circle.badge.plus") { addingReceivable = true }
         } label: {
-            AddBarLabel(title: "Yeni kayıt", gradient: Theme.savingsGradient)
+            AddBarLabel(title: L10n.Savings.newRecord, fill: Theme.savingsFill)
         }
-        .accessibilityLabel("Yeni kayıt")
+        .accessibilityLabel(L10n.Savings.newRecord)
     }
 }
 
@@ -183,6 +192,6 @@ struct AssetRowView: View {
 
     static func subtitle(_ s: AssetSnapshot) -> String {
         let quantity = MoneyFormatter.string(s.quantity, s.unit)
-        return s.unit.isGold ? "\(quantity) · \(s.unit.displayName)" : quantity
+        return s.unit.isGold ? L10n.Savings.goldSubtitle(quantity, s.unit.displayName) : quantity
     }
 }

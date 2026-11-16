@@ -1,6 +1,7 @@
 import SwiftData
 import SwiftUI
 import UIKit
+import UniformTypeIdentifiers
 
 struct RootView: View {
     let isTemporaryStore: Bool
@@ -12,6 +13,10 @@ struct RootView: View {
     /// Anahtarla seçilen, sadece bu oturumda geçerli ekran.
     @State private var sessionMode: HomeMode?
     @State private var showingSettings = false
+    @State private var showingReport = false
+    @State private var showingPDFPicker = false
+    /// "Birlikte aç" / paylaşım ile gelen PDF.
+    @State private var incomingPDF: URL?
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.modelContext) private var context
     @State private var notificationsAllowed = true
@@ -54,7 +59,8 @@ struct RootView: View {
                                 summary: summary,
                                 rates: rateStore.rates,
                                 mode: mode,
-                                onSettings: { showingSettings = true })
+                                onSettings: { showingSettings = true },
+                                onReport: { showingReport = true })
             } else {
                 HomeView(payments: payments,
                          currentMonth: month.current,
@@ -62,6 +68,8 @@ struct RootView: View {
                          netWorth: summary.net,
                          mode: mode,
                          onSettings: { showingSettings = true },
+                         onReport: { showingReport = true },
+                         onImportPDF: { showingPDFPicker = true },
                          notificationsAllowed: notificationsAllowed,
                          isTemporaryStore: isTemporaryStore)
             }
@@ -70,14 +78,23 @@ struct RootView: View {
         .sheet(isPresented: $showingSettings) {
             SettingsView()
         }
+        .pdfDebtImport(isPickerPresented: $showingPDFPicker, incomingURL: $incomingPDF)
+        .onOpenURL { url in
+            guard url.isFileURL, Self.isPDF(url) else { return }
+            receivePDF(url)
+        }
+        .sheet(isPresented: $showingReport) {
+            ReportComposerView(payments: payments + receivables, assets: assets)
+        }
         .task {
             // Açılış ekranı oturum başında bir kez okunur; Ayarlar değişikliği sonraki açılışta geçerli.
             if sessionMode == nil { sessionMode = HomeMode(rawValue: homeModeRaw) }
             #if DEBUG
             SampleData.insertIfRequested(into: context)
+            if let url = SampleData.samplePDFIfRequested() { receivePDF(url) }
             #endif
             await rateStore.refreshIfNeeded(force: true)
-            notificationsAllowed = await NotificationScheduler.requestAuthorization()
+            notificationsAllowed = await authorizeNotificationsIfNeeded()
             await NotificationScheduler.reschedule(payments: snapshots, rates: rateStore.rates)
             #if DEBUG
             if ProcessInfo.processInfo.arguments.contains("-testNotification") {
@@ -93,6 +110,14 @@ struct RootView: View {
             month.refresh()
             Task {
                 await rateStore.refreshIfNeeded()
+                notificationsAllowed = await authorizeNotificationsIfNeeded()
+                await NotificationScheduler.reschedule(payments: snapshots, rates: rateStore.rates)
+            }
+        }
+        .onChange(of: payments.isEmpty) { _, isEmpty in
+            // İlk borç kaydı eklenince izin, ne işe yarayacağı belliyken sorulur.
+            guard !isEmpty else { return }
+            Task {
                 notificationsAllowed = await NotificationScheduler.requestAuthorization()
                 await NotificationScheduler.reschedule(payments: snapshots, rates: rateStore.rates)
             }
@@ -111,9 +136,40 @@ struct RootView: View {
         .environment(rateStore)
     }
 
+    /// Uzantısız gelse de içerik türü PDF olan dosya.
+    private static func isPDF(_ url: URL) -> Bool {
+        if let type = try? url.resourceValues(forKeys: [.contentTypeKey]).contentType {
+            return type.conforms(to: .pdf)
+        }
+        return url.pathExtension.isEmpty || UTType(filenameExtension: url.pathExtension)?.conforms(to: .pdf) == true
+    }
+
+    /// "Birlikte aç" ile gelen PDF'i borç ekranında içe aktarır.
+    private func receivePDF(_ url: URL) {
+        // İlk açılış seçimi yapılmadan borç eklendiyse borç ekranı seçilmiş sayılır.
+        if HomeMode(rawValue: homeModeRaw) == nil { homeModeRaw = HomeMode.debt.rawValue }
+        // Açık sayfa varken yeni sayfa sunulamaz: önce kapat, kapanma animasyonu bitince içe aktar.
+        let hadSheet = showingSettings || showingReport || showingPDFPicker
+        showingSettings = false
+        showingReport = false
+        showingPDFPicker = false
+        sessionMode = .debt
+        Task {
+            if hadSheet { try? await Task.sleep(for: .milliseconds(600)) }
+            incomingPDF = url
+        }
+    }
+
     #if DEBUG
     @State private var debugScreen = SampleData.requestedScreen
     #endif
+
+    /// Bildirim izni sadece hatırlatılacak bir borç varken istenir; yoksa durum sormadan okunur.
+    private func authorizeNotificationsIfNeeded() async -> Bool {
+        payments.isEmpty
+            ? await NotificationScheduler.currentAuthorization()
+            : await NotificationScheduler.requestAuthorization()
+    }
 
     private struct ScheduleInput: Equatable {
         let snapshots: [PaymentSnapshot]

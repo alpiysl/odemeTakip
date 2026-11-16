@@ -1,0 +1,50 @@
+{
+  "sourceLanguage": "tr",
+  "strings": {
+    "notifications.cashLine": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elden kalan: %@"
+          }
+        }
+      }
+    },
+    "notifications.creditLine": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kredi: %1$@ (%2$lld taksit)"
+          }
+        }
+      }
+    },
+    "notifications.noPayments": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu ay ödeme yok"
+          }
+        }
+      }
+    },
+    "notifications.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ödemeleri"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

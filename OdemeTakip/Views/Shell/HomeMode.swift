@@ -11,22 +11,22 @@ enum HomeMode: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .debt: "Borç Takip"
-        case .savings: "Birikim Takip"
+        case .debt: L10n.Settings.modeDebtTitle
+        case .savings: L10n.Settings.modeSavingsTitle
         }
     }
 
     var shortTitle: String {
         switch self {
-        case .debt: "Borç"
-        case .savings: "Birikim"
+        case .debt: L10n.Settings.modeDebtShort
+        case .savings: L10n.Settings.modeSavingsShort
         }
     }
 
-    var gradient: LinearGradient {
+    var fill: Color {
         switch self {
-        case .debt: Theme.gradient
-        case .savings: Theme.savingsGradient
+        case .debt: Theme.debtFill
+        case .savings: Theme.savingsFill
         }
     }
 }
@@ -35,6 +35,7 @@ enum HomeMode: String, CaseIterable, Identifiable {
 struct HomeHeader: View {
     @Binding var mode: HomeMode
     var onSettings: () -> Void = {}
+    var onReport: () -> Void = {}
 
     var body: some View {
         // Sığmazsa başlık üstte, anahtar ve ayar altta.
@@ -58,7 +59,7 @@ struct HomeHeader: View {
     }
 
     private var title: some View {
-        Text("Varlık Takip")
+        Text(L10n.Settings.appTitle)
             .font(.title3.weight(.bold))
             .lineLimit(1)
     }
@@ -78,7 +79,7 @@ struct HomeHeader: View {
                             .padding(.vertical, 8)
                             .background {
                                 if mode == option {
-                                    RoundedRectangle(cornerRadius: 7, style: .continuous).fill(option.gradient)
+                                    RoundedRectangle(cornerRadius: 7, style: .continuous).fill(option.fill)
                                 }
                             }
                             .foregroundStyle(mode == option ? Color.white : Theme.unselectedText)
@@ -92,6 +93,15 @@ struct HomeHeader: View {
             .padding(3)
             .background(Theme.surface, in: RoundedRectangle(cornerRadius: 10, style: .continuous))
             .sensoryFeedback(.selection, trigger: mode)
+            Button(action: onReport) {
+                Image(systemName: "doc.text")
+                    .font(.body.weight(.semibold))
+                    .foregroundStyle(Theme.secondaryText)
+                    .frame(width: 44, height: 44)
+                    .contentShape(Rectangle())
+            }
+            .accessibilityLabel(L10n.Documents.createReport)
+            .accessibilityIdentifier("reportButton")
             Button(action: onSettings) {
                 Image(systemName: "gearshape")
                     .font(.body.weight(.semibold))
@@ -99,7 +109,7 @@ struct HomeHeader: View {
                     .frame(width: 44, height: 44)
                     .contentShape(Rectangle())
             }
-            .accessibilityLabel("Ayarlar")
+            .accessibilityLabel(L10n.Settings.title)
         }
     }
 }
@@ -118,7 +128,7 @@ struct SettingsView: View {
             set: { newMode in
                 guard newMode.rawValue != landingRaw else { return }
                 landingRaw = newMode.rawValue
-                showToast("Açılış ekranı: \(newMode.title)")
+                showToast(L10n.Settings.landingToast(newMode.title))
             })
     }
 
@@ -128,7 +138,7 @@ struct SettingsView: View {
             set: { newValue in
                 guard newValue.rawValue != appearanceRaw else { return }
                 withAnimation(.easeInOut(duration: 0.25)) { appearanceRaw = newValue.rawValue }
-                showToast("Görünüm: \(newValue.title)")
+                showToast(L10n.Settings.appearanceToast(newValue.title))
             })
     }
 
@@ -136,37 +146,47 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 Section {
-                    Picker("Açılış ekranı", selection: landing) {
+                    Picker(L10n.Settings.landingTitle, selection: landing) {
                         ForEach(HomeMode.allCases) { Text($0.title).tag($0) }
                     }
                     .pickerStyle(.segmented)
                     .listRowBackground(Color.clear)
                 } header: {
-                    Text("Açılış ekranı")
+                    Text(L10n.Settings.landingTitle)
                 } footer: {
-                    Text("Uygulama açılınca bu ekran gelir. Üstteki Borç | Birikim anahtarı sadece o anki ekranı değiştirir.")
+                    Text(L10n.Settings.landingFooter)
                 }
 
                 Section {
-                    Picker("Görünüm", selection: appearance) {
+                    Picker(L10n.Settings.appearanceTitle, selection: appearance) {
                         ForEach(AppAppearance.allCases) { Text($0.title).tag($0) }
                     }
                     .pickerStyle(.segmented)
                     .listRowBackground(Color.clear)
                     .accessibilityIdentifier("appearancePicker")
                 } header: {
-                    Text("Görünüm")
+                    Text(L10n.Settings.appearanceTitle)
                 } footer: {
-                    Text("Koyu veya açık tema. Değişiklik hemen uygulanır.")
+                    Text(L10n.Settings.appearanceFooter)
                 }
+
+                Section {
+                    LabeledContent(L10n.Settings.sourceCurrencies, value: L10n.Settings.sourceCurrenciesValue)
+                    LabeledContent(L10n.Settings.sourceGold, value: L10n.Settings.sourceGoldValue)
+                } header: {
+                    Text(L10n.Settings.sourcesTitle)
+                } footer: {
+                    Text(L10n.Settings.sourcesFooter)
+                }
+                .listRowBackground(Theme.surface)
             }
             .scrollContentBackground(.hidden)
             .background(Theme.background)
-            .navigationTitle("Ayarlar")
+            .navigationTitle(L10n.Settings.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Kapat") { dismiss() }
+                    Button(L10n.Common.close) { dismiss() }
                 }
             }
         }
@@ -221,7 +241,7 @@ struct NetWorthRow: View {
 
     var body: some View {
         if let net {
-            let label = Text("Net varlık (− borç)").foregroundStyle(Theme.secondaryText)
+            let label = Text(L10n.Settings.netWorth).foregroundStyle(Theme.secondaryText)
             let value = Text(MoneyFormatter.signed(net)).fontWeight(.bold).monospacedDigit().lineLimit(1)
             ViewThatFits(in: .horizontal) {
                 HStack {
@@ -254,13 +274,13 @@ struct OnboardingView: View {
         ZStack(alignment: .bottom) {
             Theme.background.ignoresSafeArea()
             VStack(alignment: .leading, spacing: 14) {
-                Text("Hoş geldin 👋").font(.largeTitle.weight(.heavy))
-                Text("Uygulama açılınca hangi ekran gelsin? Sonra üstteki anahtarla istediğin zaman değiştirebilirsin.")
+                Text(L10n.Settings.welcome).font(.largeTitle.weight(.heavy))
+                Text(L10n.Settings.welcomeMessage)
                     .font(.subheadline)
                     .foregroundStyle(Theme.secondaryText)
                     .padding(.bottom, 10)
-                card(.debt, emoji: "💳", detail: "Krediler, elden borçlar, aylık taksitler")
-                card(.savings, emoji: "🌱", detail: "Döviz, altın, TL birikimler ve alacaklar")
+                card(.debt, emoji: "💳", detail: L10n.Settings.onboardingDebtDetail)
+                card(.savings, emoji: "🌱", detail: L10n.Settings.onboardingSavingsDetail)
                 Spacer()
             }
             .padding(.horizontal, 22)
@@ -269,12 +289,12 @@ struct OnboardingView: View {
             Button {
                 onChoose(selection)
             } label: {
-                Text("Devam")
+                Text(L10n.Settings.continueButton)
                     .font(.headline)
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 15)
-                    .background(selection.gradient, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    .background(selection.fill, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
             }
             .padding(.horizontal, 22)
             .padding(.bottom, 24)

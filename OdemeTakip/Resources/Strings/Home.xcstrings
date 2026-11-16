@@ -1,0 +1,314 @@
+{
+  "sourceLanguage": "tr",
+  "strings": {
+    "home.addPayment": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ödeme ekle"
+          }
+        }
+      }
+    },
+    "home.chipAllPaid": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu ayın taksitleri ödendi ✓"
+          }
+        }
+      }
+    },
+    "home.chipDue": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu ay: %@ kredi taksiti"
+          }
+        }
+      }
+    },
+    "home.emptyMessage": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kredi veya elden borcunu ekle, kalan tutarı ve aylık taksitleri buradan takip et."
+          }
+        }
+      }
+    },
+    "home.emptyTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Henüz ödeme yok"
+          }
+        }
+      }
+    },
+    "home.filterCash": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elden"
+          }
+        }
+      }
+    },
+    "home.filterCredit": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kredi"
+          }
+        }
+      }
+    },
+    "home.installmentProgress": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld/%2$lld"
+          }
+        }
+      }
+    },
+    "home.markThisMonthPaid": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu ayın taksitini ödendi işaretle"
+          }
+        }
+      }
+    },
+    "home.markThisMonthUnpaid": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bu ayın taksitini ödenmedi yap"
+          }
+        }
+      }
+    },
+    "home.newPayment": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yeni ödeme"
+          }
+        }
+      }
+    },
+    "home.notificationsOff": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bildirimler kapalı — Ayarlar'dan açabilirsin"
+          }
+        }
+      }
+    },
+    "home.rateCeyrek": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çeyrek"
+          }
+        }
+      }
+    },
+    "home.rateEUR": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Euro"
+          }
+        }
+      }
+    },
+    "home.rateGram": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gram"
+          }
+        }
+      }
+    },
+    "home.rateItem": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@ %2$@"
+          }
+        }
+      }
+    },
+    "home.rateResat": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reşat"
+          }
+        }
+      }
+    },
+    "home.rateTam": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tam"
+          }
+        }
+      }
+    },
+    "home.rateUSD": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dolar"
+          }
+        }
+      }
+    },
+    "home.rateYarim": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yarım"
+          }
+        }
+      }
+    },
+    "home.ratesLoading": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kurlar yükleniyor…"
+          }
+        }
+      }
+    },
+    "home.ratesLoadingAccessibility": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kurlar yükleniyor"
+          }
+        }
+      }
+    },
+    "home.rowCash": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elden · %@ ödendi"
+          }
+        }
+      }
+    },
+    "home.rowCredit": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$lld/%2$lld taksit · %3$@/ay"
+          }
+        }
+      }
+    },
+    "home.rowCreditNext": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%1$@/ay · Sıradaki %2$@"
+          }
+        }
+      }
+    },
+    "home.rowReceivable": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alacak · %@ tahsil edildi"
+          }
+        }
+      }
+    },
+    "home.storeUnavailable": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Veri deposu açılamadı. Girilen veriler uygulama kapanınca silinir."
+          }
+        }
+      }
+    },
+    "home.totalRemaining": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toplam kalan"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

@@ -1,0 +1,292 @@
+{
+  "sourceLanguage": "tr",
+  "strings": {
+    "settings.appTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Varlık Takip"
+          }
+        }
+      }
+    },
+    "settings.appearanceDark": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Koyu"
+          }
+        }
+      }
+    },
+    "settings.appearanceFooter": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Koyu veya açık tema. Değişiklik hemen uygulanır."
+          }
+        }
+      }
+    },
+    "settings.appearanceLight": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Açık"
+          }
+        }
+      }
+    },
+    "settings.appearanceTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Görünüm"
+          }
+        }
+      }
+    },
+    "settings.appearanceToast": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Görünüm: %@"
+          }
+        }
+      }
+    },
+    "settings.continue": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Devam"
+          }
+        }
+      }
+    },
+    "settings.landingFooter": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uygulama açılınca bu ekran gelir. Üstteki Borç | Birikim anahtarı sadece o anki ekranı değiştirir."
+          }
+        }
+      }
+    },
+    "settings.landingTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Açılış ekranı"
+          }
+        }
+      }
+    },
+    "settings.landingToast": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Açılış ekranı: %@"
+          }
+        }
+      }
+    },
+    "settings.modeDebtShort": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Borç"
+          }
+        }
+      }
+    },
+    "settings.modeDebtTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Borç Takip"
+          }
+        }
+      }
+    },
+    "settings.modeSavingsShort": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Birikim"
+          }
+        }
+      }
+    },
+    "settings.modeSavingsTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Birikim Takip"
+          }
+        }
+      }
+    },
+    "settings.netWorth": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Net varlık (− borç)"
+          }
+        }
+      }
+    },
+    "settings.onboardingDebtDetail": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Krediler, elden borçlar, aylık taksitler"
+          }
+        }
+      }
+    },
+    "settings.onboardingSavingsDetail": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Döviz, altın, TL birikimler ve alacaklar"
+          }
+        }
+      }
+    },
+    "settings.sourceCurrencies": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dolar, Euro"
+          }
+        }
+      }
+    },
+    "settings.sourceCurrenciesValue": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TCMB döviz satış"
+          }
+        }
+      }
+    },
+    "settings.sourceGold": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Altın"
+          }
+        }
+      }
+    },
+    "settings.sourceGoldValue": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "finans.truncgil.com"
+          }
+        }
+      }
+    },
+    "settings.sourcesFooter": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fiyatlar bilgi amaçlıdır, yatırım tavsiyesi değildir. Altın fiyatları resmi olmayan bir servisten alınır; gerçek alış-satış fiyatları farklı olabilir. Tüm kayıtlar sadece bu cihazda saklanır."
+          }
+        }
+      }
+    },
+    "settings.sourcesTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fiyat kaynakları"
+          }
+        }
+      }
+    },
+    "settings.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ayarlar"
+          }
+        }
+      }
+    },
+    "settings.welcome": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoş geldin 👋"
+          }
+        }
+      }
+    },
+    "settings.welcomeMessage": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Uygulama açılınca hangi ekran gelsin? Sonra üstteki anahtarla istediğin zaman değiştirebilirsin."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

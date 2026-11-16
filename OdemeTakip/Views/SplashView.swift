@@ -13,8 +13,7 @@ struct SplashView: View {
             VStack(spacing: 10) {
                 key(symbol: "plus", symbolColor: .white, pressed: plusPressed) {
                     RoundedRectangle(cornerRadius: 26, style: .continuous)
-                        .fill(LinearGradient(colors: [Color(hex: 0x6E6CF0), Color(hex: 0xC76AF5)],
-                                             startPoint: .topLeading, endPoint: .bottomTrailing))
+                        .fill(Theme.debtFill)
                 }
                 key(symbol: "minus", symbolColor: Theme.cash, pressed: minusPressed) {
                     RoundedRectangle(cornerRadius: 26, style: .continuous).fill(Color(light: 0xE5E5EA, dark: 0x26262E))

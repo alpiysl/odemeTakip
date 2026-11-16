@@ -1,0 +1,193 @@
+{
+  "sourceLanguage": "tr",
+  "strings": {
+    "models.currencyCeyrek": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Çeyrek altın"
+          }
+        }
+      }
+    },
+    "models.currencyEUR": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "€ EUR"
+          }
+        }
+      }
+    },
+    "models.currencyGram": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gram altın"
+          }
+        }
+      }
+    },
+    "models.currencyResat": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reşat altın"
+          }
+        }
+      }
+    },
+    "models.currencyTRY": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "₺ TL"
+          }
+        }
+      }
+    },
+    "models.currencyTam": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tam altın"
+          }
+        }
+      }
+    },
+    "models.currencyUSD": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "$ USD"
+          }
+        }
+      }
+    },
+    "models.currencyYarim": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yarım altın"
+          }
+        }
+      }
+    },
+    "models.kindCash": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Elden"
+          }
+        }
+      }
+    },
+    "models.kindCredit": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kredi"
+          }
+        }
+      }
+    },
+    "models.kindReceivable": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Alacak"
+          }
+        }
+      }
+    },
+    "models.rateSource": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "TCMB %@"
+          }
+        }
+      }
+    },
+    "models.unitCeyrek": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "çeyrek"
+          }
+        }
+      }
+    },
+    "models.unitGram": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "gr"
+          }
+        }
+      }
+    },
+    "models.unitResat": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "reşat"
+          }
+        }
+      }
+    },
+    "models.unitTam": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "tam"
+          }
+        }
+      }
+    },
+    "models.unitYarim": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "yarım"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

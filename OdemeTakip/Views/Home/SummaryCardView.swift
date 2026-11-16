@@ -15,7 +15,7 @@ struct SummaryCardView: View {
         let others = lira == nil ? totals.overall.filter { $0.key != primary } : [:]
 
         VStack(alignment: .leading, spacing: 2) {
-            Text("Toplam kalan").font(.caption).opacity(0.85)
+            Text(L10n.Home.totalRemaining).font(.caption).opacity(0.85)
             Text(MoneyFormatter.string(lira ?? totals.overall[primary] ?? 0, primary))
                 .font(.system(size: compact ? compactTotalSize : totalSize, weight: .heavy))
                 .monospacedDigit()
@@ -34,14 +34,14 @@ struct SummaryCardView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(compact ? 12 : 18)
-        .background(Theme.gradient, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .background(Theme.debtFill, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .foregroundStyle(.white)
     }
 
     @ViewBuilder
     private func legends(_ totals: Totals) -> some View {
-        legend(color: Theme.credit, title: "Kredi", value: MoneyFormatter.total(totals.credit, rates: rates))
-        legend(color: Theme.cash, title: "Elden", value: MoneyFormatter.total(totals.cash, rates: rates))
+        legend(color: Theme.credit, title: L10n.Home.filterCredit, value: MoneyFormatter.total(totals.credit, rates: rates))
+        legend(color: Theme.cash, title: L10n.Home.filterCash, value: MoneyFormatter.total(totals.cash, rates: rates))
     }
 
     private func legend(color: Color, title: String, value: String) -> some View {
@@ -58,9 +58,9 @@ struct SummaryCardView: View {
         case .none:
             EmptyView()
         case .allPaid:
-            chipText("Bu ayın taksitleri ödendi ✓")
+            chipText(L10n.Home.chipAllPaid)
         case .due(let due):
-            chipText("Bu ay: \(MoneyFormatter.total(due.mapValues(\.amount), rates: rates)) kredi taksiti")
+            chipText(L10n.Home.chipDue(MoneyFormatter.total(due.mapValues(\.amount), rates: rates)))
         }
     }
 

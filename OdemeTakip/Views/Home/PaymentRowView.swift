@@ -7,11 +7,7 @@ struct PaymentRowView: View {
     var body: some View {
         let snapshot = payment.snapshot
         HStack(spacing: 12) {
-            Text(payment.icon)
-                .font(.title3)
-                .frame(width: 40, height: 40)
-                .background(Theme.kindColor(snapshot.kind).opacity(0.14),
-                            in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+            PaymentIconView(icon: payment.icon, tint: Theme.kindColor(snapshot.kind))
             VStack(alignment: .leading, spacing: 2) {
                 Text(payment.name).font(.subheadline.weight(.semibold)).lineLimit(1)
                 Text(Self.subtitle(snapshot)).font(.caption).foregroundStyle(Theme.secondaryText).lineLimit(1)
@@ -20,7 +16,7 @@ struct PaymentRowView: View {
                         ProgressBar(fraction: PaymentCalculator.progress(snapshot),
                                     color: Theme.kindColor(snapshot.kind == .receivable ? .credit : snapshot.kind))
                         if snapshot.kind == .credit {
-                            Text("\(PaymentCalculator.paidCount(snapshot))/\(snapshot.installmentCount)")
+                            Text(L10n.Home.installmentProgress(PaymentCalculator.paidCount(snapshot), snapshot.installmentCount))
                                 .font(.caption2.weight(.semibold))
                                 .monospacedDigit()
                                 .foregroundStyle(Theme.secondaryText)
@@ -36,7 +32,7 @@ struct PaymentRowView: View {
                     .font(.subheadline.weight(.bold))
                 if snapshot.currency != .TRY,
                    let lira = CurrencyConverter.toTRY([snapshot.currency: PaymentCalculator.remaining(snapshot)], rates: rates) {
-                    Text("≈ " + MoneyFormatter.string(lira, .TRY))
+                    Text(L10n.Common.approx(MoneyFormatter.string(lira, .TRY)))
                         .font(.caption)
                         .foregroundStyle(Theme.secondaryText)
                 }
@@ -55,14 +51,14 @@ struct PaymentRowView: View {
         switch s.kind {
         case .credit:
             if let next = PaymentCalculator.nextUnpaidMonth(s) {
-                "\(MoneyFormatter.string(s.monthlyAmount, s.currency))/ay · Sıradaki \(next.shortLabel)"
+                L10n.Home.rowCreditNext(MoneyFormatter.string(s.monthlyAmount, s.currency), next.shortLabel)
             } else {
-                "\(PaymentCalculator.paidCount(s))/\(s.installmentCount) taksit · \(MoneyFormatter.string(s.monthlyAmount, s.currency))/ay"
+                L10n.Home.rowCredit(PaymentCalculator.paidCount(s), s.installmentCount, MoneyFormatter.string(s.monthlyAmount, s.currency))
             }
         case .cash:
-            "Elden · \(MoneyFormatter.string(s.cashPaid, s.currency)) ödendi"
+            L10n.Home.rowCash(MoneyFormatter.string(s.cashPaid, s.currency))
         case .receivable:
-            "Alacak · \(MoneyFormatter.string(s.cashPaid, s.currency)) tahsil edildi"
+            L10n.Home.rowReceivable(MoneyFormatter.string(s.cashPaid, s.currency))
         }
     }
 }
