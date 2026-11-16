@@ -14,6 +14,28 @@ struct BankTests {
         #expect(Bank(icon: "bank:unknown") == nil)
     }
 
+    @Test(arguments: [
+        ("TÜRKİYE İŞ BANKASI A.Ş.", Bank.isbank),
+        ("Garanti BBVA", .garanti),
+        ("AKBANK T.A.Ş.", .akbank),
+        ("QNB Finansbank", .qnb),
+        ("T. Halk Bankası", .halkbank),
+        ("VakıfBank", .vakifbank),
+        ("vakiflar bankasi", .vakifbank),
+        ("T.C. Ziraat Bankası", .ziraat),
+    ])
+    func detectsBankInText(text: String, bank: Bank) {
+        #expect(Bank.detect(in: "Hesap özeti\n\(text)\nMüşteri") == bank)
+    }
+
+    @Test func detectsNoBankInPlainText() {
+        #expect(Bank.detect(in: "Market alışverişi 250,00 TL") == nil)
+    }
+
+    @Test func mostMentionedBankWins() {
+        #expect(Bank.detect(in: "Garanti BBVA\nAkbank'a EFT\nGaranti müşteri hizmetleri") == .garanti)
+    }
+
     @Test func namesAndMonogramsComeFromCatalog() {
         #expect(Bank.isbank.name == "İş Bankası")
         #expect(Bank.ziraat.name == "Ziraat Bankası")

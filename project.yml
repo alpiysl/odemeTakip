@@ -35,6 +35,14 @@ targets:
           - UIInterfaceOrientationPortrait
         UIUserInterfaceStyle: Dark
         ITSAppUsesNonExemptEncryption: false
+        # Bankadan gelen PDF'i "Birlikte aç / Varlık Takip'e kopyala" ile borç olarak eklemek için.
+        CFBundleDocumentTypes:
+          - CFBundleTypeName: PDF
+            CFBundleTypeRole: Viewer
+            LSHandlerRank: Alternate
+            LSItemContentTypes:
+              - com.adobe.pdf
+        LSSupportsOpeningDocumentsInPlace: false
   OdemeTakipTests:
     type: bundle.unit-test
     platform: iOS

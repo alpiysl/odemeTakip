@@ -115,6 +115,22 @@ enum SampleData {
         }
     }
 
+    /// `-importSamplePDF`: örnek banka kredisi PDF'i üretir; açılışta "Birlikte aç" ile gelmiş gibi içe aktarılır.
+    static func samplePDFIfRequested() -> URL? {
+        guard ProcessInfo.processInfo.arguments.contains("-importSamplePDF") else { return nil }
+        let lines = ["GARANTİ BBVA", "İhtiyaç Kredisi Bilgilendirme", "Kredi Tutarı: 100.000,00 TL",
+                     "Taksit Tutarı: 4.812,35 TL", "Taksit Sayısı: 36", "İlk Taksit Tarihi: 15.01.2026"]
+        let data = UIGraphicsPDFRenderer(bounds: CGRect(x: 0, y: 0, width: 595, height: 842)).pdfData { context in
+            context.beginPage()
+            for (index, line) in lines.enumerated() {
+                NSAttributedString(string: line, attributes: [.font: UIFont.systemFont(ofSize: 18)])
+                    .draw(at: CGPoint(x: 40, y: 60 + CGFloat(index) * 32))
+            }
+        }
+        let url = FileManager.default.temporaryDirectory.appending(path: "sample-loan.pdf")
+        return (try? data.write(to: url)) != nil ? url : nil
+    }
+
     /// `-debugScreen <credit|cash|settings|form>` argümanının değeri.
     static var requestedScreen: String? {
         let args = ProcessInfo.processInfo.arguments

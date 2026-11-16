@@ -1,6 +1,171 @@
 {
   "sourceLanguage": "tr",
   "strings": {
+    "documents.import.cardName": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ kredi kartı"
+          }
+        }
+      }
+    },
+    "documents.import.fieldBank": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "banka"
+          }
+        }
+      }
+    },
+    "documents.import.fieldCount": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "taksit sayısı"
+          }
+        }
+      }
+    },
+    "documents.import.fieldFirstMonth": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ilk taksit ayı"
+          }
+        }
+      }
+    },
+    "documents.import.fieldMonthly": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "taksit tutarı"
+          }
+        }
+      }
+    },
+    "documents.import.fieldPaidCount": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ödenmiş taksit"
+          }
+        }
+      }
+    },
+    "documents.import.fieldTotalDebt": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "toplam borç"
+          }
+        }
+      }
+    },
+    "documents.import.found": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF'ten okunanlar: %@. Kaydetmeden önce kontrol et."
+          }
+        }
+      }
+    },
+    "documents.import.fromPDF": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF'ten ekle"
+          }
+        }
+      }
+    },
+    "documents.import.loanName": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ kredisi"
+          }
+        }
+      }
+    },
+    "documents.import.manual": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bilgileri elle gir"
+          }
+        }
+      }
+    },
+    "documents.import.nothingFound": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Belgeden borç bilgisi okunamadı. Bilgileri elle girebilirsin."
+          }
+        }
+      }
+    },
+    "documents.import.reading": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF okunuyor…"
+          }
+        }
+      }
+    },
+    "documents.import.unreadable": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "PDF açılamadı"
+          }
+        }
+      }
+    },
+    "documents.import.unreadableMessage": {
+      "extractionState": "manual",
+      "localizations": {
+        "tr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dosya bozuk ya da şifreli olabilir. Başka bir PDF dene."
+          }
+        }
+      }
+    },
     "documents.receipt.collectionDone": {
       "extractionState": "manual",
       "localizations": {

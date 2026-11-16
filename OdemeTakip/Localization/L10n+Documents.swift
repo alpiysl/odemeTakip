@@ -68,5 +68,25 @@ extension L10n {
         static var generate: String { s("documents.report.generate") }
         static var failed: String { s("documents.report.failed") }
         static var empty: String { s("documents.report.empty") }
+
+        // MARK: PDF'ten borç
+        /// "Garanti BBVA kredisi"
+        static func loanName(_ bank: String) -> String { s("documents.import.loanName", bank) }
+        /// "Akbank kredi kartı"
+        static func cardName(_ bank: String) -> String { s("documents.import.cardName", bank) }
+        static var fieldBank: String { s("documents.import.fieldBank") }
+        static var fieldMonthly: String { s("documents.import.fieldMonthly") }
+        static var fieldCount: String { s("documents.import.fieldCount") }
+        static var fieldFirstMonth: String { s("documents.import.fieldFirstMonth") }
+        static var fieldPaidCount: String { s("documents.import.fieldPaidCount") }
+        static var fieldTotalDebt: String { s("documents.import.fieldTotalDebt") }
+        /// "PDF'ten okunanlar: taksit tutarı, taksit sayısı. …"
+        static func importFound(_ fields: String) -> String { s("documents.import.found", fields) }
+        static var importNothingFound: String { s("documents.import.nothingFound") }
+        static var importFromPDF: String { s("documents.import.fromPDF") }
+        static var importManual: String { s("documents.import.manual") }
+        static var importReading: String { s("documents.import.reading") }
+        static var importUnreadable: String { s("documents.import.unreadable") }
+        static var importUnreadableMessage: String { s("documents.import.unreadableMessage") }
     }
 }

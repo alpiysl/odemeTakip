@@ -66,6 +66,7 @@ final class OdemeTakipUITests: XCTestCase {
         let app = launch()
         XCTAssertTrue(app.buttons["Yeni ödeme"].waitForExistence(timeout: 5))
         app.buttons["Yeni ödeme"].tap()
+        app.buttons["Bilgileri elle gir"].tap()
 
         XCTAssertFalse(app.buttons["Kaydet"].isEnabled)
         app.textFields["Ad"].tap()
@@ -233,6 +234,84 @@ final class OdemeTakipUITests: XCTestCase {
         app.buttons["Kaydet"].tap()
         XCTAssertTrue(text(app, "Reşatlar").waitForExistence(timeout: 3))
         XCTAssertTrue(text(app, "₺82.000").exists)
+    }
+
+    // MARK: Dekont, rapor, PDF'ten borç
+
+    func testShareReceiptFromCashPaymentRow() {
+        let app = launch()
+        XCTAssertTrue(text(app, "Ahmet'e borç").waitForExistence(timeout: 5))
+        text(app, "Ahmet'e borç").tap()
+        let row = app.cells.containing(.staticText, identifier: "₺10.000").firstMatch
+        XCTAssertTrue(row.waitForExistence(timeout: 3))
+        row.press(forDuration: 1.0)
+        let share = app.buttons["Dekontu paylaş"]
+        XCTAssertTrue(share.waitForExistence(timeout: 3))
+        share.tap()
+        // Paylaşım sayfası açılır (dekont resmi hazırlanır).
+        XCTAssertTrue(app.otherElements["ActivityListView"].waitForExistence(timeout: 8))
+    }
+
+    func testShareReceiptFromPaidInstallment() {
+        let app = launch()
+        XCTAssertTrue(text(app, "Konut Kredisi").waitForExistence(timeout: 5))
+        text(app, "Konut Kredisi").tap()
+        app.buttons.matching(NSPredicate(format: "label CONTAINS 'bu ay'")).firstMatch.tap()
+        app.buttons.matching(NSPredicate(format: "label CONTAINS 'bu ay'")).firstMatch.press(forDuration: 1.0)
+        XCTAssertTrue(app.buttons["Dekontu paylaş"].waitForExistence(timeout: 3))
+    }
+
+    func testReportComposerGeneratesPDFPreview() {
+        let app = launch()
+        let report = app.buttons["reportButton"]
+        XCTAssertTrue(report.waitForExistence(timeout: 5))
+        report.tap()
+        XCTAssertTrue(app.navigationBars["Rapor oluştur"].waitForExistence(timeout: 3))
+
+        // Bir kaydı çıkar, bir bölümü kapat, oluştur.
+        app.collectionViews.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Dolar borcu'")).firstMatch.tap()
+        app.switches["Birikimler"].switches.firstMatch.tap()
+        app.buttons["generateReport"].tap()
+
+        XCTAssertTrue(app.navigationBars.matching(NSPredicate(format: "identifier BEGINSWITH 'Rapor-'")).firstMatch
+            .waitForExistence(timeout: 5))
+        let share = app.buttons["shareReport"]
+        XCTAssertTrue(share.waitForExistence(timeout: 3))
+        share.tap()
+        XCTAssertTrue(app.otherElements["ActivityListView"].waitForExistence(timeout: 8))
+    }
+
+    func testReportCannotGenerateWithNothingSelected() {
+        let app = launch()
+        app.buttons["reportButton"].tap()
+        let toggleAll = app.buttons["Seçimi kaldır"]
+        XCTAssertTrue(toggleAll.waitForExistence(timeout: 3))
+        toggleAll.tap()
+        XCTAssertFalse(app.buttons["generateReport"].isEnabled)
+        app.buttons["Tümünü seç"].tap()
+        XCTAssertTrue(app.buttons["generateReport"].isEnabled)
+    }
+
+    func testImportedPDFPrefillsCreditForm() {
+        let app = launch(["-importSamplePDF"])
+        XCTAssertTrue(app.descendants(matching: .any)["importBanner"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.textFields["Ad"].value as? String == "Garanti BBVA kredisi")
+        XCTAssertTrue(app.textFields["4812,35"].exists || app.textFields.matching(NSPredicate(format: "value == '4812,35'")).count == 1)
+        XCTAssertTrue(app.textFields.matching(NSPredicate(format: "value == '36'")).count == 1)
+        XCTAssertTrue(app.buttons["Kaydet"].isEnabled)
+        app.buttons["Kaydet"].tap()
+        XCTAssertTrue(text(app, "Garanti BBVA kredisi").waitForExistence(timeout: 5))
+    }
+
+    func testAddMenuOffersPDFImport() {
+        let app = launch()
+        XCTAssertTrue(app.buttons["Yeni ödeme"].waitForExistence(timeout: 5))
+        app.buttons["Yeni ödeme"].tap()
+        XCTAssertTrue(app.buttons["PDF'ten ekle"].waitForExistence(timeout: 3))
+        app.buttons["PDF'ten ekle"].tap()
+        // Dosya seçici açılır.
+        XCTAssertTrue(app.navigationBars.firstMatch.waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["reportButton"].isHittable)
     }
 
     // MARK: Sabit üst alan ve alt buton

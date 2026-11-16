@@ -8,6 +8,7 @@ struct HomeView: View {
     @Binding var mode: HomeMode
     var onSettings: () -> Void = {}
     var onReport: () -> Void = {}
+    var onImportPDF: () -> Void = {}
     let notificationsAllowed: Bool
     let isTemporaryStore: Bool
 
@@ -60,13 +61,14 @@ struct HomeView: View {
         }
         .background(Theme.background.ignoresSafeArea())
         .addBar {
-            Button {
-                showingAdd = true
+            Menu {
+                Button(L10n.Documents.importManual, systemImage: "square.and.pencil") { showingAdd = true }
+                Button(L10n.Documents.importFromPDF, systemImage: "doc.viewfinder", action: onImportPDF)
             } label: {
                 AddBarLabel(title: L10n.Home.newPayment, gradient: Theme.gradient)
             }
-            .buttonStyle(.plain)
             .accessibilityLabel(L10n.Home.newPayment)
+            .accessibilityIdentifier("addMenu")
         }
         .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showingAdd) {

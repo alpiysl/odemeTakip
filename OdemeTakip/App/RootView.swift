@@ -13,6 +13,9 @@ struct RootView: View {
     @State private var sessionMode: HomeMode?
     @State private var showingSettings = false
     @State private var showingReport = false
+    @State private var showingPDFPicker = false
+    /// "Birlikte aç" / paylaşım ile gelen PDF.
+    @State private var incomingPDF: URL?
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.modelContext) private var context
     @State private var notificationsAllowed = true
@@ -65,6 +68,7 @@ struct RootView: View {
                          mode: mode,
                          onSettings: { showingSettings = true },
                          onReport: { showingReport = true },
+                         onImportPDF: { showingPDFPicker = true },
                          notificationsAllowed: notificationsAllowed,
                          isTemporaryStore: isTemporaryStore)
             }
@@ -72,6 +76,14 @@ struct RootView: View {
         .tint(mode.wrappedValue == .savings ? Theme.paid : Theme.accent)
         .sheet(isPresented: $showingSettings) {
             SettingsView()
+        }
+        .pdfDebtImport(isPickerPresented: $showingPDFPicker, incomingURL: $incomingPDF)
+        .onOpenURL { url in
+            guard url.isFileURL, url.pathExtension.lowercased() == "pdf" else { return }
+            showingSettings = false
+            showingReport = false
+            sessionMode = .debt
+            incomingPDF = url
         }
         .sheet(isPresented: $showingReport) {
             ReportComposerView(payments: payments + receivables, assets: assets)
@@ -81,6 +93,7 @@ struct RootView: View {
             if sessionMode == nil { sessionMode = HomeMode(rawValue: homeModeRaw) }
             #if DEBUG
             SampleData.insertIfRequested(into: context)
+            if let url = SampleData.samplePDFIfRequested() { incomingPDF = url }
             #endif
             await rateStore.refreshIfNeeded(force: true)
             notificationsAllowed = await authorizeNotificationsIfNeeded()

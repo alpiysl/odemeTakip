@@ -188,6 +188,7 @@ struct ReportPreviewView: View {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     ShareLink(item: url)
+                        .accessibilityIdentifier("shareReport")
                 }
             }
     }

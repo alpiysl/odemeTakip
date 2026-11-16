@@ -5,6 +5,8 @@ struct PaymentFormView: View {
     enum Mode {
         case create
         case createReceivable
+        /// Banka PDF'inden okunan bilgilerle önceden doldurulmuş yeni borç.
+        case createFromImport(ParsedDebt)
         case edit(Payment)
     }
 
@@ -27,6 +29,8 @@ struct PaymentFormView: View {
             draft.kind = .receivable
             draft.icon = PaymentDraft.defaultIcon(for: .receivable)
             _draft = State(initialValue: draft)
+        case .createFromImport(let parsed):
+            _draft = State(initialValue: parsed.makeDraft(today: YearMonth(date: .now)))
         case .edit(let payment): _draft = State(initialValue: payment.makeDraft())
         }
     }
@@ -34,6 +38,15 @@ struct PaymentFormView: View {
     var body: some View {
         NavigationStack {
             Form {
+                if case .createFromImport(let parsed) = mode {
+                    Section {
+                        InfoBanner(text: parsed.bannerText, onClose: nil)
+                            .accessibilityIdentifier("importBanner")
+                    }
+                    .listRowInsets(EdgeInsets())
+                    .listRowBackground(Color.clear)
+                }
+
                 if !draft.isEditing && draft.kind != .receivable {
                     Section {
                         Picker(L10n.Forms.kind, selection: $draft.kind) {
@@ -168,7 +181,7 @@ struct PaymentFormView: View {
 
     private func save() {
         switch mode {
-        case .create, .createReceivable:
+        case .create, .createReceivable, .createFromImport:
             guard let payment = Payment.make(from: draft) else { return }
             context.insert(payment)
         case .edit(let payment):
